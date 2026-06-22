@@ -92,3 +92,55 @@ Work Log:
 
 Stage Summary:
 - Production-ready. All core interactions browser-verified end-to-end.
+
+---
+Task ID: 4
+Agent: Orchestrator
+Task: Premium font upgrade + Firebase Google Authentication for user data
+
+Work Log:
+FONTS:
+- Replaced Inter/Geist-Mono with premium pairing: Plus Jakarta Sans (body/UI, 6 weights) + Instrument Serif (display, with italic)
+- Wired font CSS variables in globals.css @theme (--font-sans -> jakarta, --font-serif)
+- Added `.font-display` utility class + tightened letter-spacing and font-feature-settings on body
+- Applied font-display (Instrument Serif) to all major headlines: hero "Understand What Actually Matters" (italic gradient), article title, category title, dashboard title, section headers, daily brief headline, CTA "decoded daily.", featured card title, search heading
+- VLM verified: typography rated 9/10 "premium/editorial/luxury, sophisticated, impactful"
+
+FIREBASE AUTH (user data only — news stays in Prisma):
+- Installed `firebase` package (v12.15.0)
+- Created `src/lib/firebase/client.ts` — client-side Firebase init with user-provided config (apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId, measurementId)
+- Created `src/lib/firebase/user-data.ts` — Realtime Database service for per-user data: toggleSaved, toggleFollowed, recordHistory, loadUserData, subscribeUserData (live), ensureProfile. Paths: users/{uid}/saved/{articleId}, users/{uid}/followed/{topic}, users/{uid}/history/{articleId}
+- Created `src/components/auth/auth-provider.tsx` — React context exposing: user, loading, userData (live-subscribed from RTDB), signInWithGoogle (popup + select_account), signUpWithEmail (createUserWithEmailAndPassword + updateProfile), signInWithEmail, signOut
+- Created `src/components/auth/user-sync.tsx` — mirrors Firebase userData into app store + merges guest (pre-sign-in) saved/followed data into the account on first sign-in
+- Created `src/components/auth/auth-modal.tsx` — premium glassmorphism modal with Google sign-in button (multi-color G icon), divider, email/password fields, sign-in/sign-up toggle, loading states, error toasts
+- Updated `src/store/use-app-store.ts` — added useUserActions() hook (save/follow/markRead that talk to Firebase when signed in, optimistic + guest fallback), guestSaved/guestFollowed sets, consumeGuest() for merge
+- Updated PremiumNav — Sign in button (gradient) for guests, avatar button + dropdown menu (Dashboard, Sign out) for signed-in users, mobile menu sign-in CTA
+- Updated NewsCard, ArticleView, DashboardView — onAuthRequired prop: guests prompted to sign in when saving/following; signed-in users persist to Firebase RTDB
+- Updated DashboardView — assembles user data client-side: generic data from /api/dashboard, saved/history articles via /api/news/byids, recommendations via /api/news/recommend (POST with followedTopics + readIds). Shows SignInPrompt cards for guests in Saved/History sections
+- Added API routes: GET /api/news/byids?ids=..., POST /api/news/recommend {followedTopics, readIds}
+- Simplified /api/dashboard to return only generic data (brief + trending + latest); removed Prisma user-data dependency from /api/news/[id] (history now recorded client-side to Firebase)
+- Wrapped app in AuthProvider + UserSync in layout.tsx
+- Lint clean (0 errors)
+
+VERIFICATION (Agent Browser):
+- Homepage renders with premium serif headlines (VLM 9/10 typography)
+- Sign in button in nav; clicking opens premium glassmorphism auth modal (Google button + email form) — VLM confirmed "Google sign-in button, email/password fields, premium glassmorphism"
+- Sign-up mode toggle works (Full name / Email / Password fields appear)
+- Dashboard shows "Sign in to sync your data" prompts for guests in Saved + History sections
+- AI Daily Brief + trending topics + recommendations all render for guests
+- Article view renders with premium serif headline + clean AI analysis (VLM 8/10)
+- All API routes return 200, no console/runtime errors
+- Firebase SDK loaded (2 firebase resource requests confirmed)
+
+NOTE FOR USER: To enable actual sign-ins, in your Firebase Console (sign-up-e0b5e):
+1. Authentication → Sign-in method → enable "Google" and "Email/Password"
+2. Add your domain to Authorized domains
+3. Realtime Database → set rules to allow authed read/write:
+   { "rules": { "users": { "$uid": { ".read": "auth.uid === $uid", ".write": "auth.uid === $uid" } } } }
+
+Stage Summary:
+- Premium font pairing (Plus Jakarta Sans + Instrument Serif) applied throughout — typography now luxury/editorial
+- Firebase Google + email authentication fully wired for USER data (saved/followed/history) in Realtime DB
+- News article data remains in Prisma/SQLite (clear separation as requested)
+- Guest browsing works; sign-in gates personalization with graceful prompts
+- Live sync: signed-in users' data updates in real-time across tabs via Firebase onValue subscription

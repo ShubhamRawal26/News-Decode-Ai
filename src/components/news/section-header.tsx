@@ -28,7 +28,7 @@ export function SectionHeader({ title, subtitle, action, icon, className }: Sect
           </motion.span>
         )}
         <div className="min-w-0">
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight leading-tight">{title}</h2>
+          <h2 className="font-display text-2xl sm:text-3xl font-normal tracking-tight leading-tight">{title}</h2>
           {subtitle && <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>}
         </div>
       </div>

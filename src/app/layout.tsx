@@ -1,19 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/components/auth/auth-provider";
+import { UserSync } from "@/components/auth/user-sync";
 
-const inter = Inter({
-  variable: "--font-geist-sans",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
   display: "swap",
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const serif = Instrument_Serif({
+  variable: "--font-serif",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -88,9 +93,12 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${jakarta.variable} ${serif.variable} font-sans antialiased bg-background text-foreground`}
       >
-        {children}
+        <AuthProvider>
+          <UserSync />
+          {children}
+        </AuthProvider>
         <Toaster />
         <SonnerToaster position="bottom-right" />
       </body>

@@ -56,7 +56,7 @@ export function CategoryView({ slug }: { slug: string }) {
               <Icon size={28} />
             </span>
             <div>
-              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">{cat?.label}</h1>
+              <h1 className="font-display text-3xl sm:text-5xl font-normal tracking-tight">{cat?.label}</h1>
               <p className="text-muted-foreground mt-1 text-sm sm:text-base">{cat?.description}</p>
             </div>
           </div>

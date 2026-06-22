@@ -10,16 +10,20 @@ import type { NewsArticle } from "@/lib/news";
 import { CATEGORY_LABELS } from "@/lib/news";
 import { ImpactRing, ImpactBadge } from "./impact-badge";
 import { NewsCard } from "./news-card";
-import { useAppStore } from "@/store/use-app-store";
+import { useAppStore, useUserActions } from "@/store/use-app-store";
+import { useAuth } from "@/components/auth/auth-provider";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 interface ArticleViewProps {
   articleId: string;
+  onAuthRequired?: () => void;
 }
 
-export function ArticleView({ articleId }: ArticleViewProps) {
-  const { go, back, savedIds, toggleSavedLocal } = useAppStore();
+export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
+  const { go, back, savedIds } = useAppStore();
+  const { save, markRead } = useUserActions();
+  const { user } = useAuth();
   const [article, setArticle] = useState<NewsArticle | null>(null);
   const [related, setRelated] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,12 +39,14 @@ export function ArticleView({ articleId }: ArticleViewProps) {
         if (d.article) {
           setArticle(d.article);
           setRelated(d.related || []);
+          // record reading to Firebase (no-op if not signed in)
+          markRead(d.article.id);
         }
       })
       .catch(() => {})
       .finally(() => !cancelled && setLoading(false));
     return () => { cancelled = true; };
-  }, [articleId]);
+  }, [articleId, markRead]);
 
   if (loading) {
     return (
@@ -72,19 +78,17 @@ export function ArticleView({ articleId }: ArticleViewProps) {
   const catLabel = CATEGORY_LABELS[article.category] || article.category;
 
   const toggleSave = async () => {
+    if (!user) {
+      onAuthRequired?.();
+      return;
+    }
     setSaving(true);
-    toggleSavedLocal(article.id);
+    const wasSaved = saved;
     try {
-      const res = await fetch("/api/user/save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ articleId: article.id }),
-      });
-      const data = await res.json();
-      if (!data.saved) toggleSavedLocal(article.id);
-      else toast.success(saved ? "Removed" : "Saved to your library");
+      await save(article.id);
+      toast.success(wasSaved ? "Removed" : "Saved to your library");
     } catch {
-      toggleSavedLocal(article.id);
+      toast.error("Could not save");
     } finally {
       setSaving(false);
     }
@@ -132,7 +136,7 @@ export function ArticleView({ articleId }: ArticleViewProps) {
             )}
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight leading-[1.1] mb-5">
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-[3.25rem] font-normal tracking-tight leading-[1.08] mb-5">
             {article.title}
           </h1>
 
@@ -350,23 +354,19 @@ function AnalysisBlock({
 }
 
 function FollowTag({ tag }: { tag: string }) {
-  const { followedTopics, toggleFollowedLocal } = useAppStore();
+  const { followedTopics } = useAppStore();
+  const { follow } = useUserActions();
+  const { user } = useAuth();
   const [busy, setBusy] = useState(false);
   const followed = followedTopics.has(tag);
 
   const toggle = async () => {
+    if (!user) return;
     setBusy(true);
-    toggleFollowedLocal(tag);
     try {
-      const res = await fetch("/api/user/follow", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic: tag }),
-      });
-      const data = await res.json();
-      if (!data.followed) toggleFollowedLocal(tag);
+      await follow(tag);
     } catch {
-      toggleFollowedLocal(tag);
+      /* revert handled by store sync */
     } finally {
       setBusy(false);
     }

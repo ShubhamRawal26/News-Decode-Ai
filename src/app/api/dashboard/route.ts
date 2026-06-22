@@ -1,23 +1,16 @@
-// GET /api/dashboard — personalized dashboard
+// GET /api/dashboard — generic dashboard data (brief, trending, latest).
+// User-specific data (saved/history/recommendations) is now assembled client-side
+// from Firebase Realtime DB + the /api/news/byids and /api/news/recommend endpoints.
 import { NextResponse } from "next/server";
-import {
-  getSavedArticles,
-  getReadingHistory,
-  getRecommendations,
-  getTrendingTopics,
-  getLatestArticles,
-} from "@/lib/data";
+import { getLatestArticles, getTrendingTopics } from "@/lib/data";
 import { generateDailyBrief } from "@/lib/ai-pipeline";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const [saved, history, recommendations, trending, latest] = await Promise.all([
-    getSavedArticles(12),
-    getReadingHistory(12),
-    getRecommendations(6),
-    getTrendingTopics(),
+  const [latest, trending] = await Promise.all([
     getLatestArticles(6),
+    getTrendingTopics(),
   ]);
 
   let brief;
@@ -32,9 +25,7 @@ export async function GET() {
 
   return NextResponse.json({
     dailyBrief: { ...brief, topStories: latest },
-    saved,
     trendingTopics: trending,
-    recommendations: recommendations.length ? recommendations : latest,
-    readingHistory: history,
+    latest,
   });
 }

@@ -20,7 +20,7 @@ interface FeedData {
   trending: { topic: string; count: number }[];
 }
 
-export function HomeView() {
+export function HomeView({ onAuthRequired }: { onAuthRequired?: () => void }) {
   const go = useAppStore((s) => s.go);
   const [data, setData] = useState<FeedData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -92,10 +92,10 @@ export function HomeView() {
           </div>
         ) : topFeatured ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
-            <NewsCard article={topFeatured} variant="featured" index={0} />
+            <NewsCard article={topFeatured} variant="featured" index={0} onAuthRequired={onAuthRequired} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               {moreFeatured.map((a, i) => (
-                <NewsCard key={a.id} article={a} index={i} />
+                <NewsCard key={a.id} article={a} index={i} onAuthRequired={onAuthRequired} />
               ))}
             </div>
           </div>
@@ -140,7 +140,7 @@ export function HomeView() {
             />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               {items.map((a, i) => (
-                <NewsCard key={a.id} article={a} index={i} />
+                <NewsCard key={a.id} article={a} index={i} onAuthRequired={onAuthRequired} />
               ))}
             </div>
           </section>
@@ -157,8 +157,8 @@ export function HomeView() {
         >
           <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-64 w-[40rem] rounded-full bg-gradient-to-r from-violet-500/20 via-fuchsia-500/15 to-sky-500/20 blur-3xl" />
           <div className="relative">
-            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-3">
-              The world, <span className="text-gradient">decoded daily.</span>
+            <h2 className="font-display text-2xl sm:text-4xl font-normal tracking-tight mb-3">
+              The world, <span className="text-gradient italic">decoded daily.</span>
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto mb-6">
               Build your personal intelligence feed. Follow topics, save stories, and let AI surface what matters to you.

@@ -11,25 +11,18 @@ import { CategoryView } from "@/components/news/category-view";
 import { ArticleView } from "@/components/news/article-view";
 import { DashboardView } from "@/components/news/dashboard-view";
 import { SearchView } from "@/components/news/search-view";
+import { AuthModal } from "@/components/auth/auth-modal";
 
 export default function Home() {
-  const { view, setSavedIds, setFollowedTopics } = useAppStore();
+  const { view } = useAppStore();
   const [booted, setBooted] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
 
-  // load user state once on mount
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/user/state")
-      .then((r) => r.json())
-      .then((d) => {
-        if (cancelled) return;
-        setSavedIds(d.savedIds || []);
-        setFollowedTopics(d.followedTopics || []);
-      })
-      .catch(() => {})
-      .finally(() => !cancelled && setBooted(true));
-    return () => { cancelled = true; };
-  }, [setSavedIds, setFollowedTopics]);
+  const openAuth = (mode: "signin" | "signup" = "signin") => {
+    setAuthMode(mode);
+    setAuthOpen(true);
+  };
 
   // deep-link via ?a=<id>
   useEffect(() => {
@@ -38,10 +31,16 @@ export default function Home() {
     if (a) useAppStore.getState().go({ name: "article", id: a });
   }, []);
 
+  // mark booted immediately (auth state is handled by AuthProvider)
+  useEffect(() => {
+    const t = setTimeout(() => setBooted(true), 50);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div className="relative min-h-screen flex flex-col">
       <AuroraBackground />
-      <PremiumNav />
+      <PremiumNav onAuthRequired={openAuth} />
 
       <main className="flex-1">
         {!booted ? (
@@ -61,10 +60,10 @@ export default function Home() {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             >
-              {view.name === "home" && <HomeView />}
+              {view.name === "home" && <HomeView onAuthRequired={openAuth} />}
               {view.name === "category" && <CategoryView slug={view.slug} />}
-              {view.name === "article" && <ArticleView articleId={view.id} />}
-              {view.name === "dashboard" && <DashboardView />}
+              {view.name === "article" && <ArticleView articleId={view.id} onAuthRequired={openAuth} />}
+              {view.name === "dashboard" && <DashboardView onAuthRequired={openAuth} />}
               {view.name === "search" && <SearchView q={view.q} />}
             </motion.div>
           </AnimatePresence>
@@ -72,6 +71,8 @@ export default function Home() {
       </main>
 
       <Footer />
+
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} mode={authMode} />
     </div>
   );
 }

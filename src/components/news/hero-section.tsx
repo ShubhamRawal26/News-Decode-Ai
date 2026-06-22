@@ -37,11 +37,11 @@ export function HeroSection({ onExplore, breakingCount, totalStories }: HeroProp
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="max-w-4xl text-[2.5rem] leading-[1.05] sm:text-6xl lg:text-7xl font-semibold tracking-tight"
+            className="font-display max-w-4xl text-[2.75rem] leading-[1.02] sm:text-6xl lg:text-[5.5rem] font-normal tracking-tight"
           >
             Understand What
             <br />
-            <span className="text-gradient">Actually Matters.</span>
+            <span className="text-gradient italic">Actually Matters.</span>
           </motion.h1>
 
           {/* Sub */}

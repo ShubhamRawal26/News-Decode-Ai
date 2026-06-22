@@ -2,17 +2,20 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, LayoutDashboard, Sparkles, Menu, X, ArrowLeft } from "lucide-react";
+import { Search, LayoutDashboard, Sparkles, Menu, X, ArrowLeft, LogOut } from "lucide-react";
 import { CATEGORIES } from "@/lib/news";
 import { useAppStore } from "@/store/use-app-store";
+import { useAuth } from "@/components/auth/auth-provider";
 import { cn } from "@/lib/utils";
 
-export function PremiumNav() {
+export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin" | "signup") => void }) {
   const { view, go, back, history } = useAppStore();
+  const { user, signOut } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [q, setQ] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -106,6 +109,64 @@ export function PremiumNav() {
                 <LayoutDashboard size={15} />
                 <span className="hidden sm:inline">Dashboard</span>
               </button>
+
+              {/* Auth */}
+              {user ? (
+                <div className="relative">
+                  <button
+                    onClick={() => setMenuOpen((o) => !o)}
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-full overflow-hidden ring-2 ring-white/60 shadow-md"
+                    aria-label="Account"
+                  >
+                    {user.photoURL ? (
+                      <img src={user.photoURL} alt={user.displayName || "avatar"} className="h-full w-full object-cover" />
+                    ) : (
+                      <span className="h-full w-full bg-[linear-gradient(135deg,#6366f1,#a855f7)] text-white text-sm font-semibold flex items-center justify-center">
+                        {(user.displayName || user.email || "U").charAt(0).toUpperCase()}
+                      </span>
+                    )}
+                  </button>
+                  <AnimatePresence>
+                    {menuOpen && (
+                      <>
+                        <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                          transition={{ duration: 0.18 }}
+                          className="absolute right-0 top-11 z-50 w-60 glass-strong rounded-2xl p-2 shadow-2xl"
+                        >
+                          <div className="px-3 py-2.5 border-b border-foreground/5 mb-1">
+                            <div className="text-sm font-semibold truncate">{user.displayName || "Account"}</div>
+                            <div className="text-xs text-muted-foreground truncate">{user.email}</div>
+                          </div>
+                          <button
+                            onClick={() => { go({ name: "dashboard" }); setMenuOpen(false); }}
+                            className="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-foreground/5 transition-colors flex items-center gap-2"
+                          >
+                            <LayoutDashboard size={15} /> Dashboard
+                          </button>
+                          <button
+                            onClick={async () => { await signOut(); setMenuOpen(false); }}
+                            className="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-foreground/5 transition-colors flex items-center gap-2 text-rose-600"
+                          >
+                            <LogOut size={15} /> Sign out
+                          </button>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <button
+                  onClick={() => onAuthRequired?.("signin")}
+                  className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[linear-gradient(110deg,#6366f1,#8b5cf6,#a855f7)] text-white px-3.5 text-sm font-medium shadow-lg shadow-violet-500/25 bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all"
+                >
+                  Sign in
+                </button>
+              )}
+
               <button
                 onClick={() => setMobileOpen((o) => !o)}
                 className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-foreground/5 transition-colors"
@@ -177,6 +238,14 @@ export function PremiumNav() {
               <MobileNavBtn active={view.name === "dashboard"} onClick={() => { go({ name: "dashboard" }); setMobileOpen(false); }}>
                 Dashboard
               </MobileNavBtn>
+              {!user && (
+                <button
+                  onClick={() => { onAuthRequired?.("signin"); setMobileOpen(false); }}
+                  className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(110deg,#6366f1,#8b5cf6,#a855f7)] text-white px-4 py-3 text-sm font-medium shadow-lg shadow-violet-500/25"
+                >
+                  Sign in to sync your data
+                </button>
+              )}
             </motion.nav>
           </motion.div>
         )}

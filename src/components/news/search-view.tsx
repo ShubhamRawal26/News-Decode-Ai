@@ -31,7 +31,7 @@ export function SearchView({ q }: { q: string }) {
             <span>Search results for</span>
           </div>
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">&ldquo;{q}&rdquo;</h1>
+            <h1 className="font-display text-3xl sm:text-5xl font-normal tracking-tight">&ldquo;{q}&rdquo;</h1>
             <button
               onClick={() => go({ name: "home" })}
               className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"

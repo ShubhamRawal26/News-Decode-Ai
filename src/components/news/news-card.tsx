@@ -7,17 +7,21 @@ import { cn } from "@/lib/utils";
 import type { NewsArticle } from "@/lib/news";
 import { CATEGORY_LABELS } from "@/lib/news";
 import { ImpactBadge } from "./impact-badge";
-import { useAppStore } from "@/store/use-app-store";
+import { useAppStore, useUserActions } from "@/store/use-app-store";
+import { useAuth } from "@/components/auth/auth-provider";
 import { toast } from "sonner";
 
 interface NewsCardProps {
   article: NewsArticle;
   variant?: "default" | "featured" | "compact";
   index?: number;
+  onAuthRequired?: () => void;
 }
 
-export function NewsCard({ article, variant = "default", index = 0 }: NewsCardProps) {
-  const { go, savedIds, toggleSavedLocal } = useAppStore();
+export function NewsCard({ article, variant = "default", index = 0, onAuthRequired }: NewsCardProps) {
+  const { go, savedIds } = useAppStore();
+  const { save } = useUserActions();
+  const { user } = useAuth();
   const [saving, setSaving] = useState(false);
   const saved = savedIds.has(article.id);
 
@@ -25,20 +29,16 @@ export function NewsCard({ article, variant = "default", index = 0 }: NewsCardPr
 
   const toggleSave = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!user) {
+      onAuthRequired?.();
+      return;
+    }
     setSaving(true);
-    toggleSavedLocal(article.id);
+    const wasSaved = saved;
     try {
-      const res = await fetch("/api/user/save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ articleId: article.id }),
-      });
-      const data = await res.json();
-      if (!data.saved) toggleSavedLocal(article.id);
-      else if (!saved) toast.success("Saved to your library");
-      else toast("Removed from library");
+      await save(article.id);
+      toast.success(wasSaved ? "Removed from library" : "Saved to your library");
     } catch {
-      toggleSavedLocal(article.id);
       toast.error("Could not save");
     } finally {
       setSaving(false);
@@ -110,7 +110,7 @@ export function NewsCard({ article, variant = "default", index = 0 }: NewsCardPr
               </span>
             )}
           </div>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight leading-tight mb-3 group-hover:text-gradient transition-all">
+          <h2 className="font-display text-2xl sm:text-3xl font-normal tracking-tight leading-tight mb-3 group-hover:text-gradient transition-all">
             {article.title}
           </h2>
           <p className="text-muted-foreground text-[15px] leading-relaxed mb-5 line-clamp-3">

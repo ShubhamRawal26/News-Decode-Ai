@@ -1,0 +1,99 @@
+// NewsDecodedAI — Prisma schema
+// Premium AI news intelligence platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String?
+  avatar      String?
+  preferences String? // JSON: { followedTopics: [], alertCategories: [] }
+  isGuest     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  savedArticles  SavedArticle[]
+  followedTopics FollowedTopic[]
+  readingHistory ReadingHistory[]
+}
+
+model Article {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  summary         String
+  content         String?
+  category        String
+  subcategory     String?
+  sourceName      String
+  sourceUrl       String
+  imageUrl        String?
+  impactScore     Int      // 0-100 AI importance score
+  importanceScore Int      // 0-100
+  sentiment       String?  // positive / neutral / negative / mixed
+  whatHappened    String
+  whyItMatters    String
+  whoIsAffected   String
+  whatHappensNext String
+  futureImpact    String?
+  tags            String   // JSON array as string
+  keyEntities     String?  // JSON array as string
+  readTime        Int      // minutes
+  isBreaking      Boolean  @default(false)
+  isFeatured      Boolean  @default(false)
+  publishedAt     DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  savedBy SavedArticle[]
+  readBy  ReadingHistory[]
+
+  @@index([category])
+  @@index([publishedAt])
+  @@index([isBreaking])
+  @@index([isFeatured])
+  @@index([impactScore])
+}
+
+model SavedArticle {
+  id        String   @id @default(cuid())
+  userId    String
+  articleId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+}
+
+model FollowedTopic {
+  id        String   @id @default(cuid())
+  userId    String
+  topic     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, topic])
+}
+
+model ReadingHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  articleId String
+  readAt    DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+}

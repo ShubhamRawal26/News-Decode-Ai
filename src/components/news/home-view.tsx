@@ -39,6 +39,7 @@ export function HomeView({ onAuthRequired }: { onAuthRequired?: () => void }) {
   const featured = data?.featured || [];
   const latest = data?.latest || [];
   const trending = data?.trending || [];
+  const editionDate = data?.editionDate || "";
 
   // category counts for nav
   const counts = CATEGORIES.reduce((acc, c) => {
@@ -55,6 +56,7 @@ export function HomeView({ onAuthRequired }: { onAuthRequired?: () => void }) {
         onExplore={() => document.getElementById("featured")?.scrollIntoView({ behavior: "smooth" })}
         breakingCount={breaking.length}
         totalStories={latest.length}
+        editionDate={editionDate}
       />
 
       {/* Breaking ticker */}

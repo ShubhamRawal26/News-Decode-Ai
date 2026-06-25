@@ -9,7 +9,8 @@ export type View =
   | { name: "category"; slug: string }
   | { name: "article"; id: string }
   | { name: "dashboard" }
-  | { name: "search"; q: string };
+  | { name: "search"; q: string }
+  | { name: "date"; date: string };
 
 interface AppState {
   view: View;

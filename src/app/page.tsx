@@ -11,6 +11,7 @@ import { CategoryView } from "@/components/news/category-view";
 import { ArticleView } from "@/components/news/article-view";
 import { DashboardView } from "@/components/news/dashboard-view";
 import { SearchView } from "@/components/news/search-view";
+import { DateView } from "@/components/news/date-view";
 import { AuthModal } from "@/components/auth/auth-modal";
 
 export default function Home() {
@@ -65,6 +66,7 @@ export default function Home() {
               {view.name === "article" && <ArticleView articleId={view.id} onAuthRequired={openAuth} />}
               {view.name === "dashboard" && <DashboardView onAuthRequired={openAuth} />}
               {view.name === "search" && <SearchView q={view.q} />}
+              {view.name === "date" && <DateView date={view.date} onAuthRequired={openAuth} />}
             </motion.div>
           </AnimatePresence>
         )}

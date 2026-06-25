@@ -1,18 +1,23 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Sparkles, ArrowRight, Zap, Globe2, Activity } from "lucide-react";
+import { Sparkles, ArrowRight, Zap, Globe2, Activity, Calendar } from "lucide-react";
 import { MagneticButton } from "./magnetic-button";
 import { useAppStore } from "@/store/use-app-store";
+import { formatEditionDate, todayEditionDate } from "@/lib/dates";
 
 interface HeroProps {
   onExplore: () => void;
   breakingCount: number;
   totalStories: number;
+  editionDate?: string;
 }
 
-export function HeroSection({ onExplore, breakingCount, totalStories }: HeroProps) {
+export function HeroSection({ onExplore, breakingCount, totalStories, editionDate }: HeroProps) {
   const go = useAppStore((s) => s.go);
+  const today = todayEditionDate();
+  const isToday = editionDate === today;
+  const editionLabel = editionDate ? formatEditionDate(editionDate) : "";
 
   return (
     <section className="relative pt-28 sm:pt-36 pb-12 sm:pb-16">
@@ -23,13 +28,25 @@ export function HeroSection({ onExplore, breakingCount, totalStories }: HeroProp
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-medium mb-6"
+            className="flex items-center gap-2 flex-wrap justify-center mb-6"
           >
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-violet-500 opacity-75" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-violet-600" />
+            <span className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-medium">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-violet-500 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-violet-600" />
+              </span>
+              <span className="text-foreground/80">AI scanning thousands of sources in real time</span>
             </span>
-            <span className="text-foreground/80">AI scanning thousands of sources in real time</span>
+            {editionLabel && (
+              <button
+                onClick={() => editionDate && go({ name: "date", date: editionDate })}
+                className="glass inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium hover:ring-1 hover:ring-violet-500/40 transition-all"
+                title={isToday ? "Today's edition" : "View this edition"}
+              >
+                <Calendar size={12} className="text-violet-600" />
+                <span>{isToday ? "Today's edition" : editionLabel}</span>
+              </button>
+            )}
           </motion.div>
 
           {/* Headline */}

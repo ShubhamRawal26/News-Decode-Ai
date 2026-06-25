@@ -144,3 +144,58 @@ Stage Summary:
 - News article data remains in Prisma/SQLite (clear separation as requested)
 - Guest browsing works; sign-in gates personalization with graceful prompts
 - Live sync: signed-in users' data updates in real-time across tabs via Firebase onValue subscription
+
+---
+Task ID: 5
+Agent: Orchestrator
+Task: Daily auto-refresh + calendar archive for browsing previous dates (since June 20)
+
+Work Log:
+SCHEMA + DATES:
+- Added `editionDate String?` to Article model (indexed) — the YYYY-MM-DD (Asia/Kolkata TZ) of the day the edition was ingested
+- Pushed schema; backfilled 36 existing articles with editionDate derived from createdAt
+- Created `src/lib/dates.ts` — timezone-safe edition date helpers: todayEditionDate() (Asia/Kolkata via Intl.DateTimeFormat en-CA), formatEditionDate (e.g. "June 22, 2026"), editionDayOfWeek, editionDateRange, isValidEditionDate, EDITION_START = "2025-06-20"
+- Updated AI pipeline to stamp `editionDate: todayEditionDate()` on every new article at ingest
+
+DATA LAYER:
+- getAvailableEditionDates() — distinct dates with articles, newest first
+- getByEditionDate(dateStr) — articles for a date, ranked by impact
+- getBreakingByEditionDate(dateStr) — breaking within a date
+- getLatestEditionArticles() — latest available edition's articles (replaces getLatestArticles for homepage)
+
+DAILY AUTO-REFRESH (3 layers):
+1. Lazy auto-refresh: /api/news checks hasTodayEdition(); if today has no articles, triggers triggerBackgroundEditionRefresh() (fire-and-forget, non-blocking). Homepage returns immediately with latest available edition; next visit sees today's.
+2. In-memory refresh guard (`src/lib/refresh-guard.ts`): dedupes concurrent refreshes (inFlight promise) + throttles to max once per 30 min. ensureDailyEdition(force?) — safe to call on every homepage load.
+3. Cron endpoint POST /api/cron/refresh-daily — for external schedulers (Vercel Cron, GitHub Actions, etc.). Optional CRON_SECRET protection. maxDuration=300s.
+- Tested: POST /api/cron/refresh-daily created today's edition (June 25: 30 new AI-analyzed articles)
+
+API ROUTES:
+- GET /api/news/dates — { available: [...], today, start, range: [...] }
+- GET /api/news/bydate?date=YYYY-MM-DD — { date, articles, breaking, count } (validates date in [June 20, today])
+- POST/GET /api/cron/refresh-daily — ensures today's edition exists
+- Updated /api/news to return editionDate + hasTodayEdition, trigger lazy refresh
+
+UI:
+- Built `date-picker.tsx` — premium glassmorphism calendar popover: month grid, prev/next month nav, dots on dates that have news, ring on today, disabled dates before June 20 / after today, selected-date preview, "View edition" CTA. Opens from "Archive" button in nav.
+- Built `date-view.tsx` — full date edition page: back button, premium header (calendar icon + date in display serif + day-of-week + story count), breaking ticker, news grid. Empty state for dates with no edition.
+- Added `date` view to store + page router
+- Added "Today's edition" badge to hero (clickable → date view for today's edition)
+- "Archive" button in nav (shows selected date label when browsing a past edition)
+
+VERIFICATION (Agent Browser):
+- Calendar modal opens from nav "Archive" button — VLM confirmed "premium glassmorphism, month grid, dotted dates (news available)"
+- Selected June 22 → "View edition" → DateView rendered with "June 22, 2026 / Monday" header + 36 articles
+- Homepage shows "Today's edition" badge; /api/news/dates returns both 2026-06-22 and 2026-06-25 editions
+- Cron refresh created today's edition (30 articles) — auto-refresh confirmed working
+- All routes 200, no console/runtime errors, lint clean
+
+HOW DAILY UPDATES WORK NOW:
+- Every homepage visit: if today's edition is missing, AI pipeline runs in background → news appears within ~8 min
+- External cron (recommended): schedule a daily POST to /api/cron/refresh-daily (e.g. 6 AM Asia/Kolkata) — example Vercel Cron config provided to user
+- Calendar shows every day since June 20, 2025; dates with news are dotted; users browse any past edition
+
+Stage Summary:
+- News now auto-updates daily via lazy refresh + cron endpoint
+- Premium calendar archive lets users browse every edition since June 20, 2025
+- Today's edition (June 25) successfully created with 30 fresh AI-analyzed articles
+- Existing June 22 edition preserved and browsable

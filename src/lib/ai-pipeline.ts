@@ -6,6 +6,7 @@
 import ZAI from "z-ai-web-dev-sdk";
 import { db } from "@/lib/db";
 import { CATEGORIES, type CategorySlug } from "@/lib/news";
+import { todayEditionDate } from "@/lib/dates";
 
 // ---------- helpers ----------
 
@@ -232,6 +233,7 @@ async function persistArticles(articles: AnalyzedArticle[]): Promise<number> {
           readTime: estimateReadTime(`${a.summary} ${a.whatHappened} ${a.whyItMatters}`),
           isBreaking: !!a.isBreaking,
           isFeatured: !!a.isFeatured,
+          editionDate: todayEditionDate(),
           publishedAt,
         },
       });

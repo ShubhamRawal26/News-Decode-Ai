@@ -49,6 +49,7 @@ model Article {
   readTime        Int      // minutes
   isBreaking      Boolean  @default(false)
   isFeatured      Boolean  @default(false)
+  editionDate     String?  // YYYY-MM-DD (Calcutta TZ) — the day this edition was ingested
   publishedAt     DateTime
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -58,6 +59,7 @@ model Article {
 
   @@index([category])
   @@index([publishedAt])
+  @@index([editionDate])
   @@index([isBreaking])
   @@index([isFeatured])
   @@index([impactScore])

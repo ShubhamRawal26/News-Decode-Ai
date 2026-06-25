@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { getCurrentUserId } from "@/lib/session";
+import { todayEditionDate, isValidEditionDate, EDITION_START } from "@/lib/dates";
 import type { NewsArticle } from "@/lib/news";
 
 function parseArr(s: string | null): string[] {
@@ -300,3 +301,57 @@ export async function getRecommendations(limit = 6) {
   const saved = await savedSet();
   return scored.map((r) => toArticle(r, saved));
 }
+
+// ---------- edition-date browsing ----------
+
+/** Distinct edition dates that have at least one article, newest first. */
+export async function getAvailableEditionDates(): Promise<string[]> {
+  const rows = await db.article.findMany({
+    where: { editionDate: { not: null } },
+    distinct: ["editionDate"],
+    select: { editionDate: true },
+  });
+  return rows
+    .map((r) => r.editionDate!)
+    .filter(Boolean)
+    .sort((a, b) => (a < b ? 1 : -1));
+}
+
+/** Articles belonging to a specific edition date (YYYY-MM-DD). */
+export async function getByEditionDate(dateStr: string, limit = 30) {
+  const rows = await db.article.findMany({
+    where: { editionDate: dateStr },
+    orderBy: [{ impactScore: "desc" }, { publishedAt: "desc" }],
+    take: limit,
+  });
+  const saved = await savedSet();
+  return rows.map((r) => toArticle(r, saved));
+}
+
+/** Breaking news within a specific edition date. */
+export async function getBreakingByEditionDate(dateStr: string, limit = 5) {
+  const rows = await db.article.findMany({
+    where: { editionDate: dateStr, isBreaking: true },
+    orderBy: [{ impactScore: "desc" }, { publishedAt: "desc" }],
+    take: limit,
+  });
+  const saved = await savedSet();
+  return rows.map((r) => toArticle(r, saved));
+}
+
+/** Latest articles from the most recent available edition (or today). */
+export async function getLatestEditionArticles(limit = 24) {
+  const today = todayEditionDate();
+  const available = await getAvailableEditionDates();
+  const latestDate = available[0] || today;
+  const rows = await db.article.findMany({
+    where: { editionDate: latestDate },
+    orderBy: [{ impactScore: "desc" }, { publishedAt: "desc" }],
+    take: limit,
+  });
+  const saved = await savedSet();
+  return { date: latestDate, articles: rows.map((r) => toArticle(r, saved)) };
+}
+
+export { isValidEditionDate, EDITION_START };
+

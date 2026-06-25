@@ -6,6 +6,7 @@ import { Search, LayoutDashboard, Sparkles, Menu, X, ArrowLeft, LogOut } from "l
 import { CATEGORIES } from "@/lib/news";
 import { useAppStore } from "@/store/use-app-store";
 import { useAuth } from "@/components/auth/auth-provider";
+import { DatePickerButton } from "./date-picker";
 import { cn } from "@/lib/utils";
 
 export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin" | "signup") => void }) {
@@ -109,6 +110,9 @@ export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin
                 <LayoutDashboard size={15} />
                 <span className="hidden sm:inline">Dashboard</span>
               </button>
+
+              {/* Date archive */}
+              <DatePickerButton />
 
               {/* Auth */}
               {user ? (

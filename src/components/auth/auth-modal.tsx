@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Mail, Lock, User as UserIcon, ArrowRight, Loader2 } from "lucide-react";
+import { X, Mail, Lock, User as UserIcon, ArrowRight, Loader2, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useAuth } from "./auth-provider";
 import { YuppLogo } from "@/components/yupp/yupp-logo";
 import { toast } from "sonner";
@@ -13,11 +13,13 @@ interface AuthModalProps {
   mode?: "signin" | "signup";
 }
 
+
 export function AuthModal({ open, onClose, mode: initialMode = "signin" }: AuthModalProps) {
   const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
   const [mode, setMode] = useState<"signin" | "signup">(initialMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
   const [googleBusy, setGoogleBusy] = useState(false);
@@ -157,13 +159,21 @@ export function AuthModal({ open, onClose, mode: initialMode = "signin" }: AuthM
               </Field>
               <Field icon={<Lock size={15} />}>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                   required
                   className="w-full bg-transparent outline-none text-xs sm:text-sm font-medium placeholder:text-muted-foreground text-foreground"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                </button>
               </Field>
 
               <button
@@ -181,7 +191,7 @@ export function AuthModal({ open, onClose, mode: initialMode = "signin" }: AuthM
             </form>
 
             {/* Toggle Mode */}
-            <p className="text-center text-xs text-muted-foreground mt-5">
+            <p className="text-center text-xs text-muted-foreground mt-4">
               {mode === "signin" ? "Don't have an account? " : "Already have an account? "}
               <button
                 type="button"
@@ -191,6 +201,12 @@ export function AuthModal({ open, onClose, mode: initialMode = "signin" }: AuthM
                 {mode === "signin" ? "Sign Up" : "Sign In"}
               </button>
             </p>
+
+            {/* Security Guarantee */}
+            <div className="mt-4 pt-3 border-t border-border flex items-center justify-center gap-1.5 text-[10px] sm:text-[11px] text-muted-foreground font-medium">
+              <ShieldCheck size={13} className="text-emerald-500 shrink-0" />
+              <span>256-Bit Encrypted & Privacy Protected</span>
+            </div>
           </motion.div>
         </div>
       )}

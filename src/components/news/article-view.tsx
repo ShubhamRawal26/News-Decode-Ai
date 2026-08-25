@@ -4,11 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import {
   ArrowLeft, Bookmark, Share2, Clock, ExternalLink, Zap,
-  AlertCircle, Users, ArrowRight, TrendingUp, Sparkles, Tag,
+  AlertCircle, Users, ArrowRight, TrendingUp, Sparkles, Tag, Check, Plus,
 } from "lucide-react";
 import type { NewsArticle } from "@/lib/news";
 import { CATEGORY_LABELS } from "@/lib/news";
-import { ImpactRing, ImpactBadge } from "./impact-badge";
+import { ImpactRing } from "./impact-badge";
 import { NewsCard } from "./news-card";
 import { useAppStore, useUserActions } from "@/store/use-app-store";
 import { useAuth } from "@/components/auth/auth-provider";
@@ -122,7 +122,7 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
         <div className="absolute -top-32 -right-32 h-72 w-72 rounded-full bg-gradient-to-br from-violet-500/20 to-fuchsia-500/10 blur-3xl" />
         <div className="relative">
           <div className="flex items-center gap-2 flex-wrap mb-5">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-violet-600">{catLabel}</span>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400">{catLabel}</span>
             {article.subcategory && (
               <>
                 <span className="text-muted-foreground/40">·</span>
@@ -130,13 +130,13 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
               </>
             )}
             {article.isBreaking && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/15 text-rose-600 text-[11px] font-semibold px-2 py-0.5">
+              <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[11px] font-semibold px-2 py-0.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-rose-500 breaking-pulse" /> Breaking
               </span>
             )}
           </div>
 
-          <h1 className="font-display text-3xl sm:text-4xl lg:text-[3.25rem] font-normal tracking-tight leading-[1.08] mb-5">
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-[3.25rem] font-normal tracking-tight leading-[1.08] mb-5 text-foreground">
             {article.title}
           </h1>
 
@@ -145,12 +145,12 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
           </p>
 
           {/* meta row */}
-          <div className="flex items-center justify-between flex-wrap gap-4 pt-5 border-t border-foreground/5">
+          <div className="flex items-center justify-between flex-wrap gap-4 pt-5 border-t border-foreground/10">
             <div className="flex items-center gap-4">
               <ImpactRing score={article.impactScore} />
               <div>
                 <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">AI Impact Score</div>
-                <div className="text-sm font-medium mt-0.5">
+                <div className="text-sm font-medium mt-0.5 text-foreground">
                   {article.impactScore >= 85 ? "Critical significance" : article.impactScore >= 70 ? "High significance" : article.impactScore >= 50 ? "Moderate significance" : "Developing story"}
                 </div>
                 {article.sentiment && (
@@ -178,7 +178,7 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
               disabled={saving}
               className={cn(
                 "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all",
-                saved ? "bg-violet-500/15 text-violet-600" : "bg-foreground/5 hover:bg-foreground/10",
+                saved ? "bg-violet-500/15 text-violet-600 dark:text-violet-400" : "bg-foreground/5 hover:bg-foreground/10 text-foreground",
               )}
             >
               <Bookmark size={15} className={cn(saved && "fill-current")} />
@@ -186,7 +186,7 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
             </button>
             <button
               onClick={share}
-              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium bg-foreground/5 hover:bg-foreground/10 transition-colors"
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors"
             >
               <Share2 size={15} /> Share
             </button>
@@ -215,32 +215,32 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
             className="space-y-4"
           >
             <AnalysisBlock
-              icon={<AlertCircle size={18} className="text-sky-600" />}
+              icon={<AlertCircle size={18} className="text-sky-600 dark:text-sky-400" />}
               label="What Happened"
               accent="sky"
               text={article.whatHappened}
             />
             <AnalysisBlock
-              icon={<Zap size={18} className="text-violet-600" />}
+              icon={<Zap size={18} className="text-violet-600 dark:text-violet-400" />}
               label="Why It Matters"
               accent="violet"
               text={article.whyItMatters}
             />
             <AnalysisBlock
-              icon={<Users size={18} className="text-emerald-600" />}
+              icon={<Users size={18} className="text-emerald-600 dark:text-emerald-400" />}
               label="Who Is Affected"
               accent="emerald"
               text={article.whoIsAffected}
             />
             <AnalysisBlock
-              icon={<ArrowRight size={18} className="text-amber-600" />}
+              icon={<ArrowRight size={18} className="text-amber-600 dark:text-amber-400" />}
               label="What Happens Next"
               accent="amber"
               text={article.whatHappensNext}
             />
             {article.futureImpact && (
               <AnalysisBlock
-                icon={<TrendingUp size={18} className="text-rose-600" />}
+                icon={<TrendingUp size={18} className="text-rose-600 dark:text-rose-400" />}
                 label="Future Impact Prediction"
                 accent="rose"
                 text={article.futureImpact}
@@ -272,14 +272,14 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
                 <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-3">Key Entities</div>
                 <div className="flex flex-wrap gap-2">
                   {article.keyEntities.map((e) => (
-                    <span key={e} className="rounded-full bg-foreground/5 px-3 py-1 text-xs font-medium">{e}</span>
+                    <span key={e} className="rounded-full bg-foreground/5 px-3 py-1 text-xs font-medium text-foreground">{e}</span>
                   ))}
                 </div>
               </div>
             )}
             <div>
               <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-2">Source excerpt</div>
-              <p className="text-sm text-foreground/70 leading-relaxed">{article.content}</p>
+              <p className="text-sm text-foreground/80 leading-relaxed">{article.content}</p>
             </div>
           </motion.div>
         )}
@@ -288,10 +288,10 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
       {/* Related */}
       {related.length > 0 && (
         <div className="mt-12">
-          <h3 className="text-xl font-semibold tracking-tight mb-5">Related intelligence</h3>
+          <h3 className="text-xl font-semibold tracking-tight mb-5 text-foreground">Related intelligence</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {related.map((r, i) => (
-              <NewsCard key={r.id} article={r} index={i} />
+              <NewsCard key={r.id} article={r} index={i} onAuthRequired={onAuthRequired} />
             ))}
           </div>
         </div>
@@ -306,7 +306,7 @@ function TabBtn({ children, active, onClick }: { children: React.ReactNode; acti
       onClick={onClick}
       className={cn(
         "relative inline-flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-sm font-medium transition-colors",
-        active ? "text-background" : "text-muted-foreground hover:text-foreground",
+        active ? "text-background font-semibold" : "text-muted-foreground hover:text-foreground",
       )}
     >
       {active && <motion.span layoutId="articleTab" className="absolute inset-0 rounded-xl bg-foreground" transition={{ type: "spring", stiffness: 400, damping: 32 }} />}
@@ -339,7 +339,7 @@ function AnalysisBlock({
       transition={{ duration: 0.4 }}
       className={cn(
         "glass rounded-2xl p-5 sm:p-6 flex gap-4 items-start",
-        highlight && "ring-1 ring-rose-500/20",
+        highlight && "ring-1 ring-rose-500/30",
       )}
     >
       <span className={cn("inline-flex h-10 w-10 items-center justify-center rounded-xl shrink-0", accentBg)}>
@@ -378,11 +378,15 @@ function FollowTag({ tag }: { tag: string }) {
       disabled={busy}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-all",
-        followed ? "bg-violet-500/15 text-violet-600" : "bg-foreground/5 hover:bg-foreground/10",
+        followed ? "bg-violet-500/15 text-violet-600 dark:text-violet-400" : "bg-foreground/5 hover:bg-foreground/10 text-foreground",
       )}
     >
       <span>#{tag}</span>
-      {followed ? <span className="text-[10px]">✓</span> : <span className="text-[10px] opacity-60">+</span>}
+      {followed ? (
+        <Check size={11} className="shrink-0" />
+      ) : (
+        <Plus size={11} className="shrink-0 opacity-60" />
+      )}
     </button>
   );
 }

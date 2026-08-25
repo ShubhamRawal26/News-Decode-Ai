@@ -7,6 +7,7 @@ import { CATEGORIES } from "@/lib/news";
 import { useAppStore } from "@/store/use-app-store";
 import { useAuth } from "@/components/auth/auth-provider";
 import { DatePickerButton } from "./date-picker";
+import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { cn } from "@/lib/utils";
 
 export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin" | "signup") => void }) {
@@ -44,18 +45,18 @@ export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin
         )}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-3 sm:gap-4">
             {/* Logo */}
             <button
               onClick={() => go({ name: "home" })}
-              className="group flex items-center gap-2.5 shrink-0"
+              className="group flex items-center gap-2.5 shrink-0 focus-visible:ring-2 focus-visible:ring-primary rounded-xl"
             >
               <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#6366f1,#a855f7)] shadow-lg shadow-violet-500/30">
                 <Sparkles size={18} className="text-white" />
                 <span className="absolute inset-0 rounded-xl ring-1 ring-white/40" />
               </span>
-              <span className="hidden sm:flex flex-col leading-none">
-                <span className="text-[15px] font-semibold tracking-tight">
+              <span className="hidden sm:flex flex-col leading-none text-left">
+                <span className="text-[15px] font-semibold tracking-tight text-foreground">
                   NewsDecoded<span className="text-gradient">AI</span>
                 </span>
                 <span className="text-[10px] text-muted-foreground font-medium tracking-wide">
@@ -81,7 +82,7 @@ export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin
             </nav>
 
             {/* Right actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               {history.length > 0 && (
                 <button
                   onClick={back}
@@ -91,6 +92,7 @@ export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin
                   <ArrowLeft size={17} />
                 </button>
               )}
+
               <button
                 onClick={() => setSearchOpen((s) => !s)}
                 className="inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-foreground/5 transition-colors"
@@ -98,28 +100,34 @@ export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin
               >
                 <Search size={17} />
               </button>
+
               <button
                 onClick={() => go({ name: "dashboard" })}
                 className={cn(
                   "inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-medium transition-all",
                   view.name === "dashboard"
-                    ? "bg-foreground text-background"
+                    ? "bg-foreground text-background shadow-sm"
                     : "hover:bg-foreground/5",
                 )}
               >
                 <LayoutDashboard size={15} />
-                <span className="hidden sm:inline">Dashboard</span>
+                <span className="hidden md:inline">Dashboard</span>
               </button>
 
               {/* Date archive */}
               <DatePickerButton />
+
+              {/* Theme switcher */}
+              <div className="hidden sm:inline-flex">
+                <ThemeSwitcher compact />
+              </div>
 
               {/* Auth */}
               {user ? (
                 <div className="relative">
                   <button
                     onClick={() => setMenuOpen((o) => !o)}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full overflow-hidden ring-2 ring-white/60 shadow-md"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-full overflow-hidden ring-2 ring-primary/40 shadow-md"
                     aria-label="Account"
                   >
                     {user.photoURL ? (
@@ -141,7 +149,7 @@ export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin
                           transition={{ duration: 0.18 }}
                           className="absolute right-0 top-11 z-50 w-60 glass-strong rounded-2xl p-2 shadow-2xl"
                         >
-                          <div className="px-3 py-2.5 border-b border-foreground/5 mb-1">
+                          <div className="px-3 py-2.5 border-b border-foreground/10 mb-1">
                             <div className="text-sm font-semibold truncate">{user.displayName || "Account"}</div>
                             <div className="text-xs text-muted-foreground truncate">{user.email}</div>
                           </div>
@@ -153,7 +161,7 @@ export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin
                           </button>
                           <button
                             onClick={async () => { await signOut(); setMenuOpen(false); }}
-                            className="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-foreground/5 transition-colors flex items-center gap-2 text-rose-600"
+                            className="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-foreground/5 transition-colors flex items-center gap-2 text-rose-500"
                           >
                             <LogOut size={15} /> Sign out
                           </button>
@@ -198,7 +206,7 @@ export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
                     placeholder="Search stories, topics, companies…"
-                    className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground"
+                    className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground text-foreground"
                   />
                   <kbd className="hidden sm:inline-flex text-[10px] font-medium text-muted-foreground border rounded px-1.5 py-0.5">
                     ↵
@@ -219,14 +227,19 @@ export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-40 lg:hidden"
           >
-            <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+            <div className="absolute inset-0 bg-background/70 backdrop-blur-md" onClick={() => setMobileOpen(false)} />
             <motion.nav
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="absolute right-0 top-0 h-full w-[78%] max-w-sm glass-strong p-6 pt-24 flex flex-col gap-1.5"
+              className="absolute right-0 top-0 h-full w-[80%] max-w-sm glass-strong p-6 pt-24 flex flex-col gap-1.5 shadow-2xl"
             >
+              <div className="flex items-center justify-between pb-3 mb-2 border-b border-border/40">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Theme</span>
+                <ThemeSwitcher compact />
+              </div>
+
               <MobileNavBtn active={view.name === "home"} onClick={() => { go({ name: "home" }); setMobileOpen(false); }}>
                 Home
               </MobileNavBtn>
@@ -242,10 +255,11 @@ export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin
               <MobileNavBtn active={view.name === "dashboard"} onClick={() => { go({ name: "dashboard" }); setMobileOpen(false); }}>
                 Dashboard
               </MobileNavBtn>
+
               {!user && (
                 <button
                   onClick={() => { onAuthRequired?.("signin"); setMobileOpen(false); }}
-                  className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(110deg,#6366f1,#8b5cf6,#a855f7)] text-white px-4 py-3 text-sm font-medium shadow-lg shadow-violet-500/25"
+                  className="mt-4 inline-flex items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(110deg,#6366f1,#8b5cf6,#a855f7)] text-white px-4 py-3 text-sm font-medium shadow-lg shadow-violet-500/25"
                 >
                   Sign in to sync your data
                 </button>
@@ -264,7 +278,7 @@ function NavBtn({ children, active, onClick }: { children: React.ReactNode; acti
       onClick={onClick}
       className={cn(
         "relative rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors",
-        active ? "text-background" : "text-foreground/70 hover:text-foreground",
+        active ? "text-background" : "text-foreground/75 hover:text-foreground",
       )}
     >
       {active && (
@@ -285,7 +299,7 @@ function MobileNavBtn({ children, active, onClick }: { children: React.ReactNode
       onClick={onClick}
       className={cn(
         "rounded-xl px-4 py-3 text-left text-[15px] font-medium transition-colors",
-        active ? "bg-foreground text-background" : "hover:bg-foreground/5",
+        active ? "bg-foreground text-background font-semibold" : "hover:bg-foreground/5 text-foreground/80",
       )}
     >
       {children}

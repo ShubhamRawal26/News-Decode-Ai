@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/components/auth/auth-provider";
 import { UserSync } from "@/components/auth/user-sync";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -40,8 +41,8 @@ export const metadata: Metadata = {
     "markets",
     "impact analysis",
   ],
-  authors: [{ name: "NewsDecodedAI" }],
-  creator: "NewsDecodedAI",
+  authors: [{ name: "NewsDecodedAI" }, { name: "NexGen Digital", url: "https://nexgendigital.tech" }],
+  creator: "NexGen Digital",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -66,7 +67,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B0D14" },
+  ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -91,16 +95,40 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var mode = localStorage.getItem('theme-mode');
+                  var isDark = mode === 'dark' || (!mode || mode === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  var root = document.documentElement;
+                  if (isDark) {
+                    root.classList.add('dark');
+                    root.classList.remove('light');
+                    root.style.colorScheme = 'dark';
+                  } else {
+                    root.classList.add('light');
+                    root.classList.remove('dark');
+                    root.style.colorScheme = 'light';
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body
-        className={`${jakarta.variable} ${serif.variable} font-sans antialiased bg-background text-foreground`}
+        className={`${jakarta.variable} ${serif.variable} font-sans antialiased bg-background text-foreground min-h-screen`}
       >
-        <AuthProvider>
-          <UserSync />
-          {children}
-        </AuthProvider>
-        <Toaster />
-        <SonnerToaster position="bottom-right" />
+        <ThemeProvider>
+          <AuthProvider>
+            <UserSync />
+            {children}
+          </AuthProvider>
+          <Toaster />
+          <SonnerToaster position="bottom-right" />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -46,7 +46,7 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
       .catch(() => {})
       .finally(() => !cancelled && setLoading(false));
     return () => { cancelled = true; };
-  }, [articleId, markRead]);
+  }, [articleId]);
 
   if (loading) {
     return (

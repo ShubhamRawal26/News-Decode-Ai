@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { create } from "zustand";
 import type { NewsArticle } from "@/lib/news";
 import { useAuth } from "@/components/auth/auth-provider";
@@ -105,7 +106,7 @@ export function useUserActions() {
   const { user } = useAuth();
   const { toggleSavedLocal, toggleFollowedLocal } = useAppStore();
 
-  const save = async (articleId: string): Promise<boolean> => {
+  const save = useCallback(async (articleId: string): Promise<boolean> => {
     toggleSavedLocal(articleId); // optimistic
     if (user) {
       try {
@@ -118,9 +119,9 @@ export function useUserActions() {
       }
     }
     return get().savedIds.has(articleId);
-  };
+  }, [user, toggleSavedLocal]);
 
-  const follow = async (topic: string): Promise<boolean> => {
+  const follow = useCallback(async (topic: string): Promise<boolean> => {
     toggleFollowedLocal(topic); // optimistic
     if (user) {
       try {
@@ -133,9 +134,9 @@ export function useUserActions() {
       }
     }
     return get().followedTopics.has(topic);
-  };
+  }, [user, toggleFollowedLocal]);
 
-  const markRead = async (articleId: string) => {
+  const markRead = useCallback(async (articleId: string) => {
     if (user) {
       try {
         await recordHistory(user, articleId);
@@ -143,7 +144,7 @@ export function useUserActions() {
         /* ignore */
       }
     }
-  };
+  }, [user]);
 
   return { save, follow, markRead };
 }

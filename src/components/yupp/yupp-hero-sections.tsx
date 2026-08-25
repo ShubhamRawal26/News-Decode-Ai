@@ -3,9 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Sparkles, ArrowRight, Bot, Cpu, Zap, Trophy,
-  ThumbsUp, Volume2, Play, Pause, Compass, ShieldCheck,
-  Check, Globe2, Radio, Flame, ArrowUpRight
+  Sparkles, ArrowRight, ShieldCheck, Activity,
+  Zap, Globe2, TrendingUp, Check, Bookmark, Calendar, ArrowUpRight
 } from "lucide-react";
 import { RotatingStampBadge } from "./yupp-logo";
 import { useAppStore } from "@/store/use-app-store";
@@ -20,25 +19,42 @@ interface YuppHeroSectionsProps {
 
 export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppHeroSectionsProps) {
   const go = useAppStore((s) => s.go);
-  const [phoneVoted, setPhoneVoted] = useState<"left" | "right" | null>("left");
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+
+  const sampleStory = featuredStory || {
+    id: "sample-1",
+    title: "Global Semiconductor Treaty Reaches Historic Agreement on Supply Security",
+    summary: "A landmark multi-nation agreement establishes unified manufacturing protocols and secures $420B in clean tech capital.",
+    whatHappened: "Delegates from 28 nations signed a binding framework securing semiconductor supply chains and wafer access.",
+    whyItMatters: "Prevents supply fragmentation, stabilizes global tech hardware pricing, and guarantees 2nm chip allocations.",
+    whoIsAffected: "Enterprise hardware manufacturers, automotive OEMs, and global technology consumers.",
+    whatHappensNext: "Implementation phase begins across four continental fabrication hubs by Q3.",
+    impactScore: 94,
+    category: "ai-tech",
+    subcategory: "Semiconductors",
+    sourceName: "Global Tech Wire",
+    publishedAt: new Date().toISOString(),
+    tags: ["Semiconductors", "Supply Chain", "Global Policy"],
+    readTime: 3,
+    isBreaking: true,
+    isFeatured: true,
+  };
 
   return (
     <div className="space-y-12 sm:space-y-16">
       {/* =========================================================================
-          1. HERO CONTAINER (Exact match to Yupp.ai Hero Layout & Phone Mockup)
+          1. TOP HERO CARD (Deep Chocolate Espresso Background #2E151B)
          ========================================================================= */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="yupp-card-dark p-8 sm:p-14 lg:p-16 relative overflow-hidden shadow-2xl">
-          {/* Ambient warm gradient inside */}
+          {/* Warm Ambient Glow */}
           <div className="absolute -right-20 -bottom-20 w-96 h-96 rounded-full bg-[#E04E15]/15 blur-3xl pointer-events-none" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
-            {/* Left Column: Hero Headlines & CTA */}
+            {/* Left Column: Headlines & CTA */}
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-[#FBE2D5] text-xs font-semibold backdrop-blur-md">
                 <Sparkles size={13} className="text-[#E04E15]" />
-                <span>Multi-Model AI News Intelligence</span>
+                <span>AI-Powered News Scoring & Synthesis</span>
               </div>
 
               <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.04]">
@@ -47,7 +63,7 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
               </h1>
 
               <p className="text-sm sm:text-base text-[#D4BEC3] leading-relaxed max-w-md">
-                AI scans thousands of verified global news feeds to decode breaking events in real time — with multi-model consensus, impact scores, and causal foresight.
+                AI analyzes thousands of verified news sources in real time to score every event from 0–100, extract key facts, and decode why it matters and what happens next.
               </p>
 
               {/* Signature Google Sign In & Explore Pills */}
@@ -74,92 +90,70 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                   onClick={onExplore}
                   className="px-5 py-3 rounded-full bg-white/10 hover:bg-white/15 text-white text-sm font-semibold transition-colors"
                 >
-                  Explore Today&apos;s Stories
+                  Explore Today&apos;s Feed
                 </button>
               </div>
             </div>
 
-            {/* Right Column: Floating Phone Mockup Widget (Exact replica of Image 1/2) */}
+            {/* Right Column: Floating Phone Mockup Widget with Real Decoded News Card */}
             <div className="lg:col-span-6 flex justify-center lg:justify-end">
               <div className="relative w-full max-w-sm sm:max-w-md rounded-[2.5rem] bg-[#FBE2D5] p-3 sm:p-5 shadow-2xl text-[#2E151B] border-4 border-white/20">
                 {/* Phone Notch & Header */}
                 <div className="flex items-center justify-between pb-3 px-2 border-b border-black/10 text-xs">
                   <span className="font-mono text-[10px] font-bold">9:41</span>
                   <div className="h-4 w-16 rounded-full bg-black/10" />
-                  <span className="text-[10px] font-bold text-[#E04E15]">PRO ARENA</span>
+                  <span className="text-[10px] font-bold text-[#E04E15]">LIVE INTELLIGENCE</span>
                 </div>
 
-                {/* Inner Phone Content */}
-                <div className="mt-3 p-4 rounded-3xl bg-white/90 backdrop-blur-md shadow-sm space-y-3">
-                  <div className="text-center space-y-1">
-                    <h3 className="font-extrabold text-xs sm:text-sm text-[#2E151B]">
-                      World&apos;s smartest AIs, side-by-side with you
-                    </h3>
-                    <p className="text-[10px] text-[#73565C]">
-                      Get the best decoded answers from 800+ AI models.
-                    </p>
+                {/* Inner Phone Content: Decoded Story Snapshot */}
+                <div className="mt-3 p-4 rounded-3xl bg-white/95 backdrop-blur-md shadow-sm space-y-3">
+                  {/* Top Impact Score Pill */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#E04E15] bg-[#E04E15]/10 px-2 py-0.5 rounded-full">
+                      AI Impact Score
+                    </span>
+                    <span className="font-mono font-extrabold text-sm text-[#E04E15] bg-[#E04E15]/10 px-2.5 py-0.5 rounded-full">
+                      {sampleStory.impactScore} / 100
+                    </span>
                   </div>
 
-                  {/* Simulated Question Prompt Box */}
-                  <div className="p-2.5 rounded-2xl bg-[#FEEFE6] border border-black/5 text-[11px] text-[#2E151B] font-medium flex items-center justify-between">
-                    <span>What is the real market impact of the AI semiconductor race?</span>
-                    <div className="h-5 w-5 rounded-full bg-[#E04E15] text-white flex items-center justify-center shrink-0">
-                      <ArrowRight size={11} />
+                  {/* Headline */}
+                  <h3 className="font-heading font-extrabold text-xs sm:text-sm text-[#2E151B] leading-snug">
+                    {sampleStory.title}
+                  </h3>
+
+                  {/* 3-Point Structured Intelligence Breakdown */}
+                  <div className="space-y-2 text-[11px] leading-relaxed">
+                    <div className="p-2.5 rounded-2xl bg-[#FEEFE6] border border-black/5">
+                      <span className="font-bold text-[#E04E15] block text-[10px] uppercase tracking-wider mb-0.5">
+                        • What Happened
+                      </span>
+                      <p className="text-[#73565C] line-clamp-2">{sampleStory.whatHappened}</p>
+                    </div>
+
+                    <div className="p-2.5 rounded-2xl bg-[#FEEFE6] border border-black/5">
+                      <span className="font-bold text-[#E04E15] block text-[10px] uppercase tracking-wider mb-0.5">
+                        • Why It Matters
+                      </span>
+                      <p className="text-[#73565C] line-clamp-2">{sampleStory.whyItMatters}</p>
+                    </div>
+
+                    <div className="p-2.5 rounded-2xl bg-[#FEEFE6] border border-black/5">
+                      <span className="font-bold text-[#E04E15] block text-[10px] uppercase tracking-wider mb-0.5">
+                        • What Happens Next
+                      </span>
+                      <p className="text-[#73565C] line-clamp-2">{sampleStory.whatHappensNext}</p>
                     </div>
                   </div>
 
-                  {/* Side-by-Side Model Response Cards */}
-                  <div className="grid grid-cols-2 gap-2 text-[10px]">
-                    {/* Left Model: Perplexity / Claude */}
-                    <div
-                      onClick={() => setPhoneVoted("left")}
-                      className={cn(
-                        "p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between",
-                        phoneVoted === "left"
-                          ? "bg-white border-[#E04E15] ring-1 ring-[#E04E15]/30 shadow-sm"
-                          : "bg-white/60 border-black/5"
-                      )}
-                    >
-                      <div>
-                        <div className="font-bold text-[#E04E15] flex items-center gap-1 mb-1">
-                          <Bot size={10} />
-                          <span>Claude 3.7</span>
-                        </div>
-                        <p className="text-[#73565C] leading-snug">
-                          Supply bottleneck shifts from lithography to advanced packaging & energy grid access.
-                        </p>
-                      </div>
-                      <div className="mt-2 pt-1.5 border-t border-black/5 flex items-center gap-1 font-bold text-[#E04E15]">
-                        <ThumbsUp size={10} />
-                        <span>{phoneVoted === "left" ? "I prefer this ✓" : "Vote"}</span>
-                      </div>
-                    </div>
-
-                    {/* Right Model: GPT-4.5 */}
-                    <div
-                      onClick={() => setPhoneVoted("right")}
-                      className={cn(
-                        "p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between",
-                        phoneVoted === "right"
-                          ? "bg-white border-[#E04E15] ring-1 ring-[#E04E15]/30 shadow-sm"
-                          : "bg-white/60 border-black/5"
-                      )}
-                    >
-                      <div>
-                        <div className="font-bold text-indigo-600 flex items-center gap-1 mb-1">
-                          <Cpu size={10} />
-                          <span>GPT-4.5</span>
-                        </div>
-                        <p className="text-[#73565C] leading-snug">
-                          CapEx reallocation accelerating toward bespoke hyperscaler ASICs across North America.
-                        </p>
-                      </div>
-                      <div className="mt-2 pt-1.5 border-t border-black/5 flex items-center gap-1 font-bold text-indigo-600">
-                        <ThumbsUp size={10} />
-                        <span>{phoneVoted === "right" ? "I prefer this ✓" : "Vote"}</span>
-                      </div>
-                    </div>
-                  </div>
+                  {/* Bottom Action Pill */}
+                  <button
+                    onClick={() => go({ name: "article", id: sampleStory.id })}
+                    className="w-full py-2 rounded-2xl bg-[#E04E15] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm hover:opacity-90 transition-opacity"
+                  >
+                    <span>Read Full Decoded Brief</span>
+                    <ArrowRight size={12} />
+                  </button>
                 </div>
               </div>
             </div>
@@ -168,34 +162,34 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
       </section>
 
       {/* =========================================================================
-          2. "WHAT'S NEW" CAROUSEL (Exact match to Image 3)
+          2. "WHAT'S NEW" SECTION (Warm Peach Container with Rotating Stamp)
          ========================================================================= */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="yupp-card-peach p-8 sm:p-12 relative overflow-hidden shadow-md">
           <div className="flex items-start justify-between gap-4 mb-8">
             <div>
               <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-[#2E151B] tracking-tight">
-                What&apos;s New
+                What&apos;s New in NewsDecoded
               </h2>
               <p className="text-sm sm:text-base text-[#73565C] mt-1 font-medium">
-                Check out the latest decoded announcements and frontier model releases.
+                Our autonomous engine extracts key facts, scores real-world impact, and delivers actionable foresight.
               </p>
             </div>
 
-            {/* Rotating NEW Stamp Badge */}
-            <RotatingStampBadge text="NEW • NEW • NEW • " size={80} className="text-[#2E151B]" />
+            {/* Rotating Stamp Badge */}
+            <RotatingStampBadge text="DECODE • DECODE • DECODE • " size={80} className="text-[#2E151B]" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {/* Card A: Claude Sonnet 4.6 (Dark landscape card) */}
+            {/* Card 1: AI Impact Scoring */}
             <div className="rounded-3xl bg-[#1C151B] p-6 text-white flex flex-col justify-between min-h-[220px] shadow-lg relative overflow-hidden">
               <div className="space-y-2 relative z-10">
                 <div className="h-10 w-10 rounded-2xl bg-white/10 flex items-center justify-center text-[#F05A28]">
-                  <Sparkles size={20} />
+                  <Activity size={20} />
                 </div>
-                <h3 className="font-heading text-lg font-bold text-white">Claude Sonnet 4.6</h3>
+                <h3 className="font-heading text-lg font-bold text-white">Objective Impact Scores (0–100)</h3>
                 <p className="text-xs text-[#D4BEC3] leading-relaxed">
-                  Anthropic&apos;s latest model offering deep geopolitical reasoning, coding synthesis, and fast causal predictions.
+                  Every story is scored on economic magnitude, geopolitical disruption, market risk, and societal impact.
                 </p>
               </div>
 
@@ -203,20 +197,20 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                 onClick={onExplore}
                 className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#FBE2D5] hover:text-white pt-2 border-t border-white/10"
               >
-                <span>Try Sonnet 4.6</span>
+                <span>View High Impact Stories</span>
                 <ArrowRight size={13} />
               </button>
             </div>
 
-            {/* Card B: Gemini 3.1 Pro (White card) */}
+            {/* Card 2: 4-Point Structural Breakdown */}
             <div className="rounded-3xl bg-white p-6 text-[#2E151B] flex flex-col justify-between min-h-[220px] shadow-sm border border-black/5">
               <div className="space-y-2">
-                <div className="h-10 w-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center">
-                  <Bot size={20} />
+                <div className="h-10 w-10 rounded-2xl bg-orange-50 text-[#E04E15] flex items-center justify-center">
+                  <Zap size={20} />
                 </div>
-                <h3 className="font-heading text-lg font-bold">Gemini 3.1 Pro</h3>
+                <h3 className="font-heading text-lg font-bold">4-Point Intelligence Synthesis</h3>
                 <p className="text-xs text-[#73565C] leading-relaxed">
-                  Google&apos;s advanced model with 2M token context, live web retrieval, and real-time multi-source fact-checking.
+                  Clear, digestible sections for What Happened, Why It Matters, Who Is Affected, and What Happens Next.
                 </p>
               </div>
 
@@ -224,20 +218,20 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                 onClick={onExplore}
                 className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#E04E15] hover:opacity-80 pt-2 border-t border-black/5"
               >
-                <span>Try Gemini 3.1 Pro</span>
+                <span>Explore Synthesis</span>
                 <ArrowRight size={13} />
               </button>
             </div>
 
-            {/* Card C: DeepSeek R1 (Ivory card) */}
+            {/* Card 3: 2,400+ Verified Sources */}
             <div className="rounded-3xl bg-white p-6 text-[#2E151B] flex flex-col justify-between min-h-[220px] shadow-sm border border-black/5">
               <div className="space-y-2">
-                <div className="h-10 w-10 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center">
-                  <Cpu size={20} />
+                <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <Globe2 size={20} />
                 </div>
-                <h3 className="font-heading text-lg font-bold">DeepSeek R1</h3>
+                <h3 className="font-heading text-lg font-bold">Multi-Source Verification</h3>
                 <p className="text-xs text-[#73565C] leading-relaxed">
-                  Open reasoning model mapping first-principles logic, mathematical proofs, and causal supply timelines.
+                  Eliminates bias and sensationalism by cross-referencing thousands of verified global reporting outlets.
                 </p>
               </div>
 
@@ -245,7 +239,7 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                 onClick={onExplore}
                 className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#E04E15] hover:opacity-80 pt-2 border-t border-black/5"
               >
-                <span>Try DeepSeek R1</span>
+                <span>Check Sources</span>
                 <ArrowRight size={13} />
               </button>
             </div>
@@ -254,7 +248,7 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
       </section>
 
       {/* =========================================================================
-          3. "HOW NEWSDECODED WORKS" (Exact match to Image 4 & 5)
+          3. "HOW NEWSDECODED WORKS" SECTION
          ========================================================================= */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="yupp-card-peach p-8 sm:p-12 shadow-md space-y-8">
@@ -264,7 +258,7 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                 How NewsDecoded Works
               </h2>
               <p className="text-sm sm:text-base text-[#73565C] mt-1 font-medium max-w-xl">
-                Use multiple AIs side-by-side for no cost. Provide feedback to win intelligence credits that let you keep prompting.
+                We distill complex global breaking events into structured, objective intelligence briefs in seconds.
               </p>
             </div>
 
@@ -272,69 +266,66 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
             <RotatingStampBadge text="LEARN • LEARN • LEARN • " size={80} className="text-[#2E151B]" />
           </div>
 
-          {/* Banner: Every AI for everyone with Model Badges */}
+          {/* Banner: Zero Fluff, 100% Signal */}
           <div className="rounded-[2.5rem] bg-[#2E151B] p-8 sm:p-10 text-white relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6 shadow-xl">
             <div className="space-y-2 max-w-md">
               <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
-                Every AI for everyone
+                Zero Fluff. 100% Signal.
               </h3>
               <p className="text-xs sm:text-sm text-[#D4BEC3]">
-                Access over 800 of the best AIs from OpenAI, Google, Anthropic, and DeepSeek to automatically decode what actually matters.
+                AI continuously monitors breaking feeds, aggregates key data points, and computes impact relevance.
               </p>
             </div>
 
-            {/* Floating Model Badges */}
             <div className="flex flex-wrap items-center gap-2.5 max-w-md justify-center lg:justify-end">
-              {["Anthropic", "OpenAI", "DeepSeek", "Google Gemini", "Mistral", "Meta Llama", "Perplexity", "Grok 3"].map((brand) => (
+              {["World News", "Business", "AI & Technology", "Politics", "Markets"].map((lens) => (
                 <span
-                  key={brand}
+                  key={lens}
                   className="px-3.5 py-1.5 rounded-full bg-white/10 text-white text-xs font-semibold border border-white/10"
                 >
-                  {brand}
+                  {lens}
                 </span>
               ))}
             </div>
           </div>
 
-          {/* 2-Column Cards */}
+          {/* 2-Column Feature Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="yupp-card-white p-8 space-y-4">
               <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#2E151B]">
-                Multiple AIs, side by side with you
+                We score the impact, you get the clarity
               </h3>
               <p className="text-sm text-[#73565C] leading-relaxed">
-                Get side-by-side news breakdowns from multiple models for macro economics, technology, and politics. Compare and see which hits the mark.
+                Skip clickbait and endless scroll. See immediate impact ratings from 0 to 100 to instantly know which stories affect markets, policy, and your industry.
               </p>
             </div>
 
             <div className="yupp-card-white p-8 space-y-4">
               <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#2E151B]">
-                Give feedback, get more credits
+                Actionable foresight on what happens next
               </h3>
               <p className="text-sm text-[#73565C] leading-relaxed">
-                Feedback comes with more credits which allow you to keep using NewsDecoded and access over 800 of the best models available.
+                Every decoded piece maps out the upcoming regulatory milestones, market reactions, and timeline projections for the next 30 to 90 days.
               </p>
             </div>
           </div>
 
-          {/* Bottom Wide Banner: Shape the future */}
+          {/* Bottom Wide Banner */}
           <div className="yupp-card-white p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2">
               <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#2E151B]">
-                Shape the future, see the stats
+                Five lenses on the world, decoded daily
               </h3>
               <p className="text-sm text-[#73565C] max-w-xl">
-                Curious about how your feedback shapes the industry? Take a look at the Leaderboard to see how models stack up across categories and speed.
+                Browse our curated categories or search across thousands of indexed stories with intelligent keyword filtering.
               </p>
             </div>
 
             <button
-              onClick={() => {
-                document.getElementById("yupp-leaderboard")?.scrollIntoView({ behavior: "smooth" });
-              }}
+              onClick={onExplore}
               className="btn-yupp-primary text-sm whitespace-nowrap"
             >
-              <span>View the leaderboard</span>
+              <span>Explore All Lenses</span>
               <ArrowRight size={15} />
             </button>
           </div>
@@ -342,62 +333,14 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
       </section>
 
       {/* =========================================================================
-          4. AI AUDIO BRIEF & DAILY SYNTHESIS PLAYER WIDGET
-         ========================================================================= */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="yupp-card-white p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md border border-border">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setIsPlayingAudio(!isPlayingAudio)}
-              className="h-14 w-14 rounded-full bg-[#E04E15] text-white flex items-center justify-center shadow-lg shadow-orange-950/20 hover:scale-105 transition-all shrink-0"
-              title={isPlayingAudio ? "Pause Audio Brief" : "Play Today's AI Audio Brief"}
-            >
-              {isPlayingAudio ? <Pause size={22} className="fill-current" /> : <Play size={22} className="fill-current ml-1" />}
-            </button>
-
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-display text-lg sm:text-xl font-bold text-[#2E151B] dark:text-white">
-                  Today&apos;s 3-Minute AI Audio Brief
-                </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                  Daily Podcast
-                </span>
-              </div>
-              <p className="text-xs text-[#73565C] dark:text-[#D4BEC3] mt-0.5">
-                Listen to a distilled multi-model audio briefing of today&apos;s most critical global stories.
-              </p>
-            </div>
-          </div>
-
-          {/* Animated Waveform Bars */}
-          <div className="flex items-center gap-1.5 h-10 px-4 py-2 rounded-2xl bg-secondary/80">
-            {[40, 70, 30, 95, 55, 80, 100, 60, 45, 85, 50, 90, 35, 75, 85, 45].map((h, i) => (
-              <span
-                key={i}
-                style={{
-                  height: isPlayingAudio ? `${Math.max(20, (h * Math.random()).toFixed(0))}%` : `${h}%`,
-                  transition: "height 0.2s ease",
-                }}
-                className={cn(
-                  "w-1.5 rounded-full",
-                  i <= 8 ? "bg-[#E04E15]" : "bg-muted-foreground/30"
-                )}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          5. WARM EMOTIONAL QUOTE SECTION
+          4. WARM QUOTE / TEAM SECTION
          ========================================================================= */}
       <section className="mx-auto max-w-4xl px-4 text-center py-12">
         <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-[#2E151B] dark:text-[#FFF1E8] tracking-tight mb-4">
-          Built with love, shaped by a million voices.
+          Built for clarity, powered by intelligence.
         </h2>
         <p className="text-sm sm:text-base text-[#73565C] dark:text-[#BFA8AD] leading-relaxed max-w-2xl mx-auto">
-          To every user who asked a question, compared a response, cast a vote, or shared a decoded story: you make NewsDecoded what it is. We are grateful for every prompt, every piece of feedback, and every moment you spend with us.
+          We believe everyone deserves access to unbiased, objective news intelligence without the noise, spin, or sensationalism.
         </p>
         <span className="block mt-4 text-xs font-bold uppercase tracking-widest text-[#E04E15]">
           — The NewsDecoded Team

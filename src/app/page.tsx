@@ -5,9 +5,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAppStore } from "@/store/use-app-store";
 import { YuppNavbar } from "@/components/yupp/yupp-navbar";
 import { YuppHeroSections } from "@/components/yupp/yupp-hero-sections";
-import { YuppPromptBar } from "@/components/yupp/yupp-prompt-bar";
-import { YuppComparisonArena } from "@/components/yupp/yupp-comparison-arena";
-import { YuppLeaderboard } from "@/components/yupp/yupp-leaderboard";
 import { BreakingTicker } from "@/components/news/breaking-ticker";
 import { CategoryNav } from "@/components/news/category-nav";
 import { NewsCard } from "@/components/news/news-card";
@@ -20,7 +17,7 @@ import { SearchView } from "@/components/news/search-view";
 import { DateView } from "@/components/news/date-view";
 import { AuthModal } from "@/components/auth/auth-modal";
 import { CATEGORIES, type NewsArticle } from "@/lib/news";
-import { Sparkles, Flame } from "lucide-react";
+import { Sparkles, Flame, Activity, Zap } from "lucide-react";
 
 export default function Home() {
   const { view, go } = useAppStore();
@@ -88,7 +85,7 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen flex flex-col bg-background text-foreground yupp-grid-bg">
-      {/* Yupp Floating Rounded Navbar */}
+      {/* Floating Rounded Navbar */}
       <YuppNavbar
         onSearchOpen={() => setSpotlightOpen(true)}
         onAuthOpen={() => openAuth("signin")}
@@ -105,19 +102,14 @@ export default function Home() {
           </div>
         ) : view.name === "home" ? (
           <div className="space-y-12 sm:space-y-16">
-            {/* Top Yupp Hero Banner */}
+            {/* Top Hero Section with Phone Mockup Decoded Card */}
             <YuppHeroSections
               featuredStory={featuredStory}
               onAuthOpen={() => openAuth("signin")}
               onExplore={() => {
-                document.getElementById("yupp-arena")?.scrollIntoView({ behavior: "smooth" });
+                document.getElementById("decoded-feed")?.scrollIntoView({ behavior: "smooth" });
               }}
             />
-
-            {/* Central Yupp Prompt & Model Selector */}
-            <div id="yupp-prompt" className="scroll-mt-28">
-              <YuppPromptBar onSearch={(q) => go({ name: "search", q })} />
-            </div>
 
             {/* Breaking News Ticker */}
             {breaking.length > 0 && (
@@ -126,29 +118,23 @@ export default function Home() {
               </div>
             )}
 
-            {/* Multi-Model Side-by-Side Comparison Arena */}
-            {featuredStory && (
-              <div id="yupp-arena" className="scroll-mt-28">
-                <YuppComparisonArena featuredArticle={featuredStory} />
-              </div>
-            )}
-
-            {/* Intelligence Lenses Category Nav */}
+            {/* Category Lenses Navigation */}
             <section className="mx-auto max-w-7xl px-4 sm:px-6">
               <div className="yupp-card-white p-6 sm:p-8">
                 <SectionHeader
-                  title="Intelligence Lenses"
-                  subtitle="Browse decoded global stories by category"
+                  title="Explore by Category Lens"
+                  subtitle="Five global perspectives, scored and decoded daily"
+                  icon={<Zap size={18} className="text-[#E04E15]" />}
                 />
                 <CategoryNav counts={counts} />
               </div>
             </section>
 
-            {/* Full Decoded Intelligence Feed */}
-            <section id="yupp-feed" className="mx-auto max-w-7xl px-4 sm:px-6 scroll-mt-28">
+            {/* Decoded News Intelligence Feed */}
+            <section id="decoded-feed" className="mx-auto max-w-7xl px-4 sm:px-6 scroll-mt-28">
               <SectionHeader
-                title="Latest Decoded Intelligence"
-                subtitle="Ranked by multi-model consensus & AI impact scoring"
+                title="Today's Decoded Stories"
+                subtitle="Ranked by AI Impact Score with brief summaries & key takeaways"
                 icon={<Sparkles size={18} className="text-[#E04E15]" />}
               />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -163,11 +149,6 @@ export default function Home() {
               </div>
             </section>
 
-            {/* Live Model Leaderboard */}
-            <div id="yupp-leaderboard" className="scroll-mt-28">
-              <YuppLeaderboard />
-            </div>
-
             {/* Trending Topics Strip */}
             {trending.length > 0 && (
               <section className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -175,7 +156,7 @@ export default function Home() {
                   <div className="flex items-center gap-2 mb-3">
                     <Flame size={16} className="text-[#E04E15]" />
                     <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                      Trending on the Wire
+                      Trending on the Global Wire
                     </span>
                   </div>
                   <div className="flex items-center gap-2 flex-wrap">
@@ -239,7 +220,7 @@ export default function Home() {
                   autoFocus
                   value={spotlightQuery}
                   onChange={(e) => setSpotlightQuery(e.target.value)}
-                  placeholder="Search intelligence topics, entities, models..."
+                  placeholder="Search intelligence topics, entities, news..."
                   className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-base font-medium"
                 />
                 <kbd className="text-[10px] px-2 py-0.5 rounded bg-secondary text-muted-foreground border border-border">

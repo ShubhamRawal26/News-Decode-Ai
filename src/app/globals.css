@@ -6,7 +6,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-jakarta), -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  --font-sans: var(--font-jakarta), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
   --font-serif: var(--font-serif), ui-serif, Georgia, Cambria, "Times New Roman", serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -43,94 +43,130 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* =========================================================================
+   macOS Color Palette & System Tokens
+   ========================================================================= */
+
 :root, html.light {
   --radius: 0.875rem;
-  /* Apple Studio Clean Light Theme */
-  --background: #F8F9FC;
-  --foreground: #0F172A;
-  --card: rgba(255, 255, 255, 0.85);
-  --card-foreground: #0F172A;
-  --popover: rgba(255, 255, 255, 0.95);
-  --popover-foreground: #0F172A;
-  --primary: #4F46E5;
-  --primary-foreground: #FFFFFF;
-  --secondary: #F1F5F9;
-  --secondary-foreground: #1E293B;
-  --muted: #F1F5F9;
-  --muted-foreground: #64748B;
-  --accent: #EEF2FF;
-  --accent-foreground: #312E81;
-  --accent-orange: #FF6B00;
-  --destructive: #EF4444;
-  --border: rgba(226, 232, 240, 0.8);
-  --input: rgba(226, 232, 240, 0.9);
-  --ring: #6366F1;
-  --chart-1: #6366F1;
-  --chart-2: #8B5CF6;
-  --chart-3: #0EA5E9;
-  --chart-4: #EC4899;
-  --chart-5: #F59E0B;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #0F172A;
-  --sidebar-primary: #4F46E5;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F1F5F9;
-  --sidebar-accent-foreground: #1E293B;
-  --sidebar-border: rgba(226, 232, 240, 0.8);
-  --sidebar-ring: #6366F1;
 
-  --glass-bg: rgba(255, 255, 255, 0.82);
-  --glass-border: rgba(255, 255, 255, 0.9);
+  /* macOS Sequoia Light Desktop */
+  --background: #EBECEF;
+  --foreground: #1D1D1F;
+
+  /* macOS Window Materials */
+  --card: rgba(255, 255, 255, 0.82);
+  --card-foreground: #1D1D1F;
+  --popover: rgba(255, 255, 255, 0.94);
+  --popover-foreground: #1D1D1F;
+
+  /* macOS System Accents */
+  --primary: #007AFF; /* Apple System Blue */
+  --primary-foreground: #FFFFFF;
+  --secondary: rgba(0, 0, 0, 0.05);
+  --secondary-foreground: #1D1D1F;
+  --muted: rgba(0, 0, 0, 0.04);
+  --muted-foreground: #6E6E73;
+  --accent: rgba(0, 122, 255, 0.1);
+  --accent-foreground: #007AFF;
+  --accent-orange: #FF9500;
+  --destructive: #FF3B30; /* Apple System Red */
+
+  /* Hairline borders & highlights */
+  --border: rgba(0, 0, 0, 0.08);
+  --input: rgba(0, 0, 0, 0.06);
+  --ring: #007AFF;
+
+  /* Charts */
+  --chart-1: #007AFF;
+  --chart-2: #AF52DE;
+  --chart-3: #30B0C7;
+  --chart-4: #FF2D55;
+  --chart-5: #FF9500;
+
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1D1D1F;
+  --sidebar-primary: #007AFF;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: rgba(0, 0, 0, 0.05);
+  --sidebar-accent-foreground: #1D1D1F;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-ring: #007AFF;
+
+  /* macOS Liquid Vibrancy Material */
+  --glass-bg: rgba(255, 255, 255, 0.80);
+  --glass-border: rgba(255, 255, 255, 0.90);
   --glass-strong-bg: rgba(255, 255, 255, 0.92);
-  --glass-strong-border: rgba(226, 232, 240, 0.9);
-  --glass-nav-bg: rgba(248, 249, 252, 0.82);
-  --glass-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 1px 3px 0 rgba(15, 23, 42, 0.03);
-  --card-glow-opacity: 0.35;
+  --glass-strong-border: rgba(0, 0, 0, 0.08);
+  --glass-nav-bg: rgba(235, 236, 239, 0.78);
+  --glass-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --card-glow-opacity: 0.25;
+
+  /* Titlebar & Menubar */
+  --macos-menubar-bg: rgba(235, 236, 239, 0.82);
+  --macos-menubar-border: rgba(0, 0, 0, 0.08);
+  --macos-titlebar-bg: rgba(245, 245, 247, 0.90);
 }
 
 html.dark, .dark {
   --radius: 0.875rem;
-  /* Apple Space Obsidian Dark Theme */
-  --background: #090A10;
-  --foreground: #F8FAFC;
-  --card: rgba(18, 21, 31, 0.72);
-  --card-foreground: #F8FAFC;
-  --popover: rgba(18, 21, 31, 0.94);
-  --popover-foreground: #F8FAFC;
-  --primary: #6366F1;
-  --primary-foreground: #FFFFFF;
-  --secondary: #1E2230;
-  --secondary-foreground: #F1F5F9;
-  --muted: #1E2230;
-  --muted-foreground: #94A3B8;
-  --accent: #252A3D;
-  --accent-foreground: #FFFFFF;
-  --accent-orange: #FF6B00;
-  --destructive: #EF4444;
-  --border: rgba(255, 255, 255, 0.09);
-  --input: rgba(255, 255, 255, 0.08);
-  --ring: #818CF8;
-  --chart-1: #818CF8;
-  --chart-2: #A78BFA;
-  --chart-3: #38BDF8;
-  --chart-4: #F472B6;
-  --chart-5: #FBBF24;
-  --sidebar: #0E1017;
-  --sidebar-foreground: #F8FAFC;
-  --sidebar-primary: #6366F1;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #1E2230;
-  --sidebar-accent-foreground: #F1F5F9;
-  --sidebar-border: rgba(255, 255, 255, 0.09);
-  --sidebar-ring: #818CF8;
 
-  --glass-bg: rgba(18, 21, 31, 0.65);
-  --glass-border: rgba(255, 255, 255, 0.09);
-  --glass-strong-bg: rgba(18, 21, 31, 0.85);
-  --glass-strong-border: rgba(255, 255, 255, 0.13);
-  --glass-nav-bg: rgba(9, 10, 16, 0.82);
-  --glass-shadow: 0 12px 36px -6px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
-  --card-glow-opacity: 0.6;
+  /* macOS Sequoia Space Obsidian Desktop */
+  --background: #14151B;
+  --foreground: #F5F5F7;
+
+  /* macOS Window Materials */
+  --card: rgba(28, 30, 40, 0.72);
+  --card-foreground: #F5F5F7;
+  --popover: rgba(26, 28, 38, 0.94);
+  --popover-foreground: #F5F5F7;
+
+  /* macOS System Accents */
+  --primary: #0A84FF; /* Apple System Blue Dark */
+  --primary-foreground: #FFFFFF;
+  --secondary: rgba(255, 255, 255, 0.08);
+  --secondary-foreground: #F5F5F7;
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: #98989D;
+  --accent: rgba(10, 132, 255, 0.16);
+  --accent-foreground: #0A84FF;
+  --accent-orange: #FF9F0A;
+  --destructive: #FF453A;
+
+  /* Hairline borders & highlights */
+  --border: rgba(255, 255, 255, 0.11);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: #0A84FF;
+
+  /* Charts */
+  --chart-1: #0A84FF;
+  --chart-2: #BF5AF2;
+  --chart-3: #64D2FF;
+  --chart-4: #FF375F;
+  --chart-5: #FFD60A;
+
+  --sidebar: #1C1E28;
+  --sidebar-foreground: #F5F5F7;
+  --sidebar-primary: #0A84FF;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: rgba(255, 255, 255, 0.08);
+  --sidebar-accent-foreground: #F5F5F7;
+  --sidebar-border: rgba(255, 255, 255, 0.11);
+  --sidebar-ring: #0A84FF;
+
+  /* macOS Liquid Vibrancy Material */
+  --glass-bg: rgba(28, 30, 40, 0.68);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-strong-bg: rgba(28, 30, 40, 0.88);
+  --glass-strong-border: rgba(255, 255, 255, 0.16);
+  --glass-nav-bg: rgba(20, 21, 27, 0.82);
+  --glass-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --card-glow-opacity: 0.55;
+
+  /* Titlebar & Menubar */
+  --macos-menubar-bg: rgba(20, 21, 27, 0.85);
+  --macos-menubar-border: rgba(255, 255, 255, 0.1);
+  --macos-titlebar-bg: rgba(24, 26, 36, 0.90);
 }
 
 @layer base {
@@ -148,41 +184,79 @@ html.dark, .dark {
     font-feature-settings: "cv11", "ss01", "ss02", "kern";
     letter-spacing: -0.012em;
     overflow-x: hidden;
-    transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
   ::selection {
-    background: rgba(99, 102, 241, 0.25);
+    background: rgba(0, 122, 255, 0.3);
   }
+}
+
+/* ---------- macOS Traffic Lights ---------- */
+.traffic-light-red {
+  background-color: #FF5F56;
+  border: 0.5px solid #E0443E;
+}
+.traffic-light-yellow {
+  background-color: #FFBD2E;
+  border: 0.5px solid #DEA123;
+}
+.traffic-light-green {
+  background-color: #27C93F;
+  border: 0.5px solid #1AAB29;
+}
+
+/* ---------- macOS Window Styling ---------- */
+.macos-window {
+  border-radius: 1.25rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  background: var(--card);
+}
+
+.macos-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--macos-titlebar-bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.macos-menubar {
+  background: var(--macos-menubar-bg);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border-bottom: 1px solid var(--macos-menubar-border);
 }
 
 /* ---------- Display typography (editorial headlines) ---------- */
 .font-display {
   font-family: var(--font-serif), ui-serif, Georgia, serif;
   font-weight: 400;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   font-feature-settings: "liga", "dlig", "kern";
 }
 
 /* ---------- Premium scrollbar ---------- */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(140, 140, 150, 0.25);
   border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.4);
-  background-clip: padding-box;
+  background: rgba(140, 140, 150, 0.45);
 }
 
-/* ---------- Atmospheric background mesh ---------- */
+/* ---------- Sonoma Desktop Dynamic Wallpaper Mesh ---------- */
 .aurora-bg {
   position: fixed;
   inset: 0;
@@ -193,48 +267,48 @@ html.dark, .dark {
 
 html.light .aurora-bg {
   background:
-    radial-gradient(1100px 750px at 15% -5%, rgba(99, 102, 241, 0.08), transparent 60%),
-    radial-gradient(1000px 700px at 85% 10%, rgba(168, 85, 247, 0.06), transparent 60%),
-    radial-gradient(900px 650px at 50% 115%, rgba(14, 165, 233, 0.06), transparent 60%),
-    radial-gradient(700px 500px at 90% 80%, rgba(244, 114, 182, 0.04), transparent 60%);
+    radial-gradient(1200px 800px at 10% -5%, rgba(0, 122, 255, 0.08), transparent 60%),
+    radial-gradient(1100px 750px at 90% 15%, rgba(175, 82, 222, 0.07), transparent 60%),
+    radial-gradient(1000px 700px at 50% 120%, rgba(48, 176, 199, 0.06), transparent 60%),
+    radial-gradient(800px 600px at 85% 85%, rgba(255, 149, 0, 0.05), transparent 60%);
 }
 
 html.dark .aurora-bg {
   background:
-    radial-gradient(1100px 750px at 15% -5%, rgba(99, 102, 241, 0.16), transparent 65%),
-    radial-gradient(1000px 700px at 85% 10%, rgba(168, 85, 247, 0.13), transparent 65%),
-    radial-gradient(900px 650px at 50% 115%, rgba(14, 165, 233, 0.12), transparent 65%),
-    radial-gradient(700px 500px at 90% 80%, rgba(244, 114, 182, 0.08), transparent 65%);
+    radial-gradient(1200px 800px at 10% -5%, rgba(10, 132, 255, 0.16), transparent 65%),
+    radial-gradient(1100px 750px at 90% 15%, rgba(191, 90, 242, 0.14), transparent 65%),
+    radial-gradient(1000px 700px at 50% 120%, rgba(100, 210, 255, 0.12), transparent 65%),
+    radial-gradient(800px 600px at 85% 85%, rgba(255, 159, 10, 0.08), transparent 65%);
 }
 
 .aurora-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.55;
+  filter: blur(85px);
+  opacity: 0.6;
   will-change: transform;
 }
 .aurora-blob.b1 {
-  width: 560px; height: 560px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.35), transparent 65%);
+  width: 580px; height: 580px;
+  background: radial-gradient(circle, rgba(0, 122, 255, 0.35), transparent 65%);
   top: -140px; left: -100px;
   animation: auroraFloat1 24s ease-in-out infinite;
 }
 .aurora-blob.b2 {
-  width: 520px; height: 520px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.3), transparent 65%);
+  width: 540px; height: 540px;
+  background: radial-gradient(circle, rgba(175, 82, 222, 0.3), transparent 65%);
   top: 8%; right: -140px;
   animation: auroraFloat2 28s ease-in-out infinite;
 }
 .aurora-blob.b3 {
   width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.25), transparent 65%);
+  background: radial-gradient(circle, rgba(48, 176, 199, 0.25), transparent 65%);
   bottom: -140px; left: 28%;
   animation: auroraFloat3 32s ease-in-out infinite;
 }
 .aurora-blob.b4 {
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(236, 72, 153, 0.2), transparent 65%);
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(255, 149, 0, 0.2), transparent 65%);
   bottom: 18%; right: 18%;
   animation: auroraFloat1 30s ease-in-out infinite reverse;
 }
@@ -251,27 +325,27 @@ html.dark .aurora-bg {
   50% { transform: translate(30px, -60px) scale(1.1); }
 }
 
-/* ---------- Apple-Grade Glassmorphism ---------- */
+/* ---------- Apple Glassmorphism ---------- */
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .glass-strong {
   background: var(--glass-strong-bg);
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  backdrop-filter: blur(36px) saturate(210%);
+  -webkit-backdrop-filter: blur(36px) saturate(210%);
   border: 1px solid var(--glass-strong-border);
   box-shadow: var(--glass-shadow);
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .glass-nav {
   background: var(--glass-nav-bg);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
   border-bottom: 1px solid var(--border);
   box-shadow: var(--glass-shadow);
   transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -279,13 +353,13 @@ html.dark .aurora-bg {
 
 /* ---------- Gradient text ---------- */
 .text-gradient {
-  background: linear-gradient(115deg, #6366F1 0%, #A855F7 50%, #EC4899 100%);
+  background: linear-gradient(115deg, #007AFF 0%, #AF52DE 50%, #FF2D55 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 .text-gradient-cyan {
-  background: linear-gradient(115deg, #0EA5E9 0%, #06B6D4 100%);
+  background: linear-gradient(115deg, #30B0C7 0%, #007AFF 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -301,38 +375,11 @@ html.dark .aurora-bg {
   position: absolute;
   inset: 0;
   transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   animation: shimmerMove 1.6s infinite;
 }
 @keyframes shimmerMove {
   100% { transform: translateX(100%); }
-}
-
-/* ---------- Floating animations ---------- */
-@keyframes floaty {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-7px); }
-}
-.animate-floaty {
-  animation: floaty 6s ease-in-out infinite;
-}
-
-/* ---------- Breaking pulse ---------- */
-@keyframes breakPulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
-  50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
-}
-.breaking-pulse {
-  animation: breakPulse 2s infinite;
-}
-
-/* ---------- Grid pattern ---------- */
-.grid-pattern {
-  background-image:
-    linear-gradient(rgba(100, 116, 139, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(100, 116, 139, 0.07) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, black, transparent 75%);
 }
 
 /* ---------- Card hover glow ---------- */
@@ -346,7 +393,7 @@ html.dark .aurora-bg {
   inset: -1px;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, var(--card-glow-opacity)), transparent 45%, rgba(168, 85, 247, var(--card-glow-opacity)));
+  background: linear-gradient(135deg, rgba(0, 122, 255, var(--card-glow-opacity)), transparent 45%, rgba(175, 82, 222, var(--card-glow-opacity)));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -377,7 +424,7 @@ html.dark .aurora-bg {
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .aurora-blob, .animate-floaty, .animate-marquee, .breaking-pulse, .shimmer::after {
+  .aurora-blob, .animate-marquee, .shimmer::after {
     animation: none !important;
   }
 }

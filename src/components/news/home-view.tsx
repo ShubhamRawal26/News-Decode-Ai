@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Flame, Newspaper, ArrowRight } from "lucide-react";
+import { Sparkles, Flame, Newspaper, ArrowRight, LayoutGrid } from "lucide-react";
 import type { NewsArticle } from "@/lib/news";
 import { CATEGORIES } from "@/lib/news";
 import { HeroSection } from "./hero-section";
 import { BreakingTicker } from "./breaking-ticker";
+import { MacOSWidgets } from "./macos-widgets";
 import { CategoryNav } from "./category-nav";
 import { NewsCard } from "./news-card";
 import { NewsGrid } from "./news-grid";
@@ -51,7 +52,8 @@ export function HomeView({ onAuthRequired }: { onAuthRequired?: () => void }) {
   const moreFeatured = (featured.length > 1 ? featured.slice(1) : latest.slice(1, 4)).slice(0, 4);
 
   return (
-    <div className="pb-12">
+    <div className="pb-24">
+      {/* Hero with macOS Window Frame */}
       <HeroSection
         onExplore={() => document.getElementById("featured")?.scrollIntoView({ behavior: "smooth" })}
         breakingCount={breaking.length}
@@ -66,12 +68,15 @@ export function HomeView({ onAuthRequired }: { onAuthRequired?: () => void }) {
         </div>
       )}
 
+      {/* macOS Intelligence Widgets */}
+      <MacOSWidgets />
+
       {/* Category nav */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 mb-12 sm:mb-16">
         <SectionHeader
           title="Explore by category"
           subtitle="Five lenses on the world, decoded daily"
-          icon={<Newspaper size={18} className="text-violet-600" />}
+          icon={<Newspaper size={18} className="text-primary" />}
         />
         <CategoryNav counts={counts} />
       </section>
@@ -81,7 +86,7 @@ export function HomeView({ onAuthRequired }: { onAuthRequired?: () => void }) {
         <SectionHeader
           title={<><span className="text-gradient">Today&apos;s intelligence</span></>}
           subtitle="The most important stories, ranked by AI impact score"
-          icon={<Sparkles size={18} className="text-violet-600" />}
+          icon={<Sparkles size={18} className="text-primary" />}
           action={{ label: "View all", onClick: () => go({ name: "category", slug: "world" }) }}
         />
 
@@ -107,19 +112,19 @@ export function HomeView({ onAuthRequired }: { onAuthRequired?: () => void }) {
       {/* Trending topics strip */}
       {trending.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 sm:px-6 mb-12 sm:mb-16">
-          <div className="glass rounded-2xl p-5 sm:p-6">
+          <div className="glass rounded-2xl p-5 sm:p-6 border border-border">
             <div className="flex items-center gap-2 mb-4">
-              <Flame size={16} className="text-rose-600" />
-              <span className="text-sm font-semibold">Trending now</span>
+              <Flame size={16} className="text-rose-500" />
+              <span className="text-sm font-semibold text-foreground">Trending on the wire</span>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               {trending.slice(0, 10).map((t) => (
                 <button
                   key={t.topic}
                   onClick={() => go({ name: "search", q: t.topic })}
-                  className="group inline-flex items-center gap-1.5 rounded-full bg-foreground/5 hover:bg-foreground/10 px-3 py-1.5 text-xs font-medium transition-colors"
+                  className="group inline-flex items-center gap-1.5 rounded-full bg-secondary hover:bg-primary/10 hover:text-primary px-3 py-1.5 text-xs font-medium transition-colors"
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                   #{t.topic}
                   <span className="text-[10px] text-muted-foreground">{t.count}</span>
                 </button>
@@ -155,22 +160,21 @@ export function HomeView({ onAuthRequired }: { onAuthRequired?: () => void }) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="glass-strong relative overflow-hidden rounded-3xl p-8 sm:p-12 text-center"
+          className="macos-window relative overflow-hidden p-8 sm:p-12 text-center border border-border"
         >
-          <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-64 w-[40rem] rounded-full bg-gradient-to-r from-violet-500/20 via-fuchsia-500/15 to-sky-500/20 blur-3xl" />
           <div className="relative">
-            <h2 className="font-display text-2xl sm:text-4xl font-normal tracking-tight mb-3">
-              The world, <span className="text-gradient italic">decoded daily.</span>
+            <h2 className="font-display text-2xl sm:text-4xl font-normal tracking-tight mb-3 text-foreground">
+              The world, <span className="text-gradient italic font-medium">decoded daily.</span>
             </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto mb-6">
+            <p className="text-muted-foreground max-w-xl mx-auto mb-6 leading-relaxed">
               Build your personal intelligence feed. Follow topics, save stories, and let AI surface what matters to you.
             </p>
             <button
               onClick={() => go({ name: "dashboard" })}
-              className="group inline-flex items-center gap-2 rounded-full bg-[linear-gradient(110deg,#6366f1,#8b5cf6,#a855f7)] text-white px-6 py-3 text-sm font-medium shadow-lg shadow-violet-500/25 bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all"
+              className="inline-flex items-center gap-2 rounded-full bg-primary text-white px-6 py-3 text-sm font-medium shadow-lg shadow-primary/25 hover:opacity-90 active:scale-95 transition-all"
             >
-              Open your dashboard
-              <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+              <span>Open your dashboard</span>
+              <ArrowRight size={15} />
             </button>
           </div>
         </motion.div>

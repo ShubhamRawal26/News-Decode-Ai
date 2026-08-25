@@ -40,8 +40,8 @@ export function PremiumNav({ onAuthRequired }: { onAuthRequired?: (mode: "signin
     <>
       <header
         className={cn(
-          "fixed top-0 inset-x-0 z-50 transition-all duration-500",
-          scrolled ? "glass-nav py-2.5" : "py-4 bg-transparent",
+          "fixed top-7 inset-x-0 z-50 transition-all duration-500",
+          scrolled ? "glass-nav py-2" : "py-3 bg-transparent",
         )}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6">

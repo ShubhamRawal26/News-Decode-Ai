@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAppStore } from "@/store/use-app-store";
 import { AuroraBackground } from "@/components/news/aurora-background";
+import { MacOSMenuBar } from "@/components/news/macos-menubar";
+import { MacOSDock } from "@/components/news/macos-dock";
 import { PremiumNav } from "@/components/news/premium-nav";
 import { Footer } from "@/components/news/footer";
 import { HomeView } from "@/components/news/home-view";
@@ -15,15 +17,29 @@ import { DateView } from "@/components/news/date-view";
 import { AuthModal } from "@/components/auth/auth-modal";
 
 export default function Home() {
-  const { view } = useAppStore();
+  const { view, go } = useAppStore();
   const [booted, setBooted] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+  const [spotlightOpen, setSpotlightOpen] = useState(false);
+  const [spotlightQuery, setSpotlightQuery] = useState("");
 
   const openAuth = (mode: "signin" | "signup" = "signin") => {
     setAuthMode(mode);
     setAuthOpen(true);
   };
+
+  // Keyboard shortcut listener for Cmd+K / Ctrl+K
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSpotlightOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   // deep-link via ?a=<id>
   useEffect(() => {
@@ -38,9 +54,18 @@ export default function Home() {
     return () => clearTimeout(t);
   }, []);
 
+  const handleSpotlightSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!spotlightQuery.trim()) return;
+    go({ name: "search", q: spotlightQuery.trim() });
+    setSpotlightOpen(false);
+    setSpotlightQuery("");
+  };
+
   return (
-    <div className="relative min-h-screen flex flex-col">
+    <div className="relative min-h-screen flex flex-col pt-7 pb-20">
       <AuroraBackground />
+      <MacOSMenuBar onSearchOpen={() => setSpotlightOpen(true)} />
       <PremiumNav onAuthRequired={openAuth} />
 
       <main className="flex-1">
@@ -74,7 +99,50 @@ export default function Home() {
 
       <Footer />
 
+      {/* Floating macOS Dock Toolbar */}
+      <MacOSDock onSearchOpen={() => setSpotlightOpen(true)} />
+
+      {/* Auth Modal */}
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} mode={authMode} />
+
+      {/* macOS Spotlight Search Modal */}
+      <AnimatePresence>
+        {spotlightOpen && (
+          <div className="fixed inset-0 z-[100] flex items-start justify-center pt-28 px-4">
+            <div className="fixed inset-0 bg-background/50 backdrop-blur-md" onClick={() => setSpotlightOpen(false)} />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: -16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -16 }}
+              transition={{ type: "spring", stiffness: 450, damping: 30 }}
+              className="relative w-full max-w-xl macos-window p-4 shadow-2xl border border-border"
+            >
+              <form onSubmit={handleSpotlightSubmit} className="flex items-center gap-3">
+                <span className="text-primary font-semibold text-sm">⌘</span>
+                <input
+                  autoFocus
+                  value={spotlightQuery}
+                  onChange={(e) => setSpotlightQuery(e.target.value)}
+                  placeholder="Spotlight Intelligence Search (e.g. AI, Semiconductors, Clean Energy)..."
+                  className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-base font-medium"
+                />
+                <kbd className="text-[10px] px-2 py-0.5 rounded bg-secondary text-muted-foreground border border-border">
+                  ESC
+                </kbd>
+              </form>
+
+              <div className="mt-3 pt-3 border-t border-border flex items-center justify-between text-[11px] text-muted-foreground">
+                <span>Press Enter to decode intelligence</span>
+                <div className="flex gap-2">
+                  <span>#Artificial Intelligence</span>
+                  <span>#Clean Tech</span>
+                  <span>#Markets</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

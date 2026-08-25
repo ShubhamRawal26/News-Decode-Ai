@@ -43,7 +43,8 @@ next-env.d.ts
 Thumbs.db
 *.pem
 
-# Database Journals
+# Database Journals & Local SQLite
 *.db-journal
 *.db-wal
 *.db-shm
+/prisma/db/

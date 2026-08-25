@@ -6,7 +6,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-jakarta), -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  --font-sans: var(--font-jakarta), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-serif: var(--font-serif), ui-serif, Georgia, Cambria, serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -40,123 +40,131 @@
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 12px);
+  --radius-3xl: calc(var(--radius) + 20px);
 }
 
 /* =========================================================================
-   Yupp.ai Signature Dark & Light Design System
+   Authentic Yupp.ai Color Palette & Design System
    ========================================================================= */
 
 :root, html.light {
-  --radius: 0.875rem;
+  --radius: 1.25rem;
 
-  /* Yupp Clean Studio Light */
-  --background: #F8F9FC;
-  --foreground: #0F172A;
+  /* Yupp Signature Warm Peach / Sand Canvas */
+  --background: #FEEFE6;
+  --foreground: #2E151B; /* Deep Chocolate Espresso */
 
-  /* Card Surfaces */
+  /* Pure Ivory / Warm White Cards */
   --card: #FFFFFF;
-  --card-foreground: #0F172A;
-  --popover: #FFFFFF;
-  --popover-foreground: #0F172A;
+  --card-foreground: #2E151B;
+  --popover: #FFFDFB;
+  --popover-foreground: #2E151B;
 
-  /* Accents */
-  --primary: #6366F1; /* Indigo */
+  /* Yupp Flame Terracotta Orange Primary */
+  --primary: #E04E15;
   --primary-foreground: #FFFFFF;
-  --secondary: #F1F5F9;
-  --secondary-foreground: #1E293B;
-  --muted: #F8FAFC;
-  --muted-foreground: #64748B;
-  --accent: #EEF2FF;
-  --accent-foreground: #4F46E5;
-  --accent-orange: #FF6B00;
-  --destructive: #EF4444;
+  --secondary: #FBE2D5;
+  --secondary-foreground: #2E151B;
+  --muted: #F8D8C8;
+  --muted-foreground: #73565C; /* Warm Espresso Gray */
+  --accent: #FDF1EA;
+  --accent-foreground: #E04E15;
+  --accent-orange: #E04E15;
+  --destructive: #E11D48;
 
-  /* Borders & Inputs */
-  --border: rgba(226, 232, 240, 0.85);
-  --input: rgba(226, 232, 240, 0.9);
-  --ring: #6366F1;
+  /* Chocolate Contrast Surfaces */
+  --dark-hero: #2E151B;
+  --dark-hero-foreground: #FFF1E8;
+
+  /* Borders & Grids */
+  --border: rgba(46, 21, 27, 0.10);
+  --input: rgba(46, 21, 27, 0.08);
+  --ring: #E04E15;
 
   /* Charts */
-  --chart-1: #6366F1;
+  --chart-1: #E04E15;
   --chart-2: #8B5CF6;
   --chart-3: #06B6D4;
-  --chart-4: #EC4899;
-  --chart-5: #F59E0B;
+  --chart-4: #F59E0B;
+  --chart-5: #10B981;
 
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #0F172A;
-  --sidebar-primary: #6366F1;
+  --sidebar: #FFF9F5;
+  --sidebar-foreground: #2E151B;
+  --sidebar-primary: #E04E15;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F1F5F9;
-  --sidebar-accent-foreground: #1E293B;
-  --sidebar-border: rgba(226, 232, 240, 0.85);
-  --sidebar-ring: #6366F1;
+  --sidebar-accent: #FBE2D5;
+  --sidebar-accent-foreground: #2E151B;
+  --sidebar-border: rgba(46, 21, 27, 0.10);
+  --sidebar-ring: #E04E15;
 
-  /* Glassmorphism & Materials */
-  --glass-bg: rgba(255, 255, 255, 0.88);
-  --glass-border: rgba(226, 232, 240, 0.85);
+  /* Glass & Shadows */
+  --glass-bg: rgba(255, 253, 250, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.95);
   --glass-strong-bg: #FFFFFF;
-  --glass-strong-border: rgba(203, 213, 225, 0.9);
-  --glass-nav-bg: rgba(248, 249, 252, 0.88);
-  --glass-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 1px 3px 0 rgba(15, 23, 42, 0.03);
-  --card-glow-opacity: 0.25;
+  --glass-strong-border: rgba(46, 21, 27, 0.12);
+  --glass-nav-bg: rgba(254, 239, 230, 0.85);
+  --glass-shadow: 0 12px 36px -4px rgba(46, 21, 27, 0.07), 0 2px 6px rgba(46, 21, 27, 0.04);
 }
 
 html.dark, .dark {
-  --radius: 0.875rem;
+  --radius: 1.25rem;
 
-  /* Yupp Matte Obsidian Dark */
-  --background: #0D0E12;
-  --foreground: #F8FAFC;
+  /* Yupp Dark Chocolate Espresso Canvas */
+  --background: #180D11;
+  --foreground: #FFF1E8;
 
-  /* Card Surfaces */
-  --card: #15171F;
-  --card-foreground: #F8FAFC;
-  --popover: #181A24;
-  --popover-foreground: #F8FAFC;
+  /* Deep Wine-Espresso Card Surfaces */
+  --card: #241318;
+  --card-foreground: #FFF1E8;
+  --popover: #2A171D;
+  --popover-foreground: #FFF1E8;
 
-  /* Accents */
-  --primary: #6366F1; /* Indigo */
+  /* Yupp Flame Terracotta Orange Primary */
+  --primary: #F05A28;
   --primary-foreground: #FFFFFF;
-  --secondary: #1E212B;
-  --secondary-foreground: #F8FAFC;
-  --muted: #1A1C25;
-  --muted-foreground: #94A3B8;
-  --accent: rgba(99, 102, 241, 0.15);
-  --accent-foreground: #818CF8;
-  --accent-orange: #FF6B00;
-  --destructive: #F43F5E;
+  --secondary: #331B22;
+  --secondary-foreground: #FFF1E8;
+  --muted: #2E181F;
+  --muted-foreground: #BFA8AD;
+  --accent: rgba(240, 90, 40, 0.15);
+  --accent-foreground: #F05A28;
+  --accent-orange: #F05A28;
+  --destructive: #FB7185;
 
-  /* Borders & Inputs */
-  --border: rgba(255, 255, 255, 0.09);
-  --input: rgba(255, 255, 255, 0.08);
-  --ring: #6366F1;
+  /* Chocolate Contrast Surfaces */
+  --dark-hero: #140A0D;
+  --dark-hero-foreground: #FFF1E8;
+
+  /* Borders & Grids */
+  --border: rgba(255, 241, 232, 0.12);
+  --input: rgba(255, 241, 232, 0.10);
+  --ring: #F05A28;
 
   /* Charts */
-  --chart-1: #6366F1;
-  --chart-2: #A855F7;
+  --chart-1: #F05A28;
+  --chart-2: #A78BFA;
   --chart-3: #38BDF8;
-  --chart-4: #F472B6;
-  --chart-5: #FBBF24;
+  --chart-4: #FBBF24;
+  --chart-5: #34D399;
 
-  --sidebar: #101217;
-  --sidebar-foreground: #F8FAFC;
-  --sidebar-primary: #6366F1;
+  --sidebar: #1C0F14;
+  --sidebar-foreground: #FFF1E8;
+  --sidebar-primary: #F05A28;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #1E212B;
-  --sidebar-accent-foreground: #F8FAFC;
-  --sidebar-border: rgba(255, 255, 255, 0.09);
-  --sidebar-ring: #6366F1;
+  --sidebar-accent: #331B22;
+  --sidebar-accent-foreground: #FFF1E8;
+  --sidebar-border: rgba(255, 241, 232, 0.12);
+  --sidebar-ring: #F05A28;
 
-  /* Glassmorphism & Materials */
-  --glass-bg: rgba(21, 23, 31, 0.78);
-  --glass-border: rgba(255, 255, 255, 0.09);
-  --glass-strong-bg: rgba(24, 26, 36, 0.90);
-  --glass-strong-border: rgba(255, 255, 255, 0.14);
-  --glass-nav-bg: rgba(13, 14, 18, 0.88);
-  --glass-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
-  --card-glow-opacity: 0.6;
+  /* Glass & Shadows */
+  --glass-bg: rgba(36, 19, 24, 0.85);
+  --glass-border: rgba(255, 241, 232, 0.12);
+  --glass-strong-bg: #2B171E;
+  --glass-strong-border: rgba(255, 241, 232, 0.18);
+  --glass-nav-bg: rgba(24, 13, 17, 0.88);
+  --glass-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 241, 232, 0.08);
 }
 
 @layer base {
@@ -171,136 +179,117 @@ html.dark, .dark {
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "cv11", "ss01", "ss02", "kern";
-    letter-spacing: -0.012em;
+    font-family: var(--font-sans), system-ui, sans-serif;
+    letter-spacing: -0.018em;
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
   ::selection {
-    background: rgba(99, 102, 241, 0.3);
+    background: rgba(224, 78, 21, 0.25);
+    color: var(--foreground);
   }
 }
 
-/* ---------- Typography ---------- */
+/* ---------- Yupp Typography Hierarchy ---------- */
 .font-display {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.06;
+}
+
+.font-heading {
   font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: -0.03em;
 }
 
+/* ---------- Yupp Warm Graph Paper Grid Texture ---------- */
+.yupp-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(46, 21, 27, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(46, 21, 27, 0.045) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+html.dark .yupp-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(255, 241, 232, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 241, 232, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ---------- Rotating Stamp Badge Animation ---------- */
+@keyframes rotateBadge {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.rotate-badge {
+  animation: rotateBadge 16s linear infinite;
+}
+
+/* ---------- Yupp Signature Buttons & Cards ---------- */
+.yupp-card-dark {
+  background-color: var(--dark-hero);
+  color: var(--dark-hero-foreground);
+  border-radius: 2.5rem;
+}
+
+.yupp-card-white {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border-radius: 2.5rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--glass-shadow);
+}
+
+.yupp-card-peach {
+  background-color: #E8C4B4;
+  color: #2E151B;
+  border-radius: 2.5rem;
+}
+
+html.dark .yupp-card-peach {
+  background-color: #381D25;
+  color: #FFF1E8;
+}
+
+.btn-yupp-primary {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  border-radius: 9999px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px -2px rgba(224, 78, 21, 0.35);
+}
+.btn-yupp-primary:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+.btn-yupp-primary:active {
+  transform: translateY(0);
+}
+
 /* ---------- Scrollbars ---------- */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.25);
+  background: rgba(115, 86, 92, 0.25);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.45);
+  background: rgba(115, 86, 92, 0.45);
 }
 
-/* ---------- Yupp Ambient Gradients ---------- */
-.aurora-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-html.light .aurora-bg {
-  background:
-    radial-gradient(1100px 700px at 20% -5%, rgba(99, 102, 241, 0.06), transparent 60%),
-    radial-gradient(1000px 650px at 80% 10%, rgba(168, 85, 247, 0.05), transparent 60%),
-    radial-gradient(900px 600px at 50% 120%, rgba(6, 182, 212, 0.04), transparent 60%);
-}
-
-html.dark .aurora-bg {
-  background:
-    radial-gradient(1100px 700px at 20% -5%, rgba(99, 102, 241, 0.14), transparent 65%),
-    radial-gradient(1000px 650px at 80% 10%, rgba(168, 85, 247, 0.11), transparent 65%),
-    radial-gradient(900px 600px at 50% 120%, rgba(6, 182, 212, 0.08), transparent 65%);
-}
-
-/* ---------- Glass Utilities ---------- */
-.glass {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  transition: background-color 0.25s ease, border-color 0.25s ease;
-}
-.glass-strong {
-  background: var(--glass-strong-bg);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border: 1px solid var(--glass-strong-border);
-  box-shadow: var(--glass-shadow);
-  transition: background-color 0.25s ease, border-color 0.25s ease;
-}
-
-/* ---------- Gradient text ---------- */
-.text-gradient {
-  background: linear-gradient(115deg, #6366F1 0%, #8B5CF6 50%, #EC4899 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.text-gradient-cyan {
-  background: linear-gradient(115deg, #06B6D4 0%, #3B82F6 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* ---------- Card hover glow ---------- */
-.card-glow {
-  position: relative;
-  isolation: isolate;
-}
-.card-glow::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, var(--card-glow-opacity)), transparent 45%, rgba(139, 92, 246, var(--card-glow-opacity)));
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 1;
-  pointer-events: none;
-}
-.card-glow:hover::before {
-  opacity: 1;
-}
-
-/* ---------- Marquee ---------- */
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.animate-marquee {
-  animation: marquee 40s linear infinite;
-}
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
-
-/* ---------- Utilities ---------- */
+/* ---------- Hide scrollbar utility ---------- */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-marquee, .card-glow::before {
-    animation: none !important;
-  }
-}

@@ -97,16 +97,16 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
 
             {/* Right Column: Floating Phone Mockup Widget with Real Decoded News Card */}
             <div className="lg:col-span-6 flex justify-center lg:justify-end">
-              <div className="relative w-full max-w-sm sm:max-w-md rounded-[2.5rem] bg-[#FBE2D5] p-3 sm:p-5 shadow-2xl text-[#2E151B] border-4 border-white/20">
+              <div className="relative w-full max-w-sm sm:max-w-md rounded-[2.5rem] bg-[#FBE2D5] dark:bg-[#2A171D] p-3 sm:p-5 shadow-2xl text-[#2E151B] dark:text-[#FFF1E8] border-4 border-white/20 dark:border-white/10">
                 {/* Phone Notch & Header */}
-                <div className="flex items-center justify-between pb-3 px-2 border-b border-black/10 text-xs">
+                <div className="flex items-center justify-between pb-3 px-2 border-b border-black/10 dark:border-white/10 text-xs">
                   <span className="font-mono text-[10px] font-bold">9:41</span>
-                  <div className="h-4 w-16 rounded-full bg-black/10" />
+                  <div className="h-4 w-16 rounded-full bg-black/10 dark:bg-white/10" />
                   <span className="text-[10px] font-bold text-[#E04E15]">LIVE INTELLIGENCE</span>
                 </div>
 
                 {/* Inner Phone Content: Decoded Story Snapshot */}
-                <div className="mt-3 p-4 rounded-3xl bg-white/95 backdrop-blur-md shadow-sm space-y-3">
+                <div className="mt-3 p-4 rounded-3xl bg-white/95 dark:bg-[#1A0D12]/95 backdrop-blur-md shadow-sm space-y-3 border border-border/40">
                   {/* Top Impact Score Pill */}
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#E04E15] bg-[#E04E15]/10 px-2 py-0.5 rounded-full">
@@ -118,31 +118,31 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                   </div>
 
                   {/* Headline */}
-                  <h3 className="font-heading font-extrabold text-xs sm:text-sm text-[#2E151B] leading-snug">
+                  <h3 className="font-heading font-extrabold text-xs sm:text-sm text-foreground leading-snug">
                     {sampleStory.title}
                   </h3>
 
                   {/* 3-Point Structured Intelligence Breakdown */}
                   <div className="space-y-2 text-[11px] leading-relaxed">
-                    <div className="p-2.5 rounded-2xl bg-[#FEEFE6] border border-black/5">
+                    <div className="p-2.5 rounded-2xl bg-[#FEEFE6] dark:bg-[#28141B] border border-black/5 dark:border-white/10">
                       <span className="font-bold text-[#E04E15] block text-[10px] uppercase tracking-wider mb-0.5">
                         • What Happened
                       </span>
-                      <p className="text-[#73565C] line-clamp-2">{sampleStory.whatHappened}</p>
+                      <p className="text-[#73565C] dark:text-[#D4BEC3] line-clamp-2">{sampleStory.whatHappened}</p>
                     </div>
 
-                    <div className="p-2.5 rounded-2xl bg-[#FEEFE6] border border-black/5">
+                    <div className="p-2.5 rounded-2xl bg-[#FEEFE6] dark:bg-[#28141B] border border-black/5 dark:border-white/10">
                       <span className="font-bold text-[#E04E15] block text-[10px] uppercase tracking-wider mb-0.5">
                         • Why It Matters
                       </span>
-                      <p className="text-[#73565C] line-clamp-2">{sampleStory.whyItMatters}</p>
+                      <p className="text-[#73565C] dark:text-[#D4BEC3] line-clamp-2">{sampleStory.whyItMatters}</p>
                     </div>
 
-                    <div className="p-2.5 rounded-2xl bg-[#FEEFE6] border border-black/5">
+                    <div className="p-2.5 rounded-2xl bg-[#FEEFE6] dark:bg-[#28141B] border border-black/5 dark:border-white/10">
                       <span className="font-bold text-[#E04E15] block text-[10px] uppercase tracking-wider mb-0.5">
                         • What Happens Next
                       </span>
-                      <p className="text-[#73565C] line-clamp-2">{sampleStory.whatHappensNext}</p>
+                      <p className="text-[#73565C] dark:text-[#D4BEC3] line-clamp-2">{sampleStory.whatHappensNext}</p>
                     </div>
                   </div>
 
@@ -165,24 +165,24 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
           2. "WHAT'S NEW" SECTION (Warm Peach Container with Rotating Stamp)
          ========================================================================= */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="yupp-card-peach p-8 sm:p-12 relative overflow-hidden shadow-md">
+        <div className="yupp-card-peach p-8 sm:p-12 relative overflow-hidden shadow-md border border-border/40">
           <div className="flex items-start justify-between gap-4 mb-8">
             <div>
-              <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-[#2E151B] tracking-tight">
+              <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-[#2E151B] dark:text-[#FFF1E8] tracking-tight">
                 What&apos;s New in NewsDecoded
               </h2>
-              <p className="text-sm sm:text-base text-[#73565C] mt-1 font-medium">
+              <p className="text-sm sm:text-base text-[#73565C] dark:text-[#D4BEC3] mt-1 font-medium">
                 Our autonomous engine extracts key facts, scores real-world impact, and delivers actionable foresight.
               </p>
             </div>
 
             {/* Rotating Stamp Badge */}
-            <RotatingStampBadge text="DECODE • DECODE • DECODE • " size={80} className="text-[#2E151B]" />
+            <RotatingStampBadge text="DECODE • DECODE • DECODE • " size={80} className="text-[#2E151B] dark:text-[#FFF1E8]" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Card 1: AI Impact Scoring */}
-            <div className="rounded-3xl bg-[#1C151B] p-6 text-white flex flex-col justify-between min-h-[220px] shadow-lg relative overflow-hidden">
+            <div className="rounded-3xl bg-[#1C151B] dark:bg-[#150A0E] p-6 text-white flex flex-col justify-between min-h-[220px] shadow-lg relative overflow-hidden border border-white/10">
               <div className="space-y-2 relative z-10">
                 <div className="h-10 w-10 rounded-2xl bg-white/10 flex items-center justify-center text-[#F05A28]">
                   <Activity size={20} />
@@ -203,20 +203,20 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
             </div>
 
             {/* Card 2: 4-Point Structural Breakdown */}
-            <div className="rounded-3xl bg-white p-6 text-[#2E151B] flex flex-col justify-between min-h-[220px] shadow-sm border border-black/5">
+            <div className="rounded-3xl bg-card text-card-foreground p-6 flex flex-col justify-between min-h-[220px] shadow-sm border border-border/80">
               <div className="space-y-2">
-                <div className="h-10 w-10 rounded-2xl bg-orange-50 text-[#E04E15] flex items-center justify-center">
+                <div className="h-10 w-10 rounded-2xl bg-orange-500/10 text-[#E04E15] flex items-center justify-center">
                   <Zap size={20} />
                 </div>
-                <h3 className="font-heading text-lg font-bold">4-Point Intelligence Synthesis</h3>
-                <p className="text-xs text-[#73565C] leading-relaxed">
+                <h3 className="font-heading text-lg font-bold text-foreground">4-Point Intelligence Synthesis</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
                   Clear, digestible sections for What Happened, Why It Matters, Who Is Affected, and What Happens Next.
                 </p>
               </div>
 
               <button
                 onClick={onExplore}
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#E04E15] hover:opacity-80 pt-2 border-t border-black/5"
+                className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#E04E15] hover:opacity-80 pt-2 border-t border-border/60"
               >
                 <span>Explore Synthesis</span>
                 <ArrowRight size={13} />
@@ -224,20 +224,20 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
             </div>
 
             {/* Card 3: 2,400+ Verified Sources */}
-            <div className="rounded-3xl bg-white p-6 text-[#2E151B] flex flex-col justify-between min-h-[220px] shadow-sm border border-black/5">
+            <div className="rounded-3xl bg-card text-card-foreground p-6 flex flex-col justify-between min-h-[220px] shadow-sm border border-border/80">
               <div className="space-y-2">
-                <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                <div className="h-10 w-10 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                   <Globe2 size={20} />
                 </div>
-                <h3 className="font-heading text-lg font-bold">Multi-Source Verification</h3>
-                <p className="text-xs text-[#73565C] leading-relaxed">
+                <h3 className="font-heading text-lg font-bold text-foreground">Multi-Source Verification</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
                   Eliminates bias and sensationalism by cross-referencing thousands of verified global reporting outlets.
                 </p>
               </div>
 
               <button
                 onClick={onExplore}
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#E04E15] hover:opacity-80 pt-2 border-t border-black/5"
+                className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#E04E15] hover:opacity-80 pt-2 border-t border-border/60"
               >
                 <span>Check Sources</span>
                 <ArrowRight size={13} />
@@ -251,23 +251,23 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
           3. "HOW NEWSDECODED WORKS" SECTION
          ========================================================================= */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="yupp-card-peach p-8 sm:p-12 shadow-md space-y-8">
+        <div className="yupp-card-peach p-8 sm:p-12 shadow-md space-y-8 border border-border/40">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-[#2E151B] tracking-tight">
+              <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-[#2E151B] dark:text-[#FFF1E8] tracking-tight">
                 How NewsDecoded Works
               </h2>
-              <p className="text-sm sm:text-base text-[#73565C] mt-1 font-medium max-w-xl">
+              <p className="text-sm sm:text-base text-[#73565C] dark:text-[#D4BEC3] mt-1 font-medium max-w-xl">
                 We distill complex global breaking events into structured, objective intelligence briefs in seconds.
               </p>
             </div>
 
             {/* Rotating LEARN Stamp Badge */}
-            <RotatingStampBadge text="LEARN • LEARN • LEARN • " size={80} className="text-[#2E151B]" />
+            <RotatingStampBadge text="LEARN • LEARN • LEARN • " size={80} className="text-[#2E151B] dark:text-[#FFF1E8]" />
           </div>
 
           {/* Banner: Zero Fluff, 100% Signal */}
-          <div className="rounded-[2.5rem] bg-[#2E151B] p-8 sm:p-10 text-white relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6 shadow-xl">
+          <div className="rounded-[2.5rem] bg-[#2E151B] dark:bg-[#1A0C11] p-8 sm:p-10 text-white relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6 shadow-xl border border-white/10">
             <div className="space-y-2 max-w-md">
               <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
                 Zero Fluff. 100% Signal.
@@ -292,19 +292,19 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
           {/* 2-Column Feature Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="yupp-card-white p-8 space-y-4">
-              <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#2E151B]">
+              <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-foreground">
                 We score the impact, you get the clarity
               </h3>
-              <p className="text-sm text-[#73565C] leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Skip clickbait and endless scroll. See immediate impact ratings from 0 to 100 to instantly know which stories affect markets, policy, and your industry.
               </p>
             </div>
 
             <div className="yupp-card-white p-8 space-y-4">
-              <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#2E151B]">
+              <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-foreground">
                 Actionable foresight on what happens next
               </h3>
-              <p className="text-sm text-[#73565C] leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Every decoded piece maps out the upcoming regulatory milestones, market reactions, and timeline projections for the next 30 to 90 days.
               </p>
             </div>
@@ -313,10 +313,10 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
           {/* Bottom Wide Banner */}
           <div className="yupp-card-white p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2">
-              <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#2E151B]">
+              <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-foreground">
                 Five lenses on the world, decoded daily
               </h3>
-              <p className="text-sm text-[#73565C] max-w-xl">
+              <p className="text-sm text-muted-foreground max-w-xl">
                 Browse our curated categories or search across thousands of indexed stories with intelligent keyword filtering.
               </p>
             </div>
@@ -336,10 +336,10 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
           4. WARM QUOTE / TEAM SECTION
          ========================================================================= */}
       <section className="mx-auto max-w-4xl px-4 text-center py-12">
-        <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-[#2E151B] dark:text-[#FFF1E8] tracking-tight mb-4">
+        <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-foreground tracking-tight mb-4">
           Built for clarity, powered by intelligence.
         </h2>
-        <p className="text-sm sm:text-base text-[#73565C] dark:text-[#BFA8AD] leading-relaxed max-w-2xl mx-auto">
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
           We believe everyone deserves access to unbiased, objective news intelligence without the noise, spin, or sensationalism.
         </p>
         <span className="block mt-4 text-xs font-bold uppercase tracking-widest text-[#E04E15]">

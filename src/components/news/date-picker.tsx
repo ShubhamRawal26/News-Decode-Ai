@@ -127,8 +127,8 @@ export function DatePickerButton() {
               </button>
 
               <div className="flex items-center gap-2 mb-1">
-                <CalendarIcon size={16} className="text-violet-600" />
-                <h3 className="font-display text-xl font-normal tracking-tight">News archive</h3>
+                <CalendarIcon size={16} className="text-[#E04E15]" />
+                <h3 className="font-heading font-bold text-lg text-foreground">News Archive</h3>
               </div>
               <p className="text-xs text-muted-foreground mb-4">
                 Browse daily editions. News since {formatEditionDate(EDITION_START)}.
@@ -138,15 +138,15 @@ export function DatePickerButton() {
               <div className="flex items-center justify-between mb-4">
                 <button
                   onClick={prevMonth}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-foreground/5 transition-colors"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-secondary text-foreground transition-colors"
                   aria-label="Previous month"
                 >
                   <ChevronLeft size={16} />
                 </button>
-                <span className="text-sm font-semibold">{monthLabel}</span>
+                <span className="text-xs font-bold text-foreground">{monthLabel}</span>
                 <button
                   onClick={nextMonth}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-foreground/5 transition-colors"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-secondary text-foreground transition-colors"
                   aria-label="Next month"
                 >
                   <ChevronRight size={16} />
@@ -156,7 +156,7 @@ export function DatePickerButton() {
               {/* weekday header */}
               <div className="grid grid-cols-7 gap-1 mb-1">
                 {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-                  <div key={i} className="text-center text-[10px] font-semibold text-muted-foreground py-1">
+                  <div key={i} className="text-center text-[10px] font-bold text-muted-foreground py-1">
                     {d}
                   </div>
                 ))}
@@ -177,11 +177,11 @@ export function DatePickerButton() {
                       onClick={() => pick(d)}
                       disabled={!selectable}
                       className={cn(
-                        "relative aspect-square rounded-xl text-sm font-medium transition-all",
+                        "relative aspect-square rounded-xl text-xs font-bold transition-all",
                         !selectable && "text-muted-foreground/30 cursor-not-allowed",
-                        selectable && !isSelected && "hover:bg-foreground/5 text-foreground",
-                        isSelected && "bg-[linear-gradient(135deg,#6366f1,#a855f7)] text-white shadow-lg shadow-violet-500/30",
-                        isToday && !isSelected && "ring-1 ring-violet-500/40",
+                        selectable && !isSelected && "hover:bg-secondary text-foreground",
+                        isSelected && "bg-[#E04E15] text-white shadow-md shadow-orange-950/20",
+                        isToday && !isSelected && "ring-1 ring-[#E04E15]/40 text-[#E04E15]",
                       )}
                     >
                       {d.getDate()}
@@ -189,7 +189,7 @@ export function DatePickerButton() {
                         <span
                           className={cn(
                             "absolute bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full",
-                            isSelected ? "bg-white" : "bg-violet-500",
+                            isSelected ? "bg-white" : "bg-[#E04E15]",
                           )}
                         />
                       )}
@@ -199,30 +199,30 @@ export function DatePickerButton() {
               </div>
 
               {/* legend */}
-              <div className="flex items-center gap-4 mt-4 text-[11px] text-muted-foreground">
+              <div className="flex items-center gap-4 mt-4 text-[10px] font-medium text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-violet-500" /> News available
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#E04E15]" /> News available
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-3 w-3 rounded ring-1 ring-violet-500/40" /> Today
+                  <span className="h-2.5 w-2.5 rounded ring-1 ring-[#E04E15]/40" /> Today
                 </span>
               </div>
 
               {/* selected preview + go button */}
-              <div className="mt-5 pt-5 border-t border-foreground/5">
+              <div className="mt-5 pt-4 border-t border-border">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Selected</div>
-                    <div className="text-sm font-medium">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Selected</div>
+                    <div className="text-xs font-bold text-foreground">
                       {formatEditionDate(selectedDate)}
                     </div>
-                    <div className="text-[11px] text-muted-foreground">{editionDayOfWeek(selectedDate)}</div>
+                    <div className="text-[10px] text-muted-foreground">{editionDayOfWeek(selectedDate)}</div>
                   </div>
                   <button
                     onClick={() => goToDate(selectedDate)}
-                    className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(110deg,#6366f1,#8b5cf6,#a855f7)] text-white px-4 py-2 text-sm font-medium shadow-lg shadow-violet-500/25 bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all"
+                    className="btn-yupp-primary text-xs py-2 px-4 shadow-sm"
                   >
-                    View edition
+                    View Edition
                   </button>
                 </div>
               </div>

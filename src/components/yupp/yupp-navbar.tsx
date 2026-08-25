@@ -20,48 +20,58 @@ export function YuppNavbar({ onSearchOpen, onAuthOpen }: YuppNavbarProps) {
   const { user } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const handleNav = (target: "home" | "intelligence" | "dashboard") => {
+    if (target === "home") {
+      go({ name: "home" });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (target === "intelligence") {
+      go({ name: "home" });
+      setTimeout(() => {
+        document.getElementById("decoded-feed")?.scrollIntoView({ behavior: "smooth" });
+      }, 80);
+    } else if (target === "dashboard") {
+      go({ name: "dashboard" });
+    }
+  };
+
   const navLinks = [
-    { id: "home", label: "Home", action: () => go({ name: "home" }) },
-    { id: "leaderboard", label: "Leaderboard", action: () => { go({ name: "home" }); document.getElementById("yupp-leaderboard")?.scrollIntoView({ behavior: "smooth" }); } },
-    { id: "feed", label: "Intelligence", action: () => { go({ name: "home" }); document.getElementById("yupp-feed")?.scrollIntoView({ behavior: "smooth" }); } },
-    { id: "dashboard", label: "Library", action: () => go({ name: "dashboard" }) },
+    { id: "home", label: "Home", active: view.name === "home", action: () => handleNav("home") },
+    { id: "intelligence", label: "Intelligence", active: false, action: () => handleNav("intelligence") },
+    { id: "dashboard", label: "Library", active: view.name === "dashboard", action: () => handleNav("dashboard") },
   ];
 
   return (
     <header className="sticky top-4 inset-x-0 z-50 mx-auto max-w-7xl px-4 sm:px-6">
-      <div className="rounded-full glass border border-white/80 dark:border-white/10 shadow-lg px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
+      <div className="rounded-full bg-card/90 dark:bg-card/80 backdrop-blur-xl border border-border/80 shadow-lg px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
         {/* Left Nav Pills */}
         <nav className="hidden md:flex items-center gap-1">
-          {navLinks.map((item) => {
-            const isActive = view.name === item.id || (item.id === "home" && view.name === "home");
-
-            return (
-              <button
-                key={item.id}
-                onClick={item.action}
-                className={cn(
-                  "px-4 py-1.5 rounded-full text-xs font-semibold transition-all",
-                  isActive
-                    ? "bg-card text-[#E04E15] shadow-sm font-bold ring-1 ring-border"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                )}
-              >
-                {item.label}
-              </button>
-            );
-          })}
+          {navLinks.map((item) => (
+            <button
+              key={item.id}
+              onClick={item.action}
+              className={cn(
+                "px-4 py-1.5 rounded-full text-xs font-semibold transition-all",
+                item.active
+                  ? "bg-[#E04E15]/10 text-[#E04E15] font-bold ring-1 ring-[#E04E15]/20"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+              )}
+            >
+              {item.label}
+            </button>
+          ))}
         </nav>
 
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="md:hidden p-1.5 rounded-full hover:bg-secondary text-foreground"
+          aria-label="Toggle navigation menu"
         >
           {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
 
         {/* Center Yupp Brand Logo */}
-        <button onClick={() => go({ name: "home" })} className="outline-none">
+        <button onClick={() => handleNav("home")} className="outline-none">
           <YuppLogo size={28} showText={true} />
         </button>
 
@@ -80,8 +90,9 @@ export function YuppNavbar({ onSearchOpen, onAuthOpen }: YuppNavbarProps) {
 
           {user ? (
             <button
-              onClick={() => go({ name: "dashboard" })}
-              className="h-8 w-8 rounded-full bg-[#E04E15] text-white flex items-center justify-center font-bold text-xs shadow-md shadow-orange-900/10"
+              onClick={() => handleNav("dashboard")}
+              className="h-8 w-8 rounded-full bg-[#E04E15] text-white flex items-center justify-center font-bold text-xs shadow-md shadow-orange-900/20 ring-2 ring-[#E04E15]/20"
+              title="View your intelligence library"
             >
               {user.email?.[0]?.toUpperCase() || "U"}
             </button>
@@ -99,7 +110,7 @@ export function YuppNavbar({ onSearchOpen, onAuthOpen }: YuppNavbarProps) {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden mt-2 p-4 rounded-3xl glass border border-border shadow-xl space-y-2">
+        <div className="md:hidden mt-2 p-4 rounded-3xl bg-card/95 backdrop-blur-xl border border-border shadow-xl space-y-2">
           {navLinks.map((item) => (
             <button
               key={item.id}
@@ -114,7 +125,7 @@ export function YuppNavbar({ onSearchOpen, onAuthOpen }: YuppNavbarProps) {
               <button
                 key={c.slug}
                 onClick={() => { go({ name: "category", slug: c.slug }); setMobileMenuOpen(false); }}
-                className="px-3 py-1 rounded-full bg-secondary text-[11px] font-medium"
+                className="px-3 py-1 rounded-full bg-secondary text-[11px] font-medium text-foreground hover:bg-[#E04E15]/10 hover:text-[#E04E15] transition-colors"
               >
                 {c.label}
               </button>

@@ -23,31 +23,33 @@ export function SearchView({ q }: { q: string }) {
   }, [q]);
 
   return (
-    <div className="pt-24 sm:pt-28 pb-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-            <Search size={15} />
-            <span>Search results for</span>
+    <div className="pt-6 sm:pt-10 pb-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 space-y-6">
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="yupp-card-white p-6 sm:p-8">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+            <Search size={14} className="text-[#E04E15]" />
+            <span>Search Results For</span>
           </div>
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-3xl sm:text-5xl font-normal tracking-tight">&ldquo;{q}&rdquo;</h1>
+            <h1 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground">&ldquo;{q}&rdquo;</h1>
             <button
               onClick={() => go({ name: "home" })}
-              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground hover:text-foreground transition-colors px-2.5 py-1 rounded-full bg-secondary"
             >
-              <X size={14} /> clear
+              <X size={12} /> Clear
             </button>
           </div>
           {!loading && (
-            <p className="text-sm text-muted-foreground mt-2">{results.length} {results.length === 1 ? "story" : "stories"} found</p>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-2 font-medium">
+              {results.length} {results.length === 1 ? "story" : "stories"} indexed and decoded
+            </p>
           )}
         </motion.div>
 
         {!loading && results.length === 0 ? (
-          <div className="glass rounded-2xl p-12 text-center">
-            <p className="text-muted-foreground">No stories matched your search.</p>
-            <p className="text-sm text-muted-foreground/70 mt-1">Try different keywords or browse categories.</p>
+          <div className="yupp-card-white p-12 text-center">
+            <p className="text-sm font-semibold text-foreground">No decoded stories matched your search query.</p>
+            <p className="text-xs text-muted-foreground mt-1">Try querying general keywords like &ldquo;semiconductors&rdquo;, &ldquo;markets&rdquo;, or &ldquo;policy&rdquo;.</p>
           </div>
         ) : (
           <NewsGrid articles={results} loading={loading} />

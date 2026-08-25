@@ -72,14 +72,12 @@ export function Footer() {
               <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">Workspaces</h4>
               <ul className="space-y-2.5">
                 {[
-                  { label: "Model Arena", v: { name: "home" } as const },
-                  { label: "Intelligence Feed", v: { name: "home" } as const },
-                  { label: "Model Leaderboard", v: { name: "home" } as const },
-                  { label: "Saved Library", v: { name: "dashboard" } as const },
+                  { label: "Intelligence Feed", action: () => { go({ name: "home" }); setTimeout(() => document.getElementById("decoded-feed")?.scrollIntoView({ behavior: "smooth" }), 80); } },
+                  { label: "Saved Library", action: () => go({ name: "dashboard" }) },
                 ].map((item) => (
                   <li key={item.label}>
                     <button
-                      onClick={() => go(item.v)}
+                      onClick={item.action}
                       className="text-sm text-foreground/80 hover:text-[#E04E15] font-medium transition-colors"
                     >
                       {item.label}

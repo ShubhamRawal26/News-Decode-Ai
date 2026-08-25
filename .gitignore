@@ -24,10 +24,23 @@ dev.log
 dev.out.log
 server.log
 
-# Environment Variables
-.env*.local
+# Environment Variables & Secrets (CRITICAL SECURITY)
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
 !.env.example
+
+# Database & Local SQLite files
+/db/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+/prisma/db/
+custom.db
 
 # Vercel & Cloud Deployments
 .vercel
@@ -37,14 +50,11 @@ server.log
 next-env.d.ts
 .claude
 .z-ai-config
+.system_generated
+.gemini
 
-# OS Metadata
+# OS Metadata & Certificates
 .DS_Store
 Thumbs.db
 *.pem
-
-# Database Journals & Local SQLite
-*.db-journal
-*.db-wal
-*.db-shm
-/prisma/db/
+*.key

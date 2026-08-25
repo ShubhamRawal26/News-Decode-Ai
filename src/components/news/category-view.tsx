@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Globe2, Briefcase, Cpu, Landmark, TrendingUp, RefreshCw } from "lucide-react";
+import { Globe2, Briefcase, Cpu, Landmark, TrendingUp } from "lucide-react";
 import { CATEGORIES, CATEGORY_LABELS, type NewsArticle } from "@/lib/news";
 import { NewsGrid } from "./news-grid";
 import { SectionHeader } from "./section-header";
@@ -41,23 +41,26 @@ export function CategoryView({ slug }: { slug: string }) {
   const rest = featured ? articles.filter((a) => a.id !== featured.id) : articles;
 
   return (
-    <div className="pt-24 sm:pt-28 pb-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+    <div className="pt-6 sm:pt-10 pb-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 space-y-8">
         {/* hero */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="glass-strong relative overflow-hidden rounded-3xl p-6 sm:p-10 mb-8"
+          className="yupp-card-dark relative overflow-hidden p-8 sm:p-12 shadow-xl border border-white/10"
         >
-          <div className={`absolute -top-24 -right-24 h-64 w-64 rounded-full bg-gradient-to-br ${cat?.gradient} opacity-20 blur-3xl`} />
-          <div className="relative flex items-center gap-4">
-            <span className={`inline-flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${cat?.gradient} text-white shadow-xl`}>
-              <Icon size={28} />
+          <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-[#E04E15]/20 blur-3xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-[#E04E15] text-white shadow-xl shadow-orange-950/30 shrink-0">
+              <Icon size={32} />
             </span>
             <div>
-              <h1 className="font-display text-3xl sm:text-5xl font-normal tracking-tight">{cat?.label}</h1>
-              <p className="text-muted-foreground mt-1 text-sm sm:text-base">{cat?.description}</p>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#FBE2D5] text-xs font-bold mb-2">
+                <span>Decoded Category Lens</span>
+              </div>
+              <h1 className="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">{cat?.label}</h1>
+              <p className="text-[#D4BEC3] mt-2 text-sm sm:text-base max-w-2xl">{cat?.description}</p>
             </div>
           </div>
         </motion.div>
@@ -69,63 +72,32 @@ export function CategoryView({ slug }: { slug: string }) {
         )}
 
         {featured && !loading && (
-          <div className="mb-8">
-            <SectionHeader title="Top story" subtitle="The most impactful development right now" />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
-              <FeaturedLarge article={featured} />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                {rest.slice(0, 4).map((a, i) => (
-                  <NewsCardMini key={a.id} article={a} index={i} />
+          <div className="space-y-4">
+            <SectionHeader title="Top Impact Development" subtitle="The highest ranked story in this lens right now" />
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+              <div className="lg:col-span-7">
+                <NewsCard article={featured} variant="featured" />
+              </div>
+              <div className="lg:col-span-5 grid grid-cols-1 gap-4">
+                {rest.slice(0, 2).map((a, i) => (
+                  <NewsCard key={a.id} article={a} variant="default" index={i} />
                 ))}
               </div>
             </div>
           </div>
         )}
 
-        <SectionHeader title={`All ${cat?.label.toLowerCase()} stories`} subtitle={`${articles.length} stories decoded by AI`} />
-        <NewsGrid articles={loading ? [] : rest} loading={loading} />
+        <div className="space-y-4 pt-4">
+          <SectionHeader title={`All ${cat?.label || "Category"} Briefs`} subtitle={`${articles.length} verified stories decoded by AI`} />
+          <NewsGrid articles={loading ? [] : rest} loading={loading} />
+        </div>
 
         {!loading && rest.length === 0 && (
-          <div className="glass rounded-2xl p-12 text-center">
-            <p className="text-muted-foreground">No stories in this category yet. Our AI is still scanning.</p>
+          <div className="yupp-card-white p-12 text-center">
+            <p className="text-muted-foreground">No stories in this category yet. Our AI is still scanning global feeds.</p>
           </div>
         )}
       </div>
     </div>
   );
-}
-
-function FeaturedLarge({ article }: { article: NewsArticle }) {
-  const go = useAppStore((s) => s.go);
-  return (
-    <motion.button
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      onClick={() => go({ name: "article", id: article.id })}
-      className="group glass-strong card-glow relative overflow-hidden rounded-3xl p-6 sm:p-8 text-left hover:shadow-2xl transition-all duration-500"
-    >
-      <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-gradient-to-br from-violet-500/20 to-fuchsia-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-      <div className="relative">
-        <div className="flex items-center gap-2 mb-4">
-          <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{article.subcategory || CATEGORY_LABELS[article.category]}</span>
-          {article.isBreaking && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/15 text-rose-600 text-[11px] font-semibold px-2 py-0.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-rose-500 breaking-pulse" /> Breaking
-            </span>
-          )}
-        </div>
-        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight leading-tight mb-3 group-hover:text-gradient transition-all">{article.title}</h2>
-        <p className="text-muted-foreground leading-relaxed mb-5 line-clamp-3">{article.summary}</p>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span className="font-semibold text-violet-600">Impact {article.impactScore}</span>
-          <span>·</span>
-          <span>{article.sourceName}</span>
-        </div>
-      </div>
-    </motion.button>
-  );
-}
-
-function NewsCardMini({ article, index }: { article: NewsArticle; index: number }) {
-  return <NewsCard article={article} index={index} />;
 }

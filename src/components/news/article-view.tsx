@@ -50,8 +50,8 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-28 pb-20">
-        <div className="glass rounded-3xl p-8 shimmer">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-12 pb-20">
+        <div className="yupp-card-white p-8 sm:p-12 shimmer">
           <div className="h-4 w-24 bg-foreground/10 rounded mb-6" />
           <div className="h-8 w-3/4 bg-foreground/10 rounded mb-3" />
           <div className="h-8 w-1/2 bg-foreground/10 rounded mb-8" />
@@ -65,10 +65,10 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
 
   if (!article) {
     return (
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-32 pb-20 text-center">
-        <p className="text-muted-foreground">Story not found.</p>
-        <button onClick={() => go({ name: "home" })} className="mt-4 text-sm font-medium text-primary">
-          Back to home
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-20 pb-20 text-center">
+        <p className="text-muted-foreground">Story not found or expired.</p>
+        <button onClick={() => go({ name: "home" })} className="mt-4 btn-yupp-primary text-xs">
+          Back to Home
         </button>
       </div>
     );
@@ -86,7 +86,7 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
     const wasSaved = saved;
     try {
       await save(article.id);
-      toast.success(wasSaved ? "Removed" : "Saved to your library");
+      toast.success(wasSaved ? "Removed from library" : "Saved to your library");
     } catch {
       toast.error("Could not save");
     } finally {
@@ -98,18 +98,18 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
     const url = `${window.location.origin}/?a=${article.id}`;
     try {
       if (navigator.share) await navigator.share({ title: article.title, url });
-      else { await navigator.clipboard.writeText(url); toast.success("Link copied"); }
+      else { await navigator.clipboard.writeText(url); toast.success("Link copied to clipboard"); }
     } catch {}
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-24 sm:pt-28 pb-20">
+    <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-6 sm:pt-10 pb-20 space-y-6">
       {/* Back */}
       <button
         onClick={back}
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-6"
+        className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-full bg-secondary/80 hover:bg-secondary"
       >
-        <ArrowLeft size={15} /> Back
+        <ArrowLeft size={14} /> Back
       </button>
 
       {/* Header card */}
@@ -117,90 +117,94 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="glass-strong card-glow relative overflow-hidden rounded-3xl p-6 sm:p-10 mb-6"
+        className="yupp-card-white p-6 sm:p-10 shadow-lg relative overflow-hidden"
       >
-        <div className="absolute -top-32 -right-32 h-72 w-72 rounded-full bg-gradient-to-br from-violet-500/20 to-fuchsia-500/10 blur-3xl" />
-        <div className="relative">
-          <div className="flex items-center gap-2 flex-wrap mb-5">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400">{catLabel}</span>
-            {article.subcategory && (
-              <>
-                <span className="text-muted-foreground/40">·</span>
-                <span className="text-[11px] font-medium text-muted-foreground">{article.subcategory}</span>
-              </>
-            )}
-            {article.isBreaking && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[11px] font-semibold px-2 py-0.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-rose-500 breaking-pulse" /> Breaking
-              </span>
-            )}
-          </div>
+        <div className="flex items-center gap-2 flex-wrap mb-4">
+          <button
+            onClick={() => go({ name: "category", slug: article.category })}
+            className="text-[11px] font-extrabold uppercase tracking-wider text-[#E04E15] bg-[#E04E15]/10 hover:bg-[#E04E15]/20 transition-colors px-3 py-1 rounded-full cursor-pointer"
+          >
+            {catLabel}
+          </button>
+          {article.subcategory && (
+            <button
+              onClick={() => go({ name: "search", q: article.subcategory || "" })}
+              className="text-xs font-semibold text-muted-foreground bg-secondary hover:bg-secondary/80 hover:text-foreground transition-colors px-2.5 py-0.5 rounded-full cursor-pointer"
+            >
+              {article.subcategory}
+            </button>
+          )}
+          {article.isBreaking && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[11px] font-bold px-2.5 py-0.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-rose-500 breaking-pulse" /> Breaking
+            </span>
+          )}
+        </div>
 
-          <h1 className="font-display text-3xl sm:text-4xl lg:text-[3.25rem] font-normal tracking-tight leading-[1.08] mb-5 text-foreground">
-            {article.title}
-          </h1>
+        <h1 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-5 text-foreground">
+          {article.title}
+        </h1>
 
-          <p className="text-lg text-muted-foreground leading-relaxed mb-7">
-            {article.summary}
-          </p>
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 font-medium">
+          {article.summary}
+        </p>
 
-          {/* meta row */}
-          <div className="flex items-center justify-between flex-wrap gap-4 pt-5 border-t border-foreground/10">
-            <div className="flex items-center gap-4">
-              <ImpactRing score={article.impactScore} />
-              <div>
-                <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">AI Impact Score</div>
-                <div className="text-sm font-medium mt-0.5 text-foreground">
-                  {article.impactScore >= 85 ? "Critical significance" : article.impactScore >= 70 ? "High significance" : article.impactScore >= 50 ? "Moderate significance" : "Developing story"}
-                </div>
-                {article.sentiment && (
-                  <div className="text-xs text-muted-foreground mt-0.5 capitalize">{article.sentiment} sentiment</div>
-                )}
+        {/* Meta row */}
+        <div className="flex items-center justify-between flex-wrap gap-4 pt-5 border-t border-border">
+          <div className="flex items-center gap-4">
+            <ImpactRing score={article.impactScore} />
+            <div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">AI Impact Score</div>
+              <div className="text-sm font-bold text-foreground">
+                {article.impactScore >= 85 ? "Critical Global Impact" : article.impactScore >= 70 ? "High Significance" : article.impactScore >= 50 ? "Moderate Shift" : "Developing Brief"}
               </div>
-            </div>
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1"><Clock size={13} /> {article.readTime} min read</span>
-              <a
-                href={article.sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 hover:text-foreground transition-colors max-w-[160px] truncate"
-              >
-                {article.sourceName} <ExternalLink size={12} />
-              </a>
-            </div>
-          </div>
-
-          {/* actions */}
-          <div className="flex items-center gap-2 mt-5">
-            <button
-              onClick={toggleSave}
-              disabled={saving}
-              className={cn(
-                "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all",
-                saved ? "bg-violet-500/15 text-violet-600 dark:text-violet-400" : "bg-foreground/5 hover:bg-foreground/10 text-foreground",
+              {article.sentiment && (
+                <div className="text-xs text-muted-foreground capitalize">{article.sentiment} sentiment</div>
               )}
-            >
-              <Bookmark size={15} className={cn(saved && "fill-current")} />
-              {saved ? "Saved" : "Save"}
-            </button>
-            <button
-              onClick={share}
-              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors"
-            >
-              <Share2 size={15} /> Share
-            </button>
+            </div>
           </div>
+          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            <span className="inline-flex items-center gap-1 font-medium"><Clock size={13} /> {article.readTime} min read</span>
+            <a
+              href={article.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 font-semibold text-[#E04E15] hover:underline max-w-[160px] truncate"
+            >
+              {article.sourceName} <ExternalLink size={12} />
+            </a>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-2 mt-6 pt-4 border-t border-border/60">
+          <button
+            onClick={toggleSave}
+            disabled={saving}
+            className={cn(
+              "inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold transition-all",
+              saved ? "bg-[#E04E15] text-white" : "bg-secondary hover:bg-secondary/80 text-foreground",
+            )}
+          >
+            <Bookmark size={14} className={cn(saved && "fill-current")} />
+            {saved ? "Saved to Library" : "Bookmark Story"}
+          </button>
+          <button
+            onClick={share}
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
+          >
+            <Share2 size={14} /> Share Intelligence
+          </button>
         </div>
       </motion.div>
 
       {/* AI analysis tabs */}
-      <div className="glass rounded-2xl p-1.5 inline-flex gap-1 mb-4">
+      <div className="bg-card border border-border rounded-full p-1.5 inline-flex gap-1 shadow-sm">
         <TabBtn active={activeTab === "analysis"} onClick={() => setActiveTab("analysis")}>
-          <Sparkles size={14} /> AI Analysis
+          <Sparkles size={14} /> 4-Point Synthesis
         </TabBtn>
         <TabBtn active={activeTab === "context"} onClick={() => setActiveTab("context")}>
-          <Tag size={14} /> Context
+          <Tag size={14} /> Context & Sources
         </TabBtn>
       </div>
 
@@ -221,9 +225,9 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
               text={article.whatHappened}
             />
             <AnalysisBlock
-              icon={<Zap size={18} className="text-violet-600 dark:text-violet-400" />}
+              icon={<Zap size={18} className="text-[#E04E15]" />}
               label="Why It Matters"
-              accent="violet"
+              accent="orange"
               text={article.whyItMatters}
             />
             <AnalysisBlock
@@ -241,7 +245,7 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
             {article.futureImpact && (
               <AnalysisBlock
                 icon={<TrendingUp size={18} className="text-rose-600 dark:text-rose-400" />}
-                label="Future Impact Prediction"
+                label="Actionable Foresight"
                 accent="rose"
                 text={article.futureImpact}
                 highlight
@@ -255,31 +259,47 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="glass rounded-2xl p-6 sm:p-8"
+            className="yupp-card-white p-6 sm:p-8 space-y-6"
           >
             {article.tags.length > 0 && (
-              <div className="mb-6">
-                <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-3">Topics</div>
+              <div>
+                <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Topic Keywords</div>
                 <div className="flex flex-wrap gap-2">
                   {article.tags.map((t) => (
-                    <FollowTag key={t} tag={t} />
+                    <div key={t} className="inline-flex items-center rounded-full bg-secondary/80 border border-border/60 overflow-hidden">
+                      <button
+                        onClick={() => go({ name: "search", q: t })}
+                        className="px-3 py-1 text-xs font-bold text-foreground hover:text-[#E04E15] transition-colors"
+                      >
+                        #{t}
+                      </button>
+                      <div className="pr-1.5 py-0.5">
+                        <FollowTag tag={t} />
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
             )}
             {article.keyEntities && article.keyEntities.length > 0 && (
-              <div className="mb-6">
-                <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-3">Key Entities</div>
+              <div>
+                <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Key Entities Monitored</div>
                 <div className="flex flex-wrap gap-2">
                   {article.keyEntities.map((e) => (
-                    <span key={e} className="rounded-full bg-foreground/5 px-3 py-1 text-xs font-medium text-foreground">{e}</span>
+                    <button
+                      key={e}
+                      onClick={() => go({ name: "search", q: e })}
+                      className="rounded-full bg-secondary hover:bg-[#E04E15]/10 hover:text-[#E04E15] border border-border/60 px-3 py-1 text-xs font-semibold text-foreground transition-all cursor-pointer"
+                    >
+                      {e}
+                    </button>
                   ))}
                 </div>
               </div>
             )}
             <div>
-              <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-2">Source excerpt</div>
-              <p className="text-sm text-foreground/80 leading-relaxed">{article.content}</p>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-2">Original Reporting Context</div>
+              <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed bg-secondary/30 p-4 rounded-2xl border border-border">{article.content}</p>
             </div>
           </motion.div>
         )}
@@ -287,8 +307,8 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
 
       {/* Related */}
       {related.length > 0 && (
-        <div className="mt-12">
-          <h3 className="text-xl font-semibold tracking-tight mb-5 text-foreground">Related intelligence</h3>
+        <div className="mt-12 space-y-4">
+          <h3 className="font-heading font-extrabold text-xl tracking-tight text-foreground">Related Intelligence Briefs</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {related.map((r, i) => (
               <NewsCard key={r.id} article={r} index={i} onAuthRequired={onAuthRequired} />
@@ -305,11 +325,10 @@ function TabBtn({ children, active, onClick }: { children: React.ReactNode; acti
     <button
       onClick={onClick}
       className={cn(
-        "relative inline-flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-sm font-medium transition-colors",
-        active ? "text-background font-semibold" : "text-muted-foreground hover:text-foreground",
+        "relative inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-bold transition-all",
+        active ? "bg-[#E04E15] text-white shadow-sm" : "text-muted-foreground hover:text-foreground hover:bg-secondary/60",
       )}
     >
-      {active && <motion.span layoutId="articleTab" className="absolute inset-0 rounded-xl bg-foreground" transition={{ type: "spring", stiffness: 400, damping: 32 }} />}
       <span className="relative z-10 inline-flex items-center gap-1.5">{children}</span>
     </button>
   );
@@ -321,12 +340,12 @@ function AnalysisBlock({
   icon: React.ReactNode;
   label: string;
   text: string;
-  accent: "sky" | "violet" | "emerald" | "amber" | "rose";
+  accent: "sky" | "orange" | "emerald" | "amber" | "rose";
   highlight?: boolean;
 }) {
   const accentBg = {
     sky: "bg-sky-500/10",
-    violet: "bg-violet-500/10",
+    orange: "bg-[#E04E15]/10",
     emerald: "bg-emerald-500/10",
     amber: "bg-amber-500/10",
     rose: "bg-rose-500/10",
@@ -338,16 +357,16 @@ function AnalysisBlock({
       viewport={{ once: true }}
       transition={{ duration: 0.4 }}
       className={cn(
-        "glass rounded-2xl p-5 sm:p-6 flex gap-4 items-start",
-        highlight && "ring-1 ring-rose-500/30",
+        "yupp-card-white p-5 sm:p-6 flex gap-4 items-start shadow-sm",
+        highlight && "ring-2 ring-rose-500/40",
       )}
     >
-      <span className={cn("inline-flex h-10 w-10 items-center justify-center rounded-xl shrink-0", accentBg)}>
+      <span className={cn("inline-flex h-10 w-10 items-center justify-center rounded-2xl shrink-0", accentBg)}>
         {icon}
       </span>
-      <div className="min-w-0">
-        <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">{label}</div>
-        <p className="text-[15px] leading-relaxed text-foreground/90">{text}</p>
+      <div className="min-w-0 flex-1">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-[#E04E15] mb-1">{label}</div>
+        <p className="text-xs sm:text-sm leading-relaxed text-foreground">{text}</p>
       </div>
     </motion.div>
   );
@@ -377,8 +396,8 @@ function FollowTag({ tag }: { tag: string }) {
       onClick={toggle}
       disabled={busy}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-all",
-        followed ? "bg-violet-500/15 text-violet-600 dark:text-violet-400" : "bg-foreground/5 hover:bg-foreground/10 text-foreground",
+        "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold transition-all",
+        followed ? "bg-[#E04E15]/15 text-[#E04E15]" : "bg-secondary hover:bg-secondary/80 text-foreground",
       )}
     >
       <span>#{tag}</span>

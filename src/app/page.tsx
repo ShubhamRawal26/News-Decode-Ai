@@ -17,11 +17,13 @@ import { SearchView } from "@/components/news/search-view";
 import { DateView } from "@/components/news/date-view";
 import { AuthModal } from "@/components/auth/auth-modal";
 import { CATEGORIES, type NewsArticle } from "@/lib/news";
+import { cn } from "@/lib/utils";
 import { Sparkles, Flame, Activity, Zap } from "lucide-react";
 
 export default function Home() {
   const { view, go } = useAppStore();
   const [booted, setBooted] = useState(false);
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>("all");
   const [authOpen, setAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
   const [spotlightOpen, setSpotlightOpen] = useState(false);
@@ -132,13 +134,58 @@ export default function Home() {
 
             {/* Decoded News Intelligence Feed */}
             <section id="decoded-feed" className="mx-auto max-w-7xl px-4 sm:px-6 scroll-mt-28">
-              <SectionHeader
-                title="Today's Decoded Stories"
-                subtitle="Ranked by AI Impact Score with brief summaries & key takeaways"
-                icon={<Sparkles size={18} className="text-[#E04E15]" />}
-              />
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+                <SectionHeader
+                  title="Today's Decoded Stories"
+                  subtitle="Ranked by AI Impact Score with structured takeaways and future foresight"
+                  icon={<Sparkles size={18} className="text-[#E04E15]" />}
+                />
+              </div>
+
+              {/* Quick Lens Filter Bar */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-6 scrollbar-none">
+                <button
+                  onClick={() => setActiveCategoryFilter("all")}
+                  className={cn(
+                    "px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap",
+                    activeCategoryFilter === "all"
+                      ? "bg-[#E04E15] text-white shadow-md shadow-orange-950/20"
+                      : "bg-card border border-border text-foreground hover:bg-secondary/70",
+                  )}
+                >
+                  All Stories ({articles.length})
+                </button>
+                {CATEGORIES.map((c) => {
+                  const count = counts[c.slug] || 0;
+                  return (
+                    <button
+                      key={c.slug}
+                      onClick={() => setActiveCategoryFilter(c.slug)}
+                      className={cn(
+                        "px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5",
+                        activeCategoryFilter === c.slug
+                          ? "bg-[#E04E15] text-white shadow-md shadow-orange-950/20"
+                          : "bg-card border border-border text-foreground hover:bg-secondary/70",
+                      )}
+                    >
+                      <span>{c.label}</span>
+                      <span className={cn(
+                        "text-[10px] px-1.5 py-0.2 rounded-full",
+                        activeCategoryFilter === c.slug ? "bg-white/20 text-white" : "bg-secondary text-muted-foreground"
+                      )}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Grid of Articles */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {articles.map((art, i) => (
+                {(activeCategoryFilter === "all"
+                  ? articles
+                  : articles.filter((a) => a.category === activeCategoryFilter)
+                ).map((art, i) => (
                   <NewsCard
                     key={art.id}
                     article={art}
@@ -164,7 +211,7 @@ export default function Home() {
                       <button
                         key={t.topic}
                         onClick={() => go({ name: "search", q: t.topic })}
-                        className="px-3.5 py-1.5 rounded-full bg-secondary hover:bg-[#E04E15]/10 hover:text-[#E04E15] text-xs font-semibold transition-colors flex items-center gap-1.5"
+                        className="px-3.5 py-1.5 rounded-full bg-secondary hover:bg-[#E04E15]/10 hover:text-[#E04E15] text-xs font-semibold transition-colors flex items-center gap-1.5 text-foreground"
                       >
                         <span className="h-1.5 w-1.5 rounded-full bg-[#E04E15]" />
                         #{t.topic}

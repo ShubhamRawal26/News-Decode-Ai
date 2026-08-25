@@ -1,13 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Sparkles, ArrowRight, Bot, Cpu, Zap, Trophy,
-  ThumbsUp, MessageSquare, Compass, ShieldCheck, Check, Globe2
+  ThumbsUp, Volume2, Play, Pause, Compass, ShieldCheck,
+  Check, Globe2, Radio, Flame, ArrowUpRight
 } from "lucide-react";
 import { RotatingStampBadge } from "./yupp-logo";
 import { useAppStore } from "@/store/use-app-store";
 import type { NewsArticle } from "@/lib/news";
+import { cn } from "@/lib/utils";
 
 interface YuppHeroSectionsProps {
   featuredStory?: NewsArticle;
@@ -17,33 +20,37 @@ interface YuppHeroSectionsProps {
 
 export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppHeroSectionsProps) {
   const go = useAppStore((s) => s.go);
+  const [phoneVoted, setPhoneVoted] = useState<"left" | "right" | null>("left");
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
   return (
     <div className="space-y-12 sm:space-y-16">
-      {/* 1. TOP HERO CARD (Deep Chocolate Espresso Background) */}
+      {/* =========================================================================
+          1. HERO CONTAINER (Exact match to Yupp.ai Hero Layout & Phone Mockup)
+         ========================================================================= */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="yupp-card-dark p-8 sm:p-14 lg:p-16 relative overflow-hidden shadow-2xl">
-          {/* Subtle warm glow inside */}
+          {/* Ambient warm gradient inside */}
           <div className="absolute -right-20 -bottom-20 w-96 h-96 rounded-full bg-[#E04E15]/15 blur-3xl pointer-events-none" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
-            {/* Left Copy */}
+            {/* Left Column: Hero Headlines & CTA */}
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-[#FBE2D5] text-xs font-semibold backdrop-blur-md">
                 <Sparkles size={13} className="text-[#E04E15]" />
-                <span>Every AI model, side-by-side for you</span>
+                <span>Multi-Model AI News Intelligence</span>
               </div>
 
               <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.04]">
-                Every AI for <br />
-                <span className="text-[#FBE2D5] italic font-medium">everyone.</span>
+                Understand what <br />
+                <span className="text-[#FBE2D5] italic font-medium">actually matters.</span>
               </h1>
 
               <p className="text-sm sm:text-base text-[#D4BEC3] leading-relaxed max-w-md">
-                Access over 800+ of the best AIs from OpenAI, Google, Anthropic, and DeepSeek. Synthesize global news, compare reasoning, and cast votes to earn credits.
+                AI scans thousands of verified global news feeds to decode breaking events in real time — with multi-model consensus, impact scores, and causal foresight.
               </p>
 
-              {/* Signature Google Sign In / Start Pill */}
+              {/* Signature Google Sign In & Explore Pills */}
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
                   onClick={onAuthOpen}
@@ -67,49 +74,92 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                   onClick={onExplore}
                   className="px-5 py-3 rounded-full bg-white/10 hover:bg-white/15 text-white text-sm font-semibold transition-colors"
                 >
-                  Explore Feed
+                  Explore Today&apos;s Stories
                 </button>
               </div>
             </div>
 
-            {/* Right Preview Card Graphic */}
+            {/* Right Column: Floating Phone Mockup Widget (Exact replica of Image 1/2) */}
             <div className="lg:col-span-6 flex justify-center lg:justify-end">
-              <div className="relative w-full max-w-md rounded-3xl bg-[#FEEFE6] p-6 shadow-2xl text-[#2E151B]">
-                <div className="flex items-center justify-between pb-3 mb-3 border-b border-black/10 text-xs">
-                  <div className="flex items-center gap-1.5 font-bold">
-                    <span className="h-2 w-2 rounded-full bg-[#E04E15]" />
-                    <span>World&apos;s smartest AIs, side-by-side</span>
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#E04E15]/10 text-[#E04E15]">
-                    800+ Models
-                  </span>
+              <div className="relative w-full max-w-sm sm:max-w-md rounded-[2.5rem] bg-[#FBE2D5] p-3 sm:p-5 shadow-2xl text-[#2E151B] border-4 border-white/20">
+                {/* Phone Notch & Header */}
+                <div className="flex items-center justify-between pb-3 px-2 border-b border-black/10 text-xs">
+                  <span className="font-mono text-[10px] font-bold">9:41</span>
+                  <div className="h-4 w-16 rounded-full bg-black/10" />
+                  <span className="text-[10px] font-bold text-[#E04E15]">PRO ARENA</span>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="p-3.5 rounded-2xl bg-white shadow-sm border border-black/5">
-                    <div className="flex items-center justify-between text-[11px] font-bold text-[#E04E15] mb-1">
-                      <span>Claude 3.7 Sonnet</span>
-                      <span>Deep Reasoning</span>
-                    </div>
-                    <p className="text-xs text-[#73565C] leading-snug">
-                      Comprehensive geopolitical context with causal foresight on global trade corridors.
+                {/* Inner Phone Content */}
+                <div className="mt-3 p-4 rounded-3xl bg-white/90 backdrop-blur-md shadow-sm space-y-3">
+                  <div className="text-center space-y-1">
+                    <h3 className="font-extrabold text-xs sm:text-sm text-[#2E151B]">
+                      World&apos;s smartest AIs, side-by-side with you
+                    </h3>
+                    <p className="text-[10px] text-[#73565C]">
+                      Get the best decoded answers from 800+ AI models.
                     </p>
                   </div>
 
-                  <div className="p-3.5 rounded-2xl bg-white shadow-sm border border-black/5">
-                    <div className="flex items-center justify-between text-[11px] font-bold text-indigo-600 mb-1">
-                      <span>GPT-4.5 Omni</span>
-                      <span>Market Synthesis</span>
+                  {/* Simulated Question Prompt Box */}
+                  <div className="p-2.5 rounded-2xl bg-[#FEEFE6] border border-black/5 text-[11px] text-[#2E151B] font-medium flex items-center justify-between">
+                    <span>What is the real market impact of the AI semiconductor race?</span>
+                    <div className="h-5 w-5 rounded-full bg-[#E04E15] text-white flex items-center justify-center shrink-0">
+                      <ArrowRight size={11} />
                     </div>
-                    <p className="text-xs text-[#73565C] leading-snug">
-                      Capital reallocation models indicate accelerated enterprise adoption in clean tech.
-                    </p>
                   </div>
-                </div>
 
-                <div className="mt-3.5 pt-2 border-t border-black/10 flex items-center justify-between text-[11px] text-[#73565C]">
-                  <span>Vote for best response</span>
-                  <span className="font-bold text-[#E04E15]">+25 Credits</span>
+                  {/* Side-by-Side Model Response Cards */}
+                  <div className="grid grid-cols-2 gap-2 text-[10px]">
+                    {/* Left Model: Perplexity / Claude */}
+                    <div
+                      onClick={() => setPhoneVoted("left")}
+                      className={cn(
+                        "p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between",
+                        phoneVoted === "left"
+                          ? "bg-white border-[#E04E15] ring-1 ring-[#E04E15]/30 shadow-sm"
+                          : "bg-white/60 border-black/5"
+                      )}
+                    >
+                      <div>
+                        <div className="font-bold text-[#E04E15] flex items-center gap-1 mb-1">
+                          <Bot size={10} />
+                          <span>Claude 3.7</span>
+                        </div>
+                        <p className="text-[#73565C] leading-snug">
+                          Supply bottleneck shifts from lithography to advanced packaging & energy grid access.
+                        </p>
+                      </div>
+                      <div className="mt-2 pt-1.5 border-t border-black/5 flex items-center gap-1 font-bold text-[#E04E15]">
+                        <ThumbsUp size={10} />
+                        <span>{phoneVoted === "left" ? "I prefer this ✓" : "Vote"}</span>
+                      </div>
+                    </div>
+
+                    {/* Right Model: GPT-4.5 */}
+                    <div
+                      onClick={() => setPhoneVoted("right")}
+                      className={cn(
+                        "p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between",
+                        phoneVoted === "right"
+                          ? "bg-white border-[#E04E15] ring-1 ring-[#E04E15]/30 shadow-sm"
+                          : "bg-white/60 border-black/5"
+                      )}
+                    >
+                      <div>
+                        <div className="font-bold text-indigo-600 flex items-center gap-1 mb-1">
+                          <Cpu size={10} />
+                          <span>GPT-4.5</span>
+                        </div>
+                        <p className="text-[#73565C] leading-snug">
+                          CapEx reallocation accelerating toward bespoke hyperscaler ASICs across North America.
+                        </p>
+                      </div>
+                      <div className="mt-2 pt-1.5 border-t border-black/5 flex items-center gap-1 font-bold text-indigo-600">
+                        <ThumbsUp size={10} />
+                        <span>{phoneVoted === "right" ? "I prefer this ✓" : "Vote"}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -117,7 +167,9 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
         </div>
       </section>
 
-      {/* 2. "WHAT'S NEW" CAROUSEL SECTION (Warm Peach Container) */}
+      {/* =========================================================================
+          2. "WHAT'S NEW" CAROUSEL (Exact match to Image 3)
+         ========================================================================= */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="yupp-card-peach p-8 sm:p-12 relative overflow-hidden shadow-md">
           <div className="flex items-start justify-between gap-4 mb-8">
@@ -126,7 +178,7 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                 What&apos;s New
               </h2>
               <p className="text-sm sm:text-base text-[#73565C] mt-1 font-medium">
-                Check out the latest intelligence announcements & model updates.
+                Check out the latest decoded announcements and frontier model releases.
               </p>
             </div>
 
@@ -135,7 +187,7 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {/* Card A: Sonnet 4.6 (Dark landscape card) */}
+            {/* Card A: Claude Sonnet 4.6 (Dark landscape card) */}
             <div className="rounded-3xl bg-[#1C151B] p-6 text-white flex flex-col justify-between min-h-[220px] shadow-lg relative overflow-hidden">
               <div className="space-y-2 relative z-10">
                 <div className="h-10 w-10 rounded-2xl bg-white/10 flex items-center justify-center text-[#F05A28]">
@@ -143,7 +195,7 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                 </div>
                 <h3 className="font-heading text-lg font-bold text-white">Claude Sonnet 4.6</h3>
                 <p className="text-xs text-[#D4BEC3] leading-relaxed">
-                  Anthropic&apos;s latest model with enhanced coding, long-context reasoning, and causal speed.
+                  Anthropic&apos;s latest model offering deep geopolitical reasoning, coding synthesis, and fast causal predictions.
                 </p>
               </div>
 
@@ -164,7 +216,7 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                 </div>
                 <h3 className="font-heading text-lg font-bold">Gemini 3.1 Pro</h3>
                 <p className="text-xs text-[#73565C] leading-relaxed">
-                  Google&apos;s advanced multimodal model with 2M token context, live web retrieval, and logic.
+                  Google&apos;s advanced model with 2M token context, live web retrieval, and real-time multi-source fact-checking.
                 </p>
               </div>
 
@@ -185,7 +237,7 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                 </div>
                 <h3 className="font-heading text-lg font-bold">DeepSeek R1</h3>
                 <p className="text-xs text-[#73565C] leading-relaxed">
-                  Open reasoning model specializing in mathematical rigor and first-principles causal mapping.
+                  Open reasoning model mapping first-principles logic, mathematical proofs, and causal supply timelines.
                 </p>
               </div>
 
@@ -201,16 +253,18 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
         </div>
       </section>
 
-      {/* 3. "HOW YUPP WORKS" SECTION */}
+      {/* =========================================================================
+          3. "HOW NEWSDECODED WORKS" (Exact match to Image 4 & 5)
+         ========================================================================= */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="yupp-card-peach p-8 sm:p-12 shadow-md space-y-8">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-[#2E151B] tracking-tight">
-                How Yupp Works
+                How NewsDecoded Works
               </h2>
               <p className="text-sm sm:text-base text-[#73565C] mt-1 font-medium max-w-xl">
-                Use multiple AIs side-by-side for no cost. Provide feedback to win credits that let you keep prompting.
+                Use multiple AIs side-by-side for no cost. Provide feedback to win intelligence credits that let you keep prompting.
               </p>
             </div>
 
@@ -218,18 +272,18 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
             <RotatingStampBadge text="LEARN • LEARN • LEARN • " size={80} className="text-[#2E151B]" />
           </div>
 
-          {/* Banner inside: Every AI for everyone with Model Badges */}
+          {/* Banner: Every AI for everyone with Model Badges */}
           <div className="rounded-[2.5rem] bg-[#2E151B] p-8 sm:p-10 text-white relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6 shadow-xl">
             <div className="space-y-2 max-w-md">
               <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
                 Every AI for everyone
               </h3>
               <p className="text-xs sm:text-sm text-[#D4BEC3]">
-                Access over 800 of the best AIs from OpenAI, Google, Anthropic, and more available at zero cost.
+                Access over 800 of the best AIs from OpenAI, Google, Anthropic, and DeepSeek to automatically decode what actually matters.
               </p>
             </div>
 
-            {/* Floating Model Badges Grid */}
+            {/* Floating Model Badges */}
             <div className="flex flex-wrap items-center gap-2.5 max-w-md justify-center lg:justify-end">
               {["Anthropic", "OpenAI", "DeepSeek", "Google Gemini", "Mistral", "Meta Llama", "Perplexity", "Grok 3"].map((brand) => (
                 <span
@@ -249,7 +303,7 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                 Multiple AIs, side by side with you
               </h3>
               <p className="text-sm text-[#73565C] leading-relaxed">
-                Get side-by-side responses from multiple models for news analysis, coding, and predictions. Compare and see which hits the mark.
+                Get side-by-side news breakdowns from multiple models for macro economics, technology, and politics. Compare and see which hits the mark.
               </p>
             </div>
 
@@ -258,7 +312,7 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                 Give feedback, get more credits
               </h3>
               <p className="text-sm text-[#73565C] leading-relaxed">
-                Feedback comes with more credits which allow you to keep using Yupp and access over 800 of the best models available.
+                Feedback comes with more credits which allow you to keep using NewsDecoded and access over 800 of the best models available.
               </p>
             </div>
           </div>
@@ -270,7 +324,7 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
                 Shape the future, see the stats
               </h3>
               <p className="text-sm text-[#73565C] max-w-xl">
-                Curious about how your feedback shapes the industry? Take a look at the Leaderboard to see how models perform across categories.
+                Curious about how your feedback shapes the industry? Take a look at the Leaderboard to see how models stack up across categories and speed.
               </p>
             </div>
 
@@ -287,16 +341,66 @@ export function YuppHeroSections({ featuredStory, onAuthOpen, onExplore }: YuppH
         </div>
       </section>
 
-      {/* 4. WARM EMOTIONAL QUOTE SECTION */}
+      {/* =========================================================================
+          4. AI AUDIO BRIEF & DAILY SYNTHESIS PLAYER WIDGET
+         ========================================================================= */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="yupp-card-white p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md border border-border">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsPlayingAudio(!isPlayingAudio)}
+              className="h-14 w-14 rounded-full bg-[#E04E15] text-white flex items-center justify-center shadow-lg shadow-orange-950/20 hover:scale-105 transition-all shrink-0"
+              title={isPlayingAudio ? "Pause Audio Brief" : "Play Today's AI Audio Brief"}
+            >
+              {isPlayingAudio ? <Pause size={22} className="fill-current" /> : <Play size={22} className="fill-current ml-1" />}
+            </button>
+
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-display text-lg sm:text-xl font-bold text-[#2E151B] dark:text-white">
+                  Today&apos;s 3-Minute AI Audio Brief
+                </span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                  Daily Podcast
+                </span>
+              </div>
+              <p className="text-xs text-[#73565C] dark:text-[#D4BEC3] mt-0.5">
+                Listen to a distilled multi-model audio briefing of today&apos;s most critical global stories.
+              </p>
+            </div>
+          </div>
+
+          {/* Animated Waveform Bars */}
+          <div className="flex items-center gap-1.5 h-10 px-4 py-2 rounded-2xl bg-secondary/80">
+            {[40, 70, 30, 95, 55, 80, 100, 60, 45, 85, 50, 90, 35, 75, 85, 45].map((h, i) => (
+              <span
+                key={i}
+                style={{
+                  height: isPlayingAudio ? `${Math.max(20, (h * Math.random()).toFixed(0))}%` : `${h}%`,
+                  transition: "height 0.2s ease",
+                }}
+                className={cn(
+                  "w-1.5 rounded-full",
+                  i <= 8 ? "bg-[#E04E15]" : "bg-muted-foreground/30"
+                )}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          5. WARM EMOTIONAL QUOTE SECTION
+         ========================================================================= */}
       <section className="mx-auto max-w-4xl px-4 text-center py-12">
         <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-[#2E151B] dark:text-[#FFF1E8] tracking-tight mb-4">
           Built with love, shaped by a million voices.
         </h2>
         <p className="text-sm sm:text-base text-[#73565C] dark:text-[#BFA8AD] leading-relaxed max-w-2xl mx-auto">
-          To every user who asked a question, compared a response, cast a vote, or told a friend: you made Yupp what it was. We are grateful for every prompt, every piece of feedback, and every moment you spent with us.
+          To every user who asked a question, compared a response, cast a vote, or shared a decoded story: you make NewsDecoded what it is. We are grateful for every prompt, every piece of feedback, and every moment you spend with us.
         </p>
         <span className="block mt-4 text-xs font-bold uppercase tracking-widest text-[#E04E15]">
-          — The Yupp Team
+          — The NewsDecoded Team
         </span>
       </section>
     </div>

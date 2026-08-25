@@ -11,7 +11,7 @@ interface YuppLogoProps {
 export function YuppLogo({ className, size = 28, showText = true }: YuppLogoProps) {
   return (
     <div className={cn("inline-flex items-center gap-2.5 select-none", className)}>
-      {/* Yupp Multi-Color Sunburst / Asterisk Pinwheel */}
+      {/* Signature Multi-Color Sunburst / Asterisk Pinwheel */}
       <svg
         width={size}
         height={size}
@@ -20,7 +20,6 @@ export function YuppLogo({ className, size = 28, showText = true }: YuppLogoProp
         xmlns="http://www.w3.org/2000/svg"
         className="shrink-0 transition-transform duration-300 hover:rotate-45"
       >
-        {/* 8 Radial Petal lines with Yupp signature rainbow hues */}
         <line x1="20" y1="4" x2="20" y2="12" stroke="#E04E15" strokeWidth="4" strokeLinecap="round" />
         <line x1="31.3" y1="8.7" x2="25.6" y2="14.4" stroke="#F59E0B" strokeWidth="4" strokeLinecap="round" />
         <line x1="36" y1="20" x2="28" y2="20" stroke="#10B981" strokeWidth="4" strokeLinecap="round" />
@@ -32,8 +31,8 @@ export function YuppLogo({ className, size = 28, showText = true }: YuppLogoProp
       </svg>
 
       {showText && (
-        <span className="font-extrabold text-2xl tracking-tighter text-foreground font-sans lowercase">
-          yupp
+        <span className="font-extrabold text-xl tracking-tight text-foreground font-sans">
+          NewsDecoded<span className="text-[#E04E15]">AI</span>
         </span>
       )}
     </div>
@@ -41,8 +40,8 @@ export function YuppLogo({ className, size = 28, showText = true }: YuppLogoProp
 }
 
 export function RotatingStampBadge({
-  text = "LEARN • LEARN • LEARN • ",
-  size = 72,
+  text = "DECODE • DECODE • DECODE • ",
+  size = 76,
   className,
 }: {
   text?: string;

@@ -13,10 +13,15 @@ function escapeXml(s: string): string {
 }
 
 export async function GET() {
-  const articles = await db.article.findMany({
-    orderBy: { publishedAt: "desc" },
-    take: 50,
-  });
+  let articles: any[] = [];
+  try {
+    articles = await db.article.findMany({
+      orderBy: { publishedAt: "desc" },
+      take: 50,
+    });
+  } catch (error) {
+    console.warn("RSS DB query fallback:", error);
+  }
 
   const items = articles
     .map(

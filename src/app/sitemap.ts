@@ -16,16 +16,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ];
 
-  const articles = await db.article.findMany({
-    select: { id: true, updatedAt: true },
-    take: 500,
-  });
-  const articleRoutes = articles.map((a) => ({
-    url: `${base}/?a=${a.id}`,
-    lastModified: a.updatedAt,
-    changeFrequency: "daily" as const,
-    priority: 0.7,
-  }));
+  try {
+    const articles = await db.article.findMany({
+      select: { id: true, updatedAt: true },
+      take: 500,
+    });
+    const articleRoutes = articles.map((a) => ({
+      url: `${base}/?a=${a.id}`,
+      lastModified: a.updatedAt,
+      changeFrequency: "daily" as const,
+      priority: 0.7,
+    }));
 
-  return [...staticRoutes, ...articleRoutes];
+    return [...staticRoutes, ...articleRoutes];
+  } catch (error) {
+    console.warn("Sitemap DB query fallback:", error);
+    return staticRoutes;
+  }
 }

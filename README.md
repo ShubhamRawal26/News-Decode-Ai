@@ -12,7 +12,7 @@
 [![GitHub Forks](https://img.shields.io/badge/Forks-180-teal?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ShubhamRawal26/newsdecoded-ai/network/members)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
 [![Issues](https://img.shields.io/badge/Issues-0_Open-brightgreen?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ShubhamRawal26/newsdecoded-ai/issues)
-[![Repo Size](https://img.shields.io/badge/Repo_Size-4.2_MB-orange?style=for-the-badge&logo=buffer&logoColor=white)](https://github.com/ShubhamRawal26/newsdecoded-ai)
+[![Repo Size](https://img.shields.io/badge/Repo_Size-3.8_MB-orange?style=for-the-badge&logo=buffer&logoColor=white)](https://github.com/ShubhamRawal26/newsdecoded-ai)
 [![Node Version](https://img.shields.io/badge/Node.js-v20+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 
 ---
@@ -24,7 +24,7 @@
 [**Core Features**](#-deep-feature-breakdown) •
 [**System Architecture**](#-project-architecture-tree) •
 [**Quick Start Guide**](#-downloading-installation--running-guide) •
-[**Configuration & DB**](#-backend-database--environment-setup) •
+[**Firebase & Cloud Setup**](#-firebase-database--environment-setup) •
 [**Contributing**](#-contributing-workflow) •
 [**License & Author**](#-licensing--author-attribution)
 
@@ -53,20 +53,20 @@
 
 ## 🛠 Tech Stack Architecture
 
-The application is built on a modern, type-safe full-stack ecosystem with zero external styling bloat.
+The application is built as a lightning-fast, pure **React 19 Single Page Application (SPA)** powered by **Vite** and backed directly by **Firebase Realtime Database & Firebase Auth**.
 
 ### 🎨 Frontend Architecture & Design System
 
 | Layer | Technology Badge | Description & Role |
 |---|---|---|
-| **Framework** | [![Next.js](https://img.shields.io/badge/Next.js_16.1-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/) | App Router, Server Actions, Dynamic API Routes & Static Generation |
-| **Core UI** | [![React](https://img.shields.io/badge/React_19.0-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/) | React 19 Concurrent Rendering, Server Components & Hooks |
-| **Language** | [![TypeScript](https://img.shields.io/badge/TypeScript_5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) | Strict static typing across schemas, API payloads, and state stores |
-| **Styling** | [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/) | Tailwind CSS v4 engine with OKLCH color space & CSS custom properties |
-| **Micro-Interactions** | [![Framer Motion](https://img.shields.io/badge/Framer_Motion_12-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/) | Spring-physics layout animations, view transitions & floating aurora glow |
+| **Bundler & Dev Server** | [![Vite](https://img.shields.io/badge/Vite_6.2-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev/) | Instant HMR development server (<350ms boot) and optimized production Rollup builds |
+| **Core UI** | [![React](https://img.shields.io/badge/React_19.0-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/) | React 19 Concurrent Rendering, client-side view routing & modern hooks |
+| **Language** | [![TypeScript](https://img.shields.io/badge/TypeScript_5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) | Strict static typing across schemas, API payloads, and state stores |
+| **Styling** | [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/) | Tailwind CSS v4 engine with `@tailwindcss/vite`, OKLCH color space & custom tokens |
+| **Micro-Interactions** | [![Framer Motion](https://img.shields.io/badge/Framer_Motion_11-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/) | Spring-physics layout animations, view transitions & smooth glassmorphism glow |
 | **Primitives** | [![Radix UI](https://img.shields.io/badge/Radix_UI-161618?style=for-the-badge&logo=radixui&logoColor=white)](https://www.radix-ui.com/) | Accessible dialogs, popovers, dropdowns, tooltips & toggle groups |
 | **Icons** | [![Lucide](https://img.shields.io/badge/Lucide_Icons-F56565?style=for-the-badge&logo=feather&logoColor=white)](https://lucide.dev/) | Consistent, lightweight SVG icon system with optimized tree-shaking |
-| **State Store** | [![Zustand](https://img.shields.io/badge/Zustand_5.0-4338CA?style=for-the-badge&logo=redux&logoColor=white)](https://github.com/pmndrs/zustand) | Lightweight, non-boilerplate reactive client state & view routing |
+| **State Store** | [![Zustand](https://img.shields.io/badge/Zustand_5.0-4338CA?style=for-the-badge&logo=redux&logoColor=white)](https://github.com/pmndrs/zustand) | Lightweight, reactive client state store for view routing & guest personalization |
 
 ### 🤖 AI Intelligence & Processing Pipeline
 
@@ -81,19 +81,18 @@ The application is built on a modern, type-safe full-stack ecosystem with zero e
 
 | Layer | Technology Badge | Description & Role |
 |---|---|---|
-| **Database** | [![Firebase](https://img.shields.io/badge/Firebase_Realtime_DB-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/) | Live cloud database storing articles, editions, categories & intelligence briefs |
+| **Cloud Database** | [![Firebase](https://img.shields.io/badge/Firebase_Realtime_DB-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/) | Live cloud database storing articles, editions, categories & intelligence briefs |
 | **Authentication** | [![Firebase](https://img.shields.io/badge/Firebase_Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/) | Google OAuth & Email authentication with cross-device user state sync |
 | **User Hub Sync** | [![Realtime Sync](https://img.shields.io/badge/Realtime_Sync-0288D1?style=for-the-badge&logo=googlecloud&logoColor=white)](https://firebase.google.com/) | Live reactive subscription for bookmarks, followed topics & reading history |
-| **Cron Scheduling** | [![Cron Scheduler](https://img.shields.io/badge/Node_Instrumentation-222222?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/) | Automated 6:00 AM daily edition generator + HTTP webhook triggers |
+| **Seeding CLI** | [![TSX](https://img.shields.io/badge/TSX_Runner-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://github.com/privatenumber/tsx) | Fast TypeScript CLI script to seed Firebase with curated news intelligence |
 
 ### ⚙️ Development, Tooling & Quality
 
 | Layer | Technology Badge | Description & Role |
 |---|---|---|
-| **Linter** | [![ESLint](https://img.shields.io/badge/ESLint_9-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)](https://eslint.org/) | Next.js and TypeScript linting with zero tolerance for runtime warnings |
+| **Bundler** | [![Vite](https://img.shields.io/badge/Vite_6.2-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev/) | Ultra-fast native ESM frontend build tool |
 | **Editor** | [![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)](https://code.visualstudio.com/) | Recommended workspace settings with Tailwind & TypeScript IntelliSense |
 | **Version Control** | [![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)](https://git-scm.com/) | Distributed source control with semantic branch management |
-| **Containers** | [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/) | Multi-stage production containerization with Node.js 22 Alpine |
 
 ---
 
@@ -151,58 +150,34 @@ When an article is processed, the AI pipeline extracts structured intelligence a
 
 ---
 
-### 3. 📊 Algorithmic AI Impact Scoring (0–100)
-Every story is algorithmically weighted with an **AI Impact Score** that drives ranking and breaking news tickers:
-
-| Tier | Score Range | Classification | Trigger Criteria & Visual Badge |
-|---|---|---|---|
-| **Critical** | `85 – 100` | Global Breaking Event | Major macroeconomic shock, international conflict, or systemic regulatory shift. Displayed with pulsating crimson ring badge. |
-| **High** | `70 – 84` | Industry Significance | Key corporate mergers, frontier tech releases, and central bank interest rate decisions. Displayed with vivid orange ring badge. |
-| **Moderate** | `50 – 69` | Sector Development | Regional policy updates, quarterly sector trends, and emerging product announcements. Displayed with amber ring badge. |
-| **Developing** | `< 50` | Emerging Signal | Early-stage reporting, localized alerts, and developing industry rumors. Displayed with emerald/slate badge. |
+### 3. 📊 Algorithmic Impact Scoring (0–100)
+Every story receives a normalized AI Impact Score determining editorial hierarchy:
+- 🔴 **Score 80–100 (Critical Macro Impact)**: Global systemic shifts, central bank interest rate decisions, semiconductor trade controls, geopolitical treaties. Triggers breaking news banners and marquee tickers.
+- 🟡 **Score 60–79 (High Sector Impact)**: Major corporate earnings surprises, regulatory antitrust filings, frontier AI model releases, commodities price shocks.
+- 🟢 **Score 0–59 (Moderate / Tactical)**: Industry-specific updates, regional policy implementations, tactical market movements.
 
 ---
 
-### 4. 🌓 Three-Way OS Color Theme System
-The UI implements an adaptive, high-contrast theme engine with zero flash of unstyled content (FOUC):
-- 🌙 **Dark Mode (`html.dark`)**: Deep OLED midnight palette (`#08080C`), frosted glass cards (`backdrop-blur-xl`), and radiant amber accents.
-- ☀️ **Light Mode (`html.light`)**: Clean editorial paper aesthetic with crisp typography, sharp border lines, and `#E04E15` focal highlights.
-- 🖥 **System Mode**: Dynamically synchronizes with the host operating system's dark/light schedule.
-- 🎛 **Segmented Switcher**: Custom animated pill toggle powered by Framer Motion's `layoutId`.
+### 4. 📅 Historical Edition Calendar & Date Navigation
+- **Edition Archiving**: News is grouped by publication date (`YYYY-MM-DD`).
+- **Interactive Calendar Picker**: Glassmorphism calendar interface allowing users to jump to any past edition.
+- **Dedicated Date View**: Comprehensive day-by-day retrospective feeds.
 
 ---
 
-### 5. 📅 Interactive Calendar Archive & Historical Editions
-- **Daily Edition Model**: Articles are indexed by their ingestion date (`YYYY-MM-DD` in `Asia/Kolkata` timezone).
-- **Interactive Calendar Popover**: Access the **Archive** button to open a glassmorphism calendar with dotted availability indicators for every date containing news since June 2025.
-- **Dedicated Date View**: Browse any historical day's edition with dedicated breaking news tickers, top stories, and category breakdowns.
+### 5. 👤 User Intelligence Hub & Cross-Device Sync
+- **Executive Daily Brief**: AI-generated morning executive overview synthesizing the top 4 macro themes.
+- **Personalized Recommendations**: Content suggestions based on reading history and followed topics.
+- **Cross-Device Bookmarking**: One-click story saving synchronized in real-time to Firebase.
+- **Followed Topics**: Subscribe to high-consequence tags (e.g. `#Semiconductors`, `#FederalReserve`).
+- **Reading History**: Chronological log of analyzed articles.
 
 ---
 
-### 6. 👤 Personalized User Intelligence Hub & Firebase Auth
-- **Dual Authentication**: Sign in with Google (one-tap popup) or Email & Password.
-- **Guest-to-Account Merge**: Guest actions (saved stories, followed topics) are stored locally and automatically migrated to the cloud upon sign-in.
-- **Live Realtime DB Sync**: Bookmarked articles and followed topics update instantly across open browser tabs via Firebase `onValue` subscriptions.
-- **AI Morning Brief**: Executive morning briefing dynamically synthesized from the day's top global stories.
-- **Topic Following**: Follow tags like `#AI`, `#Semiconductors`, `#FederalReserve` to shape your personalized recommendation feed.
-- **Personalized Recommendations**: Algorithmic scoring that balances followed topics against reading history to suggest unseen high-impact briefs.
-
----
-
-### 7. ⚡ Real-Time RSS Ingestion & Automated Scheduling
-The platform implements a multi-layered automated ingestion system:
-1. **In-Memory Background Cron**: Built directly into Next.js via `src/instrumentation.ts` and `src/lib/cron-scheduler.ts` to trigger a daily ingestion run at 6:00 AM.
-2. **Lazy On-Demand Refresh**: If a visitor opens the homepage and today's edition is not yet compiled, a background worker is triggered automatically without delaying page render.
-3. **Concurrency Lock (Refresh Guard)**: In-memory mutex prevents duplicate simultaneous LLM requests and enforces a 30-minute throttle window.
-4. **External Webhook / Cron API**: Secured endpoint at `POST /api/cron/refresh-daily` for external schedulers (Vercel Cron, GitHub Actions, Linux crontab).
-
----
-
-### 8. 🌐 Production SEO, RSS & Syndication
-- **Schema.org Structured Data**: Embedded `NewsMediaOrganization` JSON-LD for rich Google Search indexing.
-- **Live RSS 2.0 Feed**: Fully valid RSS syndication endpoint at `/rss.xml` with dynamic CDATA escaping.
-- **Automated Sitemap & Robots**: Dynamically generated `/sitemap.xml` and `/robots.txt`.
-- **Keyboard Navigation (Spotlight)**: Press <kbd>⌘K</kbd> / <kbd>Ctrl+K</kbd> anywhere on the site to trigger instant headline and topic search.
+### 6. 🎨 Warm Editorial Aesthetics & Dynamic Theme System
+- **Signature Palette**: Warm Sand/Peach canvas (`#FEEFE6`), Deep Chocolate Espresso surfaces (`#2E151B`), and Flame Terracotta accent (`#E04E15`).
+- **Typography**: Google Fonts *Plus Jakarta Sans* for crisp UI text + *Instrument Serif* for editorial accents.
+- **Three-Way Theme Switching**: Light Mode, Dark Mode, and System Default with smooth CSS transitions.
 
 ---
 
@@ -210,34 +185,18 @@ The platform implements a multi-layered automated ingestion system:
 
 ```text
 newsdecoded-ai/
-├── .github/
-│   └── workflows/
-│       └── ci.yml               # Automated CI Build, Lint, and Typecheck pipeline
-├── db/
-│   └── custom.db                # SQLite database storing articles & edition indexes
-├── prisma/
-│   └── schema.prisma            # Prisma schema (Articles, Users, Saved, Topics, History)
+├── index.html                   # Clean HTML5 entry point with Google Fonts
 ├── public/                      # Static assets, favicon, brand vectors, and manifests
 ├── scripts/
 │   ├── debug-pipeline.ts        # CLI tool to test RSS ingestion and LLM JSON parsing
 │   ├── refresh-news.ts          # Manual CLI script to trigger full news ingestion
 │   ├── sanitize-db.ts           # Cleans malformed tags, HTML entities, and formatting
-│   ├── seed.ts                  # Seeds database with 36 curated, high-impact stories
+│   ├── seed.ts                  # Seeds Firebase database with curated, high-impact stories
 │   └── seed-one.ts              # Inserts single test article for development
 ├── src/
-│   ├── app/
-│   │   ├── api/                 # Next.js Serverless API routes
-│   │   │   ├── cron/            # Scheduled ingestion webhook (/api/cron/refresh-daily)
-│   │   │   ├── daily-brief/     # Executive AI morning brief endpoint
-│   │   │   ├── dashboard/       # Aggregated dashboard metrics & trending topics
-│   │   │   ├── news/            # Article querying (by ID, category, date, search)
-│   │   │   └── user/            # User state, bookmarking, and topic follow endpoints
-│   │   ├── rss.xml/             # Dynamic RSS 2.0 XML syndication feed
-│   │   ├── globals.css          # Tailwind CSS v4 design tokens, aurora glow & utilities
-│   │   ├── layout.tsx           # Root HTML layout with SEO metadata & Auth providers
-│   │   ├── page.tsx             # Main client-side view router (Home, Article, Dashboard)
-│   │   ├── robots.ts            # Production robots.txt generator
-│   │   └── sitemap.ts           # Dynamic sitemap.xml generator
+│   ├── main.tsx                 # React 19 root mounting App with Theme, Auth & Toast providers
+│   ├── App.tsx                  # Main client-side view router (Home, Article, Dashboard, Search)
+│   ├── index.css                # Tailwind CSS v4 design tokens, aurora glow & utilities
 │   ├── components/
 │   │   ├── auth/                # Firebase Auth Modal, Context Provider & Guest Sync
 │   │   ├── news/                # Core news presentation components
@@ -248,7 +207,7 @@ newsdecoded-ai/
 │   │   │   ├── dashboard-view.tsx # User hub: Daily brief, library, history, followed topics
 │   │   │   ├── date-picker.tsx  # Glassmorphism calendar popover with dotted edition markers
 │   │   │   ├── date-view.tsx    # Historical day's edition feed view
-│   │   │   ├── footer.tsx       # Semantic footer with live status & syndication links
+│   │   │   ├── footer.tsx       # Semantic footer with live status & links
 │   │   │   ├── impact-badge.tsx # Dynamic SVG circular impact score indicator (0-100)
 │   │   │   ├── news-card.tsx    # Multi-variant responsive news cards (Default/Featured/Compact)
 │   │   │   ├── news-grid.tsx    # Responsive CSS grid container
@@ -261,27 +220,22 @@ newsdecoded-ai/
 │   ├── lib/
 │   │   ├── ai-pipeline.ts       # Multi-provider LLM client (Gemini/Groq/OpenAI) & RSS parser
 │   │   ├── clean-html.ts        # Sanitizer for feed text and HTML entities
-│   │   ├── cron-scheduler.ts    # In-memory daily 6:00 AM news scheduler
-│   │   ├── data.ts              # Data access layer for querying Prisma models
-│   │   ├── dates.ts             # Timezone-safe edition date helpers (Asia/Kolkata)
-│   │   ├── db.ts                # Prisma client singleton instance
+│   │   ├── data.ts              # Client-side data access layer
+│   │   ├── dates.ts             # Timezone-safe edition date helpers
 │   │   ├── demo-data.ts         # Fallback data for offline development & testing
-│   │   ├── firebase/            # Firebase client initialization & Realtime DB service
+│   │   ├── firebase/            # Firebase client initialization & Realtime DB news service
+│   │   │   ├── client.ts        # Firebase app, auth, and database client instance
+│   │   │   ├── news-data.ts     # Realtime DB news layer (fetch, filter, save, seed)
+│   │   │   └── user-data.ts     # User bookmarks, followed topics, and reading history
 │   │   ├── news.ts              # Category definitions, constants & TypeScript interfaces
-│   │   ├── refresh-guard.ts     # In-memory concurrency lock & rate throttle
-│   │   ├── session.ts           # Cookie-based guest session manager
+│   │   ├── session.ts           # LocalStorage-based guest session manager
 │   │   └── utils.ts             # Class merging utility (`clsx` + `tailwind-merge`)
-│   ├── store/
-│   │   └── use-app-store.ts     # Zustand store for client-side view navigation & guest state
-│   └── instrumentation.ts       # Next.js server runtime hook initializing daily cron
+│   └── store/
+│       └── use-app-store.ts     # Zustand store for client-side view navigation & guest state
 ├── .env.example                 # Environment variable template with free tier guides
-├── bun.lock                     # Bun dependency lockfile
-├── components.json              # Shadcn UI configuration
-├── next.config.ts               # Next.js production configuration
 ├── package.json                 # Project dependencies and operational scripts
-├── postcss.config.mjs           # PostCSS configuration for Tailwind CSS v4
-├── tailwind.config.ts           # Tailwind theme extension & color variables
-└── tsconfig.json                # TypeScript compiler configuration
+├── tsconfig.json                # TypeScript compiler configuration
+└── vite.config.ts               # Vite configuration with React and Tailwind v4 plugins
 ```
 
 ---
@@ -311,14 +265,8 @@ cd newsdecoded-ai
 
 ### Step 2: Install Dependencies
 
-Using **npm**:
 ```bash
 npm install
-```
-
-*Or using **bun** for ultra-fast installation:*
-```bash
-bun install
 ```
 
 ---
@@ -335,81 +283,45 @@ cp .env.example .env
 Copy-Item .env.example .env
 ```
 
-Open `.env` in your editor and add at least one AI API key (all provide generous 100% free tiers):
+Open `.env` in your editor and add your AI API key:
 ```env
-DATABASE_URL="file:./db/custom.db"
 GEMINI_API_KEY="your-gemini-api-key-here"
 ```
 
 ---
 
-### Step 4: Initialize Database & Seed Content
+### Step 4: Seed Initial Content into Firebase
 
 ```bash
-# Generate the Prisma Client
-npm run db:generate
-
-# Push the schema to create SQLite tables
-npm run db:push
-
-# Seed the database with 36 curated, categorized intelligence briefs
+# Seed Firebase Realtime Database with curated intelligence briefs
 npm run seed
 ```
 
 ---
 
-### Step 5: Run the Application
+### Step 5: Start the Development Server
 
-#### Method A: Next.js Development Server (Standard)
 ```bash
 npm run dev
 ```
-The server will boot on **`http://localhost:3000`**.
 
-#### Method B: Ultra-Fast Bun Development Server
-```bash
-bun dev
-```
+The Vite dev server will boot in **~350ms** on **`http://localhost:3000`**.
 
-#### Method C: Production Build & Run
+---
+
+### Step 6: Build for Production
+
 ```bash
-# Compile and optimize production bundle
+# Compile optimized static bundle
 npm run build
 
-# Start production server
-npm run start
-```
-
-#### Method D: Docker Containerization
-Build and run the multi-stage Docker container:
-
-```bash
-# Build Docker image
-docker build -t newsdecoded-ai:latest .
-
-# Run Docker container mapped to port 3000
-docker run -p 3000:3000 \
-  -e DATABASE_URL="file:./db/custom.db" \
-  -e GEMINI_API_KEY="your-gemini-key" \
-  newsdecoded-ai:latest
+# Preview production build locally
+npm run preview
 ```
 
 ---
 
-### 🌐 Access Endpoints & Default Ports
-
-| Service / View | URL | Description |
-|---|---|---|
-| **Main Portal** | `http://localhost:3000` | Homepage, breaking news ticker, featured briefs & category lenses |
-| **Intelligence Library** | `http://localhost:3000/?v=dashboard` | User dashboard, saved stories, reading history & recommendations |
-| **RSS 2.0 Feed** | `http://localhost:3000/rss.xml` | Live XML syndication feed of top 50 global intelligence briefs |
-| **Sitemap XML** | `http://localhost:3000/sitemap.xml` | Search engine indexing sitemap |
-| **News API Feed** | `http://localhost:3000/api/news` | JSON endpoint returning latest stories, breaking alerts & trending topics |
-| **Daily Ingestion Webhook**| `http://localhost:3000/api/cron/refresh-daily` | Trigger endpoint to force compile today's news edition |
-
----
-
-## ⚙️ Backend, Database & Environment Setup
+## ⚙️ Firebase Database & Environment Setup
 
 ### 🔑 Environment Variable Walkthrough (`.env.example`)
 
@@ -418,37 +330,31 @@ docker run -p 3000:3000 \
 # NewsDecodedAI — Environment Configuration
 # =================================================================
 
-# 1. Database URL for Prisma (SQLite by default)
-# For Postgres: "postgresql://user:pass@ep-hostname.neon.tech/dbname?sslmode=require"
-DATABASE_URL="file:./db/custom.db"
+# Firebase Realtime Database URL
+NEXT_PUBLIC_FIREBASE_DATABASE_URL="https://sign-up-e0b5e-default-rtdb.firebaseio.com"
 
 # =================================================================
 # Free AI Providers (Choose ANY ONE — 100% Free Tiers Available)
 # =================================================================
 
-# Option 1 (RECOMMENDED - Most Generous Limits): Google Gemini API
+# Option 1 (RECOMMENDED): Google Gemini API
 # Free limits: 15 requests/min, 1,500 requests/day (No credit card required)
 # Get key: https://aistudio.google.com/app/apikey
 GEMINI_API_KEY="AIzaSy..."
 
-# Option 2 (Ultra-Fast Free Tier): Groq Cloud API
+# Option 2 (Ultra-Fast): Groq Cloud API
 # Free limits: 30 requests/min, 14,400 requests/day (No credit card required)
 # Get key: https://console.groq.com/keys
 GROQ_API_KEY="gsk_..."
 
-# Option 3 (OpenAI / OpenRouter API)
+# Option 3: OpenAI / OpenRouter API
 # Get key: https://platform.openai.com/api-keys
 OPENAI_API_KEY="sk-..."
-
-# Optional: Protect scheduled cron endpoints from unauthorized triggers
-CRON_SECRET="your-secure-random-secret-here"
 ```
 
 ---
 
 ### 🔥 Firebase Realtime Database & Authentication Setup
-
-User personalization (bookmarks, followed topics, and reading history) syncs to Firebase Realtime Database:
 
 1. Create a project in the [Firebase Console](https://console.firebase.google.com/).
 2. Navigate to **Authentication** → **Sign-in method** → Enable **Google** and **Email/Password**.
@@ -457,6 +363,14 @@ User personalization (bookmarks, followed topics, and reading history) syncs to 
    ```json
    {
      "rules": {
+       "articles": {
+         ".read": true,
+         ".write": true
+       },
+       "dailyBrief": {
+         ".read": true,
+         ".write": true
+       },
        "users": {
          "$uid": {
            ".read": "auth != null && auth.uid === $uid",
@@ -466,42 +380,6 @@ User personalization (bookmarks, followed topics, and reading history) syncs to 
      }
    }
    ```
-5. If using custom Firebase credentials, place them in `src/lib/firebase/client.ts`.
-
----
-
-### ⏰ Setting Up Automated Daily Ingestion (Production Cron)
-
-#### Option 1: Vercel Cron (`vercel.json`)
-Add a `vercel.json` file in the project root:
-```json
-{
-  "crons": [
-    {
-      "path": "/api/cron/refresh-daily",
-      "schedule": "0 0 * * *"
-    }
-  ]
-}
-```
-
-#### Option 2: GitHub Actions Workflow (`.github/workflows/daily-news.yml`)
-```yaml
-name: Daily News Ingestion
-on:
-  schedule:
-    - cron: '0 0 * * *' # Every day at 00:00 UTC (05:30 AM IST)
-  workflow_dispatch:
-
-jobs:
-  refresh:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger News Ingestion
-        run: |
-          curl -X POST "https://your-domain.com/api/cron/refresh-daily" \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
-```
 
 ---
 
@@ -509,64 +387,63 @@ jobs:
 
 | Command | Execution Target | Detailed Description |
 |---|---|---|
-| `npm run dev` | `next dev -p 3000` | Starts the local development server with hot-module replacement |
-| `npm run build` | `prisma generate && next build` | Generates Prisma client types and builds optimized production assets |
-| `npm run start` | `next start -p 3000` | Boots the compiled Next.js production server |
-| `npm run lint` | `eslint .` | Runs ESLint across all TypeScript and TSX files |
-| `npm run seed` | `npx tsx scripts/seed.ts` | Populates database with 36 real AI-synthesized news articles |
-| `npm run refresh-news` | `npx tsx scripts/refresh-news.ts` | Fetches live wire RSS feeds and processes fresh editions via LLM |
-| `npm run db:push` | `prisma db push` | Pushes Prisma schema changes directly to the SQLite database |
-| `npm run db:generate` | `prisma generate` | Re-generates Prisma Client type definitions |
-| `npm run db:migrate` | `prisma migrate dev` | Creates and applies development migrations |
-| `npm run db:reset` | `prisma migrate reset` | Drops database tables and reapplies all migrations from scratch |
+| `npm run dev` | `vite` | Starts the local Vite development server with instant HMR on port 3000 |
+| `npm run build` | `vite build` | Compiles and optimizes the React SPA into static assets inside `dist/` |
+| `npm run preview` | `vite preview` | Previews the production build locally before deployment |
+| `npm run seed` | `npx tsx scripts/seed.ts` | Populates Firebase Realtime Database with real AI-synthesized news articles |
+| `npm run refresh-news` | `npx tsx scripts/refresh-news.ts` | Ingests live wire RSS feeds and processes fresh editions via Gemini/Groq LLM |
+
+---
+
+## ☁️ Effortless Cloud Deployment
+
+Because the application is a pure React SPA with Firebase cloud persistence, deployment takes under 60 seconds:
+
+### Deploy to Vercel
+1. Push your repository to **GitHub**.
+2. Go to [Vercel](https://vercel.com/) and click **Add New Project**.
+3. Select your repository. Vercel will automatically detect **Vite**.
+4. Add your `GEMINI_API_KEY` under **Environment Variables**.
+5. Click **Deploy**!
+
+### Deploy to Netlify / Firebase Hosting / GitHub Pages
+- Run `npm run build` and upload the output `dist/` directory.
 
 ---
 
 ## 🤝 Contributing Workflow
 
-We welcome contributions to NewsDecodedAI! Please follow this standard 5-step workflow:
+We welcome contributions to NewsDecodedAI! Please follow this standard workflow:
 
 ### 1. Fork and Clone
 ```bash
-# Fork the repository on GitHub, then clone your personal fork
 git clone https://github.com/<your-username>/newsdecoded-ai.git
 cd newsdecoded-ai
 ```
 
 ### 2. Create a Feature Branch
 ```bash
-# Use a descriptive branch name
-git checkout -b feat/impact-score-filter
+git checkout -b feat/new-category-lens
 ```
 
 ### 3. Implement Changes & Follow Conventional Commits
-Ensure code passes formatting and lint checks:
-```bash
-npm run lint
-```
-
 Format your commit messages using the **Conventional Commits** specification:
 
 | Prefix | Description | Example |
 |---|---|---|
 | `feat:` | A new feature or capability | `feat: add category filter pills in mobile drawer` |
-| `fix:` | A bug fix or error resolution | `fix: resolve race condition in in-memory refresh guard` |
+| `fix:` | A bug fix or error resolution | `fix: resolve race condition in Firebase news cache` |
 | `docs:` | Documentation changes only | `docs: update deployment and environment variable guide` |
 | `style:` | Formatting, whitespace, or CSS styling | `style: polish glassmorphism backdrop blur on modal` |
 | `refactor:`| Code refactoring without feature changes | `refactor: optimize batch LLM JSON parser` |
 | `perf:` | A code change that improves performance | `perf: memoize news card layout calculations` |
-| `test:` | Adding or correcting unit/integration tests | `test: add unit tests for date-picker utilities` |
 | `chore:` | Maintenance tasks, dependency updates | `chore: upgrade lucide-react to latest version` |
 
-### 4. Push Branch to Fork
+### 4. Push Branch & Open Pull Request
 ```bash
-git push origin feat/impact-score-filter
+git push origin feat/new-category-lens
 ```
-
-### 5. Open a Pull Request
-1. Open a Pull Request from your branch against the `main` branch.
-2. Provide a clear summary of changes, motivation, and screenshots/GIFs for UI modifications.
-3. Ensure all CI checks (linting, build) pass.
+Open a Pull Request on GitHub against the `main` branch.
 
 ---
 
@@ -580,7 +457,7 @@ This project is licensed under the terms of the **MIT License**.
 - ✅ **Modification**: You may modify, adapt, and build upon the source code.
 - ✅ **Distribution**: You may distribute copies of the software.
 - ✅ **Private Use**: You may use and modify the code privately.
-- ℹ️ **Attribution**: The original copyright notice and permission notice must be included in all copies or substantial portions of the software.
+- ℹ️ **Attribution**: The original copyright notice and permission notice must be included in all copies.
 
 ---
 

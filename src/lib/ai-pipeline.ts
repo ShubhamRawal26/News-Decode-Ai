@@ -1,12 +1,16 @@
-// NewsDecodedAI — Universal AI News Pipeline
+// NewsDecodedAI — Universal AI News Pipeline (Firebase Native)
 // Fetches live real-world news from verified RSS & Google News feeds,
 // then uses Free Tier LLMs (Google Gemini 2.0 Flash / Groq / OpenAI) to
 // dedupe, score 0-100, and produce 4-point structured intelligence breakdowns.
 
-import { db } from "@/lib/db";
-import { CATEGORIES, type CategorySlug } from "@/lib/news";
+import { CATEGORIES, type CategorySlug, type NewsArticle } from "@/lib/news";
 import { todayEditionDate } from "@/lib/dates";
 import { cleanHtml } from "@/lib/clean-html";
+import {
+  saveArticleToFirebase,
+  getFirebaseArticles,
+  saveFirebaseDailyBrief,
+} from "@/lib/firebase/news-data";
 
 // ---------- Helpers ----------
 
@@ -186,11 +190,11 @@ async function callLlmWithJson(systemPrompt: string, userPrompt: string): Promis
   const groqKey = process.env.GROQ_API_KEY;
   const openaiKey = process.env.OPENAI_API_KEY || process.env.OPENROUTER_API_KEY;
 
-  // 1. Google Gemini (Models: gemini-3.6-flash, gemini-3.5-flash-lite, gemini-flash-latest)
+  // 1. Google Gemini (Models: gemini-2.0-flash, gemini-1.5-flash)
   if (geminiKey) {
     const candidateModels = [
-      "gemini-3.6-flash",
-      "gemini-3.5-flash-lite",
+      "gemini-2.0-flash",
+      "gemini-1.5-flash",
       "gemini-flash-latest",
     ];
 
@@ -209,9 +213,6 @@ async function callLlmWithJson(systemPrompt: string, userPrompt: string): Promis
             generationConfig: {
               responseMimeType: "application/json",
               temperature: 0.2,
-              thinkingConfig: {
-                thinkingBudget: 0,
-              },
             },
           }),
           signal: AbortSignal.timeout(12000),
@@ -228,57 +229,65 @@ async function callLlmWithJson(systemPrompt: string, userPrompt: string): Promis
     }
   }
 
-  // 2. Groq Cloud (Recommended Free Tier: 30 RPM / 14,400 RPD)
+  // 2. Groq Cloud (Free Tier: 30 RPM / 14,400 RPD)
   if (groqKey) {
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${groqKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-        response_format: { type: "json_object" },
-        temperature: 0.3,
-      }),
-    });
+    try {
+      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${groqKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt },
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.3,
+        }),
+      });
 
-    if (res.ok) {
-      const data = await res.json();
-      return data.choices?.[0]?.message?.content || "";
+      if (res.ok) {
+        const data = await res.json();
+        return data.choices?.[0]?.message?.content || "";
+      }
+    } catch {
+      /* continue to fallback */
     }
   }
 
   // 3. OpenAI / OpenRouter
   if (openaiKey) {
-    const baseUrl = process.env.OPENROUTER_API_KEY
-      ? "https://openrouter.ai/api/v1/chat/completions"
-      : "https://api.openai.com/v1/chat/completions";
+    try {
+      const baseUrl = process.env.OPENROUTER_API_KEY
+        ? "https://openrouter.ai/api/v1/chat/completions"
+        : "https://api.openai.com/v1/chat/completions";
 
-    const res = await fetch(baseUrl, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${openaiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: process.env.OPENROUTER_API_KEY ? "meta-llama/llama-3.3-70b-instruct:free" : "gpt-4o-mini",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-        response_format: { type: "json_object" },
-        temperature: 0.3,
-      }),
-    });
+      const res = await fetch(baseUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${openaiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: process.env.OPENROUTER_API_KEY ? "meta-llama/llama-3.3-70b-instruct:free" : "gpt-4o-mini",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt },
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.3,
+        }),
+      });
 
-    if (res.ok) {
-      const data = await res.json();
-      return data.choices?.[0]?.message?.content || "";
+      if (res.ok) {
+        const data = await res.json();
+        return data.choices?.[0]?.message?.content || "";
+      }
+    } catch {
+      /* continue */
     }
   }
 
@@ -355,7 +364,7 @@ Sort articles by impactScore descending. Return at most 6 articles.`;
       }));
   }
 
-  // Fallback: If no AI key is configured or API rate-limited, create structured briefs from raw feeds
+  // Fallback: structured briefs from raw feeds
   return items.slice(0, 5).map((it, idx) => ({
     title: it.title,
     category,
@@ -379,57 +388,53 @@ Sort articles by impactScore descending. Return at most 6 articles.`;
   }));
 }
 
-// ---------- 4. Persistence into Database ----------
+// ---------- 4. Persistence into Firebase Realtime Database ----------
 
 async function persistArticles(articles: AnalyzedArticle[]): Promise<number> {
   let inserted = 0;
   for (const a of articles) {
     const slug = `${slugify(a.title)}-${Date.now().toString(36).slice(-5)}`;
     const publishedAt = a.date && !isNaN(new Date(a.date).getTime())
-      ? new Date(a.date)
-      : new Date();
+      ? new Date(a.date).toISOString()
+      : new Date().toISOString();
 
-    try {
-      const title = cleanHtml(a.title);
-      const summary = cleanHtml(a.summary);
-      const whatHappened = cleanHtml(a.whatHappened);
-      const whyItMatters = cleanHtml(a.whyItMatters);
-      const whoIsAffected = cleanHtml(a.whoIsAffected);
-      const whatHappensNext = cleanHtml(a.whatHappensNext);
-      const futureImpact = a.futureImpact ? cleanHtml(a.futureImpact) : null;
+    const title = cleanHtml(a.title);
+    const summary = cleanHtml(a.summary);
+    const whatHappened = cleanHtml(a.whatHappened);
+    const whyItMatters = cleanHtml(a.whyItMatters);
+    const whoIsAffected = cleanHtml(a.whoIsAffected);
+    const whatHappensNext = cleanHtml(a.whatHappensNext);
+    const futureImpact = a.futureImpact ? cleanHtml(a.futureImpact) : null;
 
-      await db.article.create({
-        data: {
-          title,
-          slug,
-          summary,
-          content: whatHappened,
-          category: a.category,
-          subcategory: a.subcategory ? cleanHtml(a.subcategory) : null,
-          sourceName: cleanHtml(a.source),
-          sourceUrl: a.url,
-          imageUrl: null,
-          impactScore: a.impactScore,
-          importanceScore: a.importanceScore,
-          sentiment: a.sentiment || null,
-          whatHappened,
-          whyItMatters,
-          whoIsAffected,
-          whatHappensNext,
-          futureImpact,
-          tags: JSON.stringify(a.tags),
-          keyEntities: JSON.stringify(a.keyEntities),
-          readTime: estimateReadTime(`${summary} ${whatHappened} ${whyItMatters}`),
-          isBreaking: !!a.isBreaking,
-          isFeatured: !!a.isFeatured,
-          editionDate: todayEditionDate(),
-          publishedAt,
-        },
-      });
-      inserted++;
-    } catch {
-      /* skip duplicate or collision */
-    }
+    const articleObj: NewsArticle = {
+      id: `art_${slug}`,
+      title,
+      slug,
+      summary,
+      content: whatHappened,
+      category: a.category,
+      subcategory: a.subcategory ? cleanHtml(a.subcategory) : null,
+      sourceName: cleanHtml(a.source),
+      sourceUrl: a.url,
+      imageUrl: null,
+      impactScore: a.impactScore,
+      importanceScore: a.importanceScore,
+      sentiment: a.sentiment || null,
+      whatHappened,
+      whyItMatters,
+      whoIsAffected,
+      whatHappensNext,
+      futureImpact,
+      tags: a.tags,
+      keyEntities: a.keyEntities,
+      readTime: estimateReadTime(`${summary} ${whatHappened} ${whyItMatters}`),
+      isBreaking: !!a.isBreaking,
+      isFeatured: !!a.isFeatured,
+      publishedAt,
+    };
+
+    const ok = await saveArticleToFirebase(articleObj);
+    if (ok) inserted++;
   }
   return inserted;
 }
@@ -457,10 +462,8 @@ export async function refreshAllNews(): Promise<{ category: string; inserted: nu
 // ---------- 6. Daily Brief Synthesis ----------
 
 export async function generateDailyBrief(): Promise<{ headline: string; summary: string }> {
-  const top = await db.article.findMany({
-    orderBy: [{ impactScore: "desc" }, { publishedAt: "desc" }],
-    take: 6,
-  });
+  const all = await getFirebaseArticles();
+  const top = all.slice(0, 6);
 
   if (top.length === 0) {
     return {
@@ -482,5 +485,6 @@ export async function generateDailyBrief(): Promise<{ headline: string; summary:
     summary: "Today's headlines highlight accelerated geopolitical alignments, supply chain security, and strategic monetary policy shifts.",
   });
 
+  await saveFirebaseDailyBrief(parsed);
   return parsed;
 }

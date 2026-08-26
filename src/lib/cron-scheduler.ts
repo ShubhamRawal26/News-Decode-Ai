@@ -1,8 +1,7 @@
 // NewsDecodedAI — Automated 6:00 AM Daily Ingestion Scheduler
-
 import { refreshAllNews } from "@/lib/ai-pipeline";
-import { db } from "@/lib/db";
 import { todayEditionDate } from "@/lib/dates";
+import { getFirebaseArticles } from "@/lib/firebase/news-data";
 
 let schedulerInitialized = false;
 
@@ -12,7 +11,6 @@ function msUntilNext6AM(): number {
   next6AM.setHours(6, 0, 0, 0);
 
   if (now.getTime() >= next6AM.getTime()) {
-    // If it's already past 6:00 AM today, schedule for 6:00 AM tomorrow
     next6AM.setDate(next6AM.getDate() + 1);
   }
 
@@ -36,31 +34,28 @@ export function initDailyNewsCron() {
 
   console.log("[Cron Scheduler] Initializing automated daily news pipeline...");
 
-  // 1. Check if today's edition already has news; if not, warmup/ingest now in the background
   setTimeout(async () => {
     try {
       const today = todayEditionDate();
-      const count = await db.article.count({ where: { editionDate: today } });
+      const all = await getFirebaseArticles();
+      const count = all.filter((a) => a.publishedAt && a.publishedAt.startsWith(today)).length;
       if (count < 5) {
         console.log(`[Cron Scheduler] Today's edition (${today}) has only ${count} articles. Running initial ingestion...`);
         await runDailyMorningTask();
       } else {
-        console.log(`[Cron Scheduler] Today's edition (${today}) already has ${count} articles active.`);
+        console.log(`[Cron Scheduler] Today's edition (${today}) already has ${count} articles active in Firebase.`);
       }
     } catch {
-      /* ignore DB connection warmup errors */
+      /* ignore warmup errors */
     }
   }, 3000);
 
-  // 2. Schedule execution for the upcoming 6:00 AM
   const delay = msUntilNext6AM();
   const hoursUntil = (delay / (1000 * 60 * 60)).toFixed(2);
   console.log(`[Cron Scheduler] Next 6:00 AM scheduled in ${hoursUntil} hours.`);
 
   setTimeout(async () => {
     await runDailyMorningTask();
-
-    // After first 6:00 AM run, trigger every 24 hours recurringly
     setInterval(async () => {
       await runDailyMorningTask();
     }, 24 * 60 * 60 * 1000);

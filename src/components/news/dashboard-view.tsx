@@ -6,7 +6,9 @@ import {
   Sparkles, Bookmark, Flame, History as HistoryIcon, ArrowRight,
   TrendingUp, LayoutDashboard, Plus, Check, LogIn,
 } from "lucide-react";
-import type { NewsArticle } from "@/lib/news";
+import { TRENDING_TOPICS, type NewsArticle } from "@/lib/news";
+import { getDailyBrief } from "@/lib/data";
+import { getFirebaseArticles } from "@/lib/firebase/news-data";
 import { SectionHeader } from "./section-header";
 import { NewsCard } from "./news-card";
 import { useAppStore, useUserActions } from "@/store/use-app-store";
@@ -31,59 +33,69 @@ export function DashboardView({ onAuthRequired }: { onAuthRequired?: () => void 
   // load generic dashboard data
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/dashboard")
-      .then((r) => r.json())
-      .then((d) => !cancelled && setGeneric(d))
+    Promise.all([getDailyBrief(), getFirebaseArticles()])
+      .then(([brief, allArticles]) => {
+        if (cancelled) return;
+        const all = allArticles || [];
+        setGeneric({
+          dailyBrief: brief,
+          trendingTopics: TRENDING_TOPICS.slice(0, 8).map((t, idx) => ({ topic: t, count: 14 - idx })),
+          latest: all.slice(0, 6),
+        });
+      })
       .catch(() => {})
-      .finally(() => !cancelled && setLoading(false));
-    return () => { cancelled = true; };
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // load saved articles by ids
   useEffect(() => {
-    const ids = [...savedIds].slice(0, 24);
+    const ids = new Set(savedIds);
     let cancelled = false;
-    if (ids.length === 0) {
-      Promise.resolve().then(() => { if (!cancelled) setSavedArticles([]); });
-    } else {
-      fetch(`/api/news/byids?ids=${ids.join(",")}`)
-        .then((r) => r.json())
-        .then((d) => { if (!cancelled) setSavedArticles(d.articles || []); })
-        .catch(() => {});
-    }
-    return () => { cancelled = true; };
-  }, [[...savedIds].join(",")]);
+    getFirebaseArticles().then((all) => {
+      if (!cancelled) {
+        setSavedArticles((all || []).filter((a) => ids.has(a.id)));
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [savedIds]);
 
   // load history articles by ids
   useEffect(() => {
-    const ids = historyIds.slice(0, 12);
+    const ids = new Set(historyIds);
     let cancelled = false;
-    if (ids.length === 0) {
-      Promise.resolve().then(() => { if (!cancelled) setHistoryArticles([]); });
-    } else {
-      fetch(`/api/news/byids?ids=${ids.join(",")}`)
-        .then((r) => r.json())
-        .then((d) => { if (!cancelled) setHistoryArticles(d.articles || []); })
-        .catch(() => {});
-    }
-    return () => { cancelled = true; };
-  }, [historyIds.join(",")]);
+    getFirebaseArticles().then((all) => {
+      if (!cancelled) {
+        setHistoryArticles((all || []).filter((a) => ids.has(a.id)));
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [historyIds]);
 
   // load recommendations
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/news/recommend", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        followedTopics: [...followedTopics],
-        readIds: historyIds,
-      }),
-    })
-      .then((r) => r.json())
-      .then((d) => !cancelled && setRecommendations(d.recommendations || []))
-      .catch(() => {});
-    return () => { cancelled = true; };
+    getFirebaseArticles().then((all) => {
+      if (cancelled) return;
+      const readSet = new Set(historyIds);
+      const matched = (all || []).filter(
+        (a) =>
+          !readSet.has(a.id) &&
+          a.tags.some((t) => followedTopics.has(t.toLowerCase())),
+      );
+      setRecommendations(matched.length > 0 ? matched.slice(0, 6) : (all || []).slice(0, 4));
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [followedTopics, historyIds]);
 
   if (loading || !generic) {

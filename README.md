@@ -77,14 +77,14 @@ The application is built on a modern, type-safe full-stack ecosystem with zero e
 | **Fallback LLM** | [![OpenAI](https://img.shields.io/badge/OpenAI_GPT--4o_Mini-412991?style=for-the-badge&logo=openai&logoColor=white)](https://platform.openai.com/) | Secondary synthesis fallback & OpenRouter compatibility |
 | **RSS Ingestion** | [![XML / RSS](https://img.shields.io/badge/Live_RSS_2.0-FFA500?style=for-the-badge&logo=rss&logoColor=white)](https://validator.w3.org/feed/) | Multi-wire concurrent feed parser with HTML sanitization & deduplication |
 
-### 🗄 Backend, Database & Cloud Persistence
+### 🗄 Cloud Persistence, Database & Auth
 
 | Layer | Technology Badge | Description & Role |
 |---|---|---|
-| **ORM** | [![Prisma](https://img.shields.io/badge/Prisma_ORM_6.11-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/) | Type-safe database client, schema migrations, and indexing |
-| **Primary DB** | [![SQLite](https://img.shields.io/badge/SQLite_3-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/) | Embedded relational storage for articles, editions, indexes, and tags |
-| **User Data & Auth** | [![Firebase](https://img.shields.io/badge/Firebase_Auth_&_RTDB-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/) | Google OAuth, email authentication, and live cross-device user sync |
-| **Cron Scheduling** | [![Cron Scheduler](https://img.shields.io/badge/Node_Instrumentation-222222?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/) | Automated 6:00 AM daily edition generator + HTTP cron triggers |
+| **Database** | [![Firebase](https://img.shields.io/badge/Firebase_Realtime_DB-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/) | Live cloud database storing articles, editions, categories & intelligence briefs |
+| **Authentication** | [![Firebase](https://img.shields.io/badge/Firebase_Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/) | Google OAuth & Email authentication with cross-device user state sync |
+| **User Hub Sync** | [![Realtime Sync](https://img.shields.io/badge/Realtime_Sync-0288D1?style=for-the-badge&logo=googlecloud&logoColor=white)](https://firebase.google.com/) | Live reactive subscription for bookmarks, followed topics & reading history |
+| **Cron Scheduling** | [![Cron Scheduler](https://img.shields.io/badge/Node_Instrumentation-222222?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/) | Automated 6:00 AM daily edition generator + HTTP webhook triggers |
 
 ### ⚙️ Development, Tooling & Quality
 

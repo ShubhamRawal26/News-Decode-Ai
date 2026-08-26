@@ -24,10 +24,6 @@ export function AuthModal({ open, onClose, mode: initialMode = "signin" }: AuthM
   const [busy, setBusy] = useState(false);
   const [googleBusy, setGoogleBusy] = useState(false);
 
-  useEffect(() => {
-    if (open) setMode(initialMode);
-  }, [open, initialMode]);
-
   const onGoogle = async () => {
     setGoogleBusy(true);
     try {

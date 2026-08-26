@@ -1,9 +1,9 @@
 // Daily refresh guard — ensures today's news edition exists.
 // Used by lazy auto-refresh (on homepage load) and the cron endpoint.
 
-import { db } from "@/lib/db";
 import { todayEditionDate } from "@/lib/dates";
 import { refreshAllNews } from "@/lib/ai-pipeline";
+import { getFirebaseArticles } from "@/lib/firebase/news-data";
 
 let inFlight: Promise<{ ok: boolean; total: number; refreshed: boolean }> | null = null;
 let lastRefreshAt = 0;
@@ -12,7 +12,7 @@ const MIN_REFRESH_INTERVAL_MS = 30 * 60 * 1000; // at most once per 30 min
 export interface DailyRefreshResult {
   ok: boolean;
   total: number;
-  refreshed: boolean; // true if a refresh was actually run
+  refreshed: boolean;
   today: string;
   hasEdition: boolean;
 }
@@ -20,15 +20,11 @@ export interface DailyRefreshResult {
 /** True if today's edition has at least one article. */
 export async function hasTodayEdition(): Promise<boolean> {
   const today = todayEditionDate();
-  const count = await db.article.count({ where: { editionDate: today } });
-  return count > 0;
+  const all = await getFirebaseArticles();
+  const todayArticles = all.filter((a) => a.publishedAt && a.publishedAt.startsWith(today));
+  return todayArticles.length > 0;
 }
 
-/**
- * Ensure today's edition exists. If it doesn't (and no refresh is already
- * running, and we haven't tried recently), run the full AI pipeline.
- * Safe to call on every homepage load — the guard prevents over-refreshing.
- */
 export async function ensureDailyEdition(force = false): Promise<DailyRefreshResult> {
   const today = todayEditionDate();
   const has = await hasTodayEdition();
@@ -66,9 +62,8 @@ export async function ensureDailyEdition(force = false): Promise<DailyRefreshRes
   return { ...r, today, hasEdition: hasAfter };
 }
 
-/** Fire-and-forget refresh (for lazy background triggering). */
 export function triggerBackgroundEditionRefresh(force = false) {
   ensureDailyEdition(force).catch(() => {
-    /* swallow — background best-effort */
+    /* swallow */
   });
 }

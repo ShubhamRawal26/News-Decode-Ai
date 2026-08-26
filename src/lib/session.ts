@@ -1,59 +1,32 @@
-// NewsDecodedAI — user session helper
-// Uses a guest user per browser (cookie) so personalization
-// (saved articles, followed topics, history) works seamlessly.
+// NewsDecodedAI — client session helper
+const GUEST_KEY = "nda_guest_uid";
 
-import { cookies } from "next/headers";
-import { db } from "@/lib/db";
-
-const GUEST_COOKIE = "nda_guest_uid";
-
-export async function getOrCreateCurrentUser(): Promise<{
+export function getOrCreateCurrentUser(): {
   id: string;
   name: string | null;
   email: string;
   isGuest: boolean;
-}> {
-  const cookieStore = await cookies();
-  let uid = cookieStore.get(GUEST_COOKIE)?.value;
+} {
+  let uid = typeof window !== "undefined" ? localStorage.getItem(GUEST_KEY) : null;
 
-  if (uid) {
-    const existing = await db.user.findUnique({ where: { id: uid } });
-    if (existing) {
-      return {
-        id: existing.id,
-        name: existing.name,
-        email: existing.email,
-        isGuest: existing.isGuest,
-      };
+  if (!uid) {
+    uid = `guest_${Math.random().toString(36).slice(2, 11)}`;
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(GUEST_KEY, uid);
+      } catch {}
     }
   }
 
-  // create a new guest user
-  const guest = await db.user.create({
-    data: {
-      email: `guest-${Math.random().toString(36).slice(2, 10)}@newsdecoded.ai`,
-      name: "Guest",
-      isGuest: true,
-      preferences: JSON.stringify({ followedTopics: [], alertCategories: [] }),
-    },
-  });
-
-  cookieStore.set(GUEST_COOKIE, guest.id, {
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 365,
-    path: "/",
-  });
-
   return {
-    id: guest.id,
-    name: guest.name,
-    email: guest.email,
-    isGuest: guest.isGuest,
+    id: uid,
+    name: "Guest",
+    email: `${uid}@newsdecoded.ai`,
+    isGuest: true,
   };
 }
 
-export async function getCurrentUserId(): Promise<string> {
-  const u = await getOrCreateCurrentUser();
+export function getCurrentUserId(): string {
+  const u = getOrCreateCurrentUser();
   return u.id;
 }

@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAppStore } from "@/store/use-app-store";
@@ -16,12 +14,13 @@ import { DashboardView } from "@/components/news/dashboard-view";
 import { SearchView } from "@/components/news/search-view";
 import { DateView } from "@/components/news/date-view";
 import { AuthModal } from "@/components/auth/auth-modal";
-import { CATEGORIES, type NewsArticle } from "@/lib/news";
+import { CATEGORIES, type NewsArticle, TRENDING_TOPICS } from "@/lib/news";
 import { DEMO_ARTICLES } from "@/lib/demo-data";
+import { getFirebaseArticles } from "@/lib/firebase/news-data";
 import { cn } from "@/lib/utils";
-import { Sparkles, Flame, Activity, Zap } from "lucide-react";
+import { Sparkles, Flame, Zap } from "lucide-react";
 
-export default function Home() {
+export default function App() {
   const { view, go } = useAppStore();
   const [booted, setBooted] = useState(false);
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>("all");
@@ -51,28 +50,31 @@ export default function Home() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  // Fetch initial news feed
+  // Fetch initial news feed directly from Firebase
   useEffect(() => {
-    fetch("/api/news")
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.latest && d.latest.length > 0) {
-          setArticles(d.latest);
+    getFirebaseArticles()
+      .then((data) => {
+        if (data && data.length > 0) {
+          setArticles(data);
+          setBreaking(data.filter((a) => a.isBreaking || a.impactScore >= 80));
         } else {
           setArticles(DEMO_ARTICLES);
-        }
-        if (d.breaking && d.breaking.length > 0) {
-          setBreaking(d.breaking);
-        } else {
           setBreaking(DEMO_ARTICLES.filter((a) => a.isBreaking));
         }
-        if (d.trending) setTrending(d.trending);
       })
       .catch(() => {
         setArticles(DEMO_ARTICLES);
         setBreaking(DEMO_ARTICLES.filter((a) => a.isBreaking));
       })
-      .finally(() => setBooted(true));
+      .finally(() => {
+        setTrending(
+          TRENDING_TOPICS.slice(0, 8).map((t, idx) => ({
+            topic: t,
+            count: 14 - idx,
+          })),
+        );
+        setBooted(true);
+      });
   }, []);
 
   // deep-link via ?a=<id>
@@ -181,10 +183,14 @@ export default function Home() {
                       )}
                     >
                       <span>{c.label}</span>
-                      <span className={cn(
-                        "text-[10px] px-1.5 py-0.2 rounded-full",
-                        activeCategoryFilter === c.slug ? "bg-white/20 text-white" : "bg-secondary text-muted-foreground"
-                      )}>
+                      <span
+                        className={cn(
+                          "text-[10px] px-1.5 py-0.2 rounded-full",
+                          activeCategoryFilter === c.slug
+                            ? "bg-white/20 text-white"
+                            : "bg-secondary text-muted-foreground",
+                        )}
+                      >
                         {count}
                       </span>
                     </button>
@@ -238,17 +244,32 @@ export default function Home() {
         ) : (
           <AnimatePresence mode="wait">
             <motion.div
-              key={view.name + (view.name === "category" ? view.slug : view.name === "article" ? view.id : view.name === "search" ? view.q : "")}
+              key={
+                view.name +
+                (view.name === "category"
+                  ? view.slug
+                  : view.name === "article"
+                    ? view.id
+                    : view.name === "search"
+                      ? view.q
+                      : "")
+              }
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
             >
               {view.name === "category" && <CategoryView slug={view.slug} />}
-              {view.name === "article" && <ArticleView articleId={view.id} onAuthRequired={() => openAuth("signin")} />}
-              {view.name === "dashboard" && <DashboardView onAuthRequired={() => openAuth("signin")} />}
+              {view.name === "article" && (
+                <ArticleView articleId={view.id} onAuthRequired={() => openAuth("signin")} />
+              )}
+              {view.name === "dashboard" && (
+                <DashboardView onAuthRequired={() => openAuth("signin")} />
+              )}
               {view.name === "search" && <SearchView q={view.q} />}
-              {view.name === "date" && <DateView date={view.date} onAuthRequired={() => openAuth("signin")} />}
+              {view.name === "date" && (
+                <DateView date={view.date} onAuthRequired={() => openAuth("signin")} />
+              )}
             </motion.div>
           </AnimatePresence>
         )}

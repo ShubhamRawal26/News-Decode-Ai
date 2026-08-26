@@ -9,6 +9,7 @@ import {
 import type { NewsArticle } from "@/lib/news";
 import { CATEGORY_LABELS } from "@/lib/news";
 import { DEMO_ARTICLES } from "@/lib/demo-data";
+import { getFirebaseArticleById, getFirebaseArticlesByCategory } from "@/lib/firebase/news-data";
 import { ImpactRing } from "./impact-badge";
 import { NewsCard } from "./news-card";
 import { useAppStore, useUserActions } from "@/store/use-app-store";
@@ -33,14 +34,16 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`/api/news/${articleId}`)
-      .then((r) => r.json())
-      .then((d) => {
+    getFirebaseArticleById(articleId)
+      .then(async (found) => {
         if (cancelled) return;
-        if (d.article) {
-          setArticle(d.article);
-          setRelated(d.related || []);
-          markRead(d.article.id);
+        if (found) {
+          setArticle(found);
+          markRead(found.id);
+          const relatedList = await getFirebaseArticlesByCategory(found.category);
+          if (!cancelled) {
+            setRelated(relatedList.filter((a) => a.id !== found.id).slice(0, 3));
+          }
         } else {
           const fallback = DEMO_ARTICLES.find((a) => a.id === articleId || a.slug === articleId) || DEMO_ARTICLES[0];
           setArticle(fallback);
@@ -54,7 +57,9 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
           setRelated(DEMO_ARTICLES.filter((a) => a.id !== fallback.id && a.category === fallback.category).slice(0, 3));
         }
       })
-      .finally(() => !cancelled && setLoading(false));
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
     return () => { cancelled = true; };
   }, [articleId]);
 

@@ -1,18 +1,20 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Globe2, Briefcase, Cpu, Landmark, TrendingUp } from "lucide-react";
-import { CATEGORIES, CATEGORY_LABELS, type NewsArticle } from "@/lib/news";
+import { CATEGORIES, type NewsArticle } from "@/lib/news";
 import { DEMO_ARTICLES } from "@/lib/demo-data";
+import { getFirebaseArticlesByCategory } from "@/lib/firebase/news-data";
 import { NewsGrid } from "./news-grid";
 import { SectionHeader } from "./section-header";
 import { BreakingTicker } from "./breaking-ticker";
 import { NewsCard } from "./news-card";
-import { useAppStore } from "@/store/use-app-store";
 
 const ICONS: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
-  Globe2, Briefcase, Cpu, Landmark, TrendingUp,
+  Globe2,
+  Briefcase,
+  Cpu,
+  Landmark,
+  TrendingUp,
 };
 
 export function CategoryView({ slug }: { slug: string }) {
@@ -24,33 +26,32 @@ export function CategoryView({ slug }: { slug: string }) {
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([
-      fetch(`/api/news/category?slug=${slug}`).then((r) => r.json()),
-      fetch("/api/news/breaking").then((r) => r.json()),
-    ])
-      .then(([catData, brkData]) => {
+    getFirebaseArticlesByCategory(slug)
+      .then((fetched) => {
         if (cancelled) return;
-        const fetched = catData.articles || [];
-        if (fetched.length > 0) {
+        if (fetched && fetched.length > 0) {
           setArticles(fetched);
+          setBreaking(fetched.filter((b) => b.isBreaking || b.impactScore >= 80).slice(0, 3));
         } else {
-          setArticles(DEMO_ARTICLES.filter((a) => a.category === slug));
-        }
-        const fetchedBreaking = (brkData.breaking || []).filter((b: NewsArticle) => b.category === slug);
-        if (fetchedBreaking.length > 0) {
-          setBreaking(fetchedBreaking.slice(0, 3));
-        } else {
-          setBreaking(DEMO_ARTICLES.filter((a) => a.category === slug && a.isBreaking).slice(0, 3));
+          const fallback = DEMO_ARTICLES.filter((a) => a.category === slug);
+          setArticles(fallback);
+          setBreaking(fallback.filter((a) => a.isBreaking).slice(0, 3));
         }
       })
       .catch(() => {
         if (!cancelled) {
-          setArticles(DEMO_ARTICLES.filter((a) => a.category === slug));
-          setBreaking(DEMO_ARTICLES.filter((a) => a.category === slug && a.isBreaking).slice(0, 3));
+          const fallback = DEMO_ARTICLES.filter((a) => a.category === slug);
+          setArticles(fallback);
+          setBreaking(fallback.filter((a) => a.isBreaking).slice(0, 3));
         }
       })
-      .finally(() => !cancelled && setLoading(false));
-    return () => { cancelled = true; };
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [slug]);
 
   const featured = articles.find((a) => a.isFeatured) || articles[0];
@@ -75,8 +76,12 @@ export function CategoryView({ slug }: { slug: string }) {
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#FBE2D5] text-xs font-bold mb-2">
                 <span>Decoded Category Lens</span>
               </div>
-              <h1 className="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">{cat?.label}</h1>
-              <p className="text-[#D4BEC3] mt-2 text-sm sm:text-base max-w-2xl">{cat?.description}</p>
+              <h1 className="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                {cat?.label}
+              </h1>
+              <p className="text-[#D4BEC3] mt-2 text-sm sm:text-base max-w-2xl">
+                {cat?.description}
+              </p>
             </div>
           </div>
         </motion.div>
@@ -89,7 +94,10 @@ export function CategoryView({ slug }: { slug: string }) {
 
         {featured && !loading && (
           <div className="space-y-4">
-            <SectionHeader title="Top Impact Development" subtitle="The highest ranked story in this lens right now" />
+            <SectionHeader
+              title="Top Impact Development"
+              subtitle="The highest ranked story in this lens right now"
+            />
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
               <div className="lg:col-span-7">
                 <NewsCard article={featured} variant="featured" />
@@ -104,13 +112,18 @@ export function CategoryView({ slug }: { slug: string }) {
         )}
 
         <div className="space-y-4 pt-4">
-          <SectionHeader title={`All ${cat?.label || "Category"} Briefs`} subtitle={`${articles.length} verified stories decoded by AI`} />
+          <SectionHeader
+            title={`All ${cat?.label || "Category"} Briefs`}
+            subtitle={`${articles.length} verified stories decoded by AI`}
+          />
           <NewsGrid articles={loading ? [] : rest} loading={loading} />
         </div>
 
         {!loading && rest.length === 0 && (
           <div className="yupp-card-white p-12 text-center">
-            <p className="text-muted-foreground">No stories in this category yet. Our AI is still scanning global feeds.</p>
+            <p className="text-muted-foreground">
+              No stories in this category yet. Our AI is still scanning global feeds.
+            </p>
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Globe2, Briefcase, Cpu, Landmark, TrendingUp } from "lucide-react";
 import { CATEGORIES, CATEGORY_LABELS, type NewsArticle } from "@/lib/news";
+import { DEMO_ARTICLES } from "@/lib/demo-data";
 import { NewsGrid } from "./news-grid";
 import { SectionHeader } from "./section-header";
 import { BreakingTicker } from "./breaking-ticker";
@@ -29,10 +30,25 @@ export function CategoryView({ slug }: { slug: string }) {
     ])
       .then(([catData, brkData]) => {
         if (cancelled) return;
-        setArticles(catData.articles || []);
-        setBreaking((brkData.breaking || []).filter((b: NewsArticle) => b.category === slug).slice(0, 3));
+        const fetched = catData.articles || [];
+        if (fetched.length > 0) {
+          setArticles(fetched);
+        } else {
+          setArticles(DEMO_ARTICLES.filter((a) => a.category === slug));
+        }
+        const fetchedBreaking = (brkData.breaking || []).filter((b: NewsArticle) => b.category === slug);
+        if (fetchedBreaking.length > 0) {
+          setBreaking(fetchedBreaking.slice(0, 3));
+        } else {
+          setBreaking(DEMO_ARTICLES.filter((a) => a.category === slug && a.isBreaking).slice(0, 3));
+        }
       })
-      .catch(() => {})
+      .catch(() => {
+        if (!cancelled) {
+          setArticles(DEMO_ARTICLES.filter((a) => a.category === slug));
+          setBreaking(DEMO_ARTICLES.filter((a) => a.category === slug && a.isBreaking).slice(0, 3));
+        }
+      })
       .finally(() => !cancelled && setLoading(false));
     return () => { cancelled = true; };
   }, [slug]);

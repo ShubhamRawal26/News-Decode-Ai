@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import type { NewsArticle } from "@/lib/news";
 import { CATEGORY_LABELS } from "@/lib/news";
+import { DEMO_ARTICLES } from "@/lib/demo-data";
 import { ImpactRing } from "./impact-badge";
 import { NewsCard } from "./news-card";
 import { useAppStore, useUserActions } from "@/store/use-app-store";
@@ -39,11 +40,20 @@ export function ArticleView({ articleId, onAuthRequired }: ArticleViewProps) {
         if (d.article) {
           setArticle(d.article);
           setRelated(d.related || []);
-          // record reading to Firebase (no-op if not signed in)
           markRead(d.article.id);
+        } else {
+          const fallback = DEMO_ARTICLES.find((a) => a.id === articleId || a.slug === articleId) || DEMO_ARTICLES[0];
+          setArticle(fallback);
+          setRelated(DEMO_ARTICLES.filter((a) => a.id !== fallback.id && a.category === fallback.category).slice(0, 3));
         }
       })
-      .catch(() => {})
+      .catch(() => {
+        if (!cancelled) {
+          const fallback = DEMO_ARTICLES.find((a) => a.id === articleId || a.slug === articleId) || DEMO_ARTICLES[0];
+          setArticle(fallback);
+          setRelated(DEMO_ARTICLES.filter((a) => a.id !== fallback.id && a.category === fallback.category).slice(0, 3));
+        }
+      })
       .finally(() => !cancelled && setLoading(false));
     return () => { cancelled = true; };
   }, [articleId]);

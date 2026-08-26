@@ -17,6 +17,7 @@ import { SearchView } from "@/components/news/search-view";
 import { DateView } from "@/components/news/date-view";
 import { AuthModal } from "@/components/auth/auth-modal";
 import { CATEGORIES, type NewsArticle } from "@/lib/news";
+import { DEMO_ARTICLES } from "@/lib/demo-data";
 import { cn } from "@/lib/utils";
 import { Sparkles, Flame, Activity, Zap } from "lucide-react";
 
@@ -55,11 +56,22 @@ export default function Home() {
     fetch("/api/news")
       .then((r) => r.json())
       .then((d) => {
-        if (d.latest) setArticles(d.latest);
-        if (d.breaking) setBreaking(d.breaking);
+        if (d.latest && d.latest.length > 0) {
+          setArticles(d.latest);
+        } else {
+          setArticles(DEMO_ARTICLES);
+        }
+        if (d.breaking && d.breaking.length > 0) {
+          setBreaking(d.breaking);
+        } else {
+          setBreaking(DEMO_ARTICLES.filter((a) => a.isBreaking));
+        }
         if (d.trending) setTrending(d.trending);
       })
-      .catch(() => {})
+      .catch(() => {
+        setArticles(DEMO_ARTICLES);
+        setBreaking(DEMO_ARTICLES.filter((a) => a.isBreaking));
+      })
       .finally(() => setBooted(true));
   }, []);
 
